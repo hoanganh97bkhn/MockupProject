@@ -1,0 +1,161 @@
+*{
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  font-family: montserrat;
+  box-sizing: border-box;
+}
+
+body{
+  min-height: 100vh;
+  background-image: url('./image/bgrlogin.jpg');
+  background-image: linear-gradient(120deg, #3498db, #8e44ad);
+}
+
+#close.register{
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.25s;
+}
+#open.register{
+  transition: 0.75s;
+  visibility: visible;
+  opacity: 1;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  background-color: rgba(0,0,0,0.4);
+  width: 100%;
+  height: 100%;
+}
+.login-form{
+  width: 360px;
+  background: #f1f1f1;
+  height: 580px;
+  padding: 40px 40px;
+  border-radius: 10px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+}
+.login-form h1{
+  text-align: center;
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+.txtb{
+  border-bottom: 2px solid #adadad;
+  position: relative;
+  margin: 30px 0;
+}
+.txtb input{
+  font-size: 15px;
+  color: #333;
+  border: none;
+  width: 100%;
+  outline: none;
+  background: none;
+  padding: 0 5px;
+  height: 40px;
+}
+.txtb span::before{
+  content: attr(data-placeholder);
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  color: #adadad;
+  transform: translateY(-50%);
+  z-index: -1;
+  transition: .5s;
+}
+.txtb span::after{
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(120deg, #3498db, #8e44ad);
+  transition: .5s;
+  left: 0%;
+  top: 100%;
+}
+.focus + span::before{
+  top: -5px;
+}
+.focus + span::after{
+  width: 100%;
+}
+.logbtn{
+  display: block;
+  width: 100%;
+  height: 50px;
+  border: none;
+  background: linear-gradient(120deg, #3498db, #8e44ad,#3498db);
+  background-size: 200%;
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: .5s;
+}
+.logbtn:hover{
+  background-position: right;
+}
+.bottom-text{
+  margin-top: 30px;
+  text-align: center;
+  font-size: 13px
+}
+.bottom-text a:not([href]){
+  cursor: pointer;
+  color: #007bff;
+  text-decoration: none;
+  background-color: transparent;
+}
+.bottom-text a:not([href]):hover{
+  color: red;
+}
+.register button.close{
+  transition: 0.5s;
+  border: 1px solid #adadad;
+  width: 26px;
+  color: #333;
+  border-radius: 12px
+}
+.register button.close:hover{
+  transform: rotate(-90deg);
+  transition: 0.5s
+}
+
+.navbar-brand img{
+  width: 100px;
+  height: 100px;
+}
+
+.box-register .login-form{
+  height: 660px;
+}
+
+.box-register .login-form h1{
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+
+.notification{
+  margin-top: 10px;
+  font-style: italic;
+  font-size: 15px;
+  color: red;
+}
+.notificationSuccess{
+  margin-top: 10px;
+  font-style: italic;
+  font-size: 15px;
+  color: green;
+}
+.gender{
+  margin-bottom: 30px;
+}
+.gender .form-check-inline :hover{
+  cursor: pointer;
+}
