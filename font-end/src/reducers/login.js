@@ -1,14 +1,21 @@
 import * as types from '../constants/ActionTypes'
+import isEmpty from '../validation/is-empty';
 
-let initialState = {type:"",message:[]};
+let initialState = {
+    isAuthenticated: false,
+    user: {}
+}
 
 let myReducer = (state = initialState,action) => {
 
     switch(action.type){
         case types.LOGIN_SUCCESS :
-            state.type = "success"
-            state.message = action.data.messageSuccess;
-            return state; 
+            console.log(!isEmpty(action.payload));
+            return {
+                ...state,
+                isAuthenticated: !isEmpty(action.payload),
+                user: action.payload
+            }
         case types.LOGIN_ERROR :
             state.type = "error"
             state.message = action.data.messageError;

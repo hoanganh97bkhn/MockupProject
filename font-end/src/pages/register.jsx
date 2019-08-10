@@ -19,8 +19,8 @@ class register extends Component {
             register:{
                 email: "",
                 username: "",
-                password: "11111111111",
-                password_confirmation: "11111111111",
+                password: "",
+                password_confirmation: "",
                 gender: "male",
             },
             modal: "close",
@@ -29,6 +29,21 @@ class register extends Component {
             arraySuccess: [],
             loading: false,
         }
+    }
+
+    componentDidMount = ()=>{
+        console.log(this.props.auth.isAuthenticated);
+        if(this.props.auth.isAuthenticated) {
+            this.props.history.push('/');
+        }
+        // setTimeout(()=>{
+        //     this.setState({
+        //         modal: "open"
+        //     })
+        // },1500)
+        this.setState({
+            modal: "open"
+        })
     }
     componentWillMount = ()=>{
         const pathname = this.props.location.pathname;
@@ -46,32 +61,31 @@ class register extends Component {
         }
     }
 
-    componentWillReceiveProps(){
-        console.log('dkm');
-        if(this.props.message.status === "error"){
+    // componentWillReceiveProps(){
+    //     if(this.props.message.status === "error"){
             
-            this.setState({
-                arrayError: this.props.message.message,
-                loading: false,
-            })
-        }
-        else {
-            this.setState({
-                arraySuccess: this.props.message.message,
-                loading: false
-            })
-        }
-    }
+    //         this.setState({
+    //             arrayError: this.props.message.message,
+    //             loading: false,
+    //         })
+    //     }
+    //     else {
+    //         this.setState({
+    //             arraySuccess: this.props.message.message,
+    //             loading: false
+    //         })
+    //     }
+    // }
 
-    componentDidMount = () => {
-        // setTimeout(()=>{
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.auth.isAuthenticated) {
+            this.props.history.push('/')
+        }
+        // if(nextProps.errors) {
         //     this.setState({
-        //         modal: "open"
-        //     })
-        // },1500)
-        this.setState({
-            modal: "open"
-        })
+        //         errors: nextProps.errors
+        //     });
+        // }
     }
 
     handleChangeLogin = (name, data) => {
@@ -236,6 +250,7 @@ class register extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        auth: state.login,
         message: state.register
     }
 }

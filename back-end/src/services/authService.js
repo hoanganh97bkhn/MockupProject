@@ -4,6 +4,9 @@ import uuidv4 from "uuid/v4";
 import {transErrors, transSuccess, transMail} from './../../lang/vi';
 import sendMail from './../config/mailer';
 import config from './../config/host';
+import jwt from 'jsonwebtoken';
+import { rejects } from 'assert';
+import decode from 'jwt-decode';
 
 let saltRounds = 7;
 
@@ -50,6 +53,36 @@ let register =  (name, email, gender, password) => {
   
 };
 
+let login = (email, password) => {
+  return new Promise(async(resolve, reject) => {
+    let user = await UserModel.findByEmail(email);
+    if(!user){
+      return reject(transErrors.login_failed);
+    }
+    if(!user.local.isActive){
+      return reject( transErrors.account_not_active);
+    }
+    let checkPassword = await user.comparePassword(password);
+    if(!checkPassword) {
+      return reject(transErrors.login_failed);
+    }
+
+    const payload = {
+      id: user.id,
+      email: user.local.email,
+    }
+    jwt.sign(payload, 'secret', {
+        expiresIn: 3600
+    }, (err, token) => {
+        if(err) console.error('There is some error in token', err);
+        else {
+          return resolve({message: transSuccess.loginSuccess(user.userName), token: `Bearer ${token}`});
+        }
+    });
+    
+  })
+}
+
 let verifyAccount = (token) => {
   return new Promise(async(resolve, reject) => {
     let userByToken = await UserModel.findByToken(token);
@@ -57,11 +90,16 @@ let verifyAccount = (token) => {
       return reject(transErrors.token_undefined);
     }
     await UserModel.verify(token);
-    resolve(transSuccess.account_actived);
+    const payload = userByToken.email;
+    const jwtToken = jwt.sign(payload, process.env.JWTSECRET, {
+      expiresIn: '1d',
+    });
+    resolve({message:transSuccess.account_actived, access_token:jwtToken});
   });
 };
 
 module.exports = {
   register,
-  verifyAccount
+  verifyAccount,
+  login
 }
