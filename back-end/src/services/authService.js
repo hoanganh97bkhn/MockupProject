@@ -53,7 +53,7 @@ let register =  (name, email, gender, password) => {
   
 };
 
-let login = (email, password) => {
+let loginLocal = (email, password) => {
   return new Promise(async(resolve, reject) => {
     let user = await UserModel.findByEmail(email);
     if(!user){
@@ -67,6 +67,43 @@ let login = (email, password) => {
       return reject(transErrors.login_failed);
     }
 
+    const payload = {
+      id: user.id,
+      email: user.local.email,
+    }
+    jwt.sign(payload, 'secret', {
+        expiresIn: 3600
+    }, (err, token) => {
+        if(err) console.error('There is some error in token', err);
+        else {
+          return resolve({message: transSuccess.loginSuccess(user.userName), token: `Bearer ${token}`});
+        }
+    });
+    
+  })
+}
+
+let loginFb = (data ) => {
+  return new Promise(async(resolve, reject) => {
+    let newUser;
+    let user = await UserModel.findByFacebookUid(data.id);
+    if(!user){
+      let newUserItem = {
+        userName: data.name,
+        gender : data.gender !=undefined ? data.gender : "",
+        local : {
+          isActive: true,
+          email : data.email != undefined ? data.email : ""
+        },
+        facebook: {
+          uid: data.id,
+          token: data.accessToken,
+          email: data.email != undefined ? data.email : ""
+        }
+      };
+      newUser = await UserModel.createNew(newUserItem);
+    }
+    user = user ? user : newUser;     
     const payload = {
       id: user.id,
       email: user.local.email,
@@ -101,5 +138,6 @@ let verifyAccount = (token) => {
 module.exports = {
   register,
   verifyAccount,
-  login
+  loginLocal,
+  loginFb
 }

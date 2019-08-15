@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom'
+import {Row, Col} from 'antd';
+import NavBar from './../components/home/NavBar';
+import LeftMain from './../components/home/LeftMain';
+import RightMain from './../components/home/RightMain';
 
 class home extends Component {
     componentDidMount(){
@@ -11,8 +15,20 @@ class home extends Component {
     
     render() {
         return (
-        <div>
-            <div>Hello home</div>
+        <div className="home">
+            {/* Icon loader */}
+            <div id="loader"></div>
+
+            {/* NavBar */}
+            <NavBar></NavBar>
+            <Row guiter={16} className="row-content">
+                <Col className="left-main" span={6}>
+                    <LeftMain></LeftMain>
+                </Col>
+                <Col className="right-main" span={18}>
+                    <RightMain></RightMain>
+                </Col>
+            </Row>
         </div>
         );
     }

@@ -1,0 +1,26 @@
+@media(max-width: 768px){
+  .dropdown-menu{
+    border: 1px none rgba(0,0,0,.15);
+  }
+  .navbar-main .dropdown-menu {
+    padding: 0px;
+  }
+  .navbar-main .dropdown-menu button{
+    padding-left: 10px;
+  }
+  .navbar-main .dropdown-menu :hover{
+    background-color: rgb(51, 51, 51);
+    color: #f8f8f8; 
+  }
+  .navbar-light .navbar-toggler {
+    border: 0.5px solid #f8f8f8;
+    background-color: #9d9d9d;
+    margin-right: 15px;
+  }
+  .navbar-main .input-search-navbar{
+    display: none;
+  } 
+  .navbar-main .input-search{
+    display: block;
+  } 
+}

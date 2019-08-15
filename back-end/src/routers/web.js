@@ -7,7 +7,6 @@ import {authValid} from './../validation/index';
 
 //Init all passPort
 initPassportJWT();
-
 let router = express.Router();
 
 /**
@@ -18,13 +17,15 @@ let initRouters = (app) => {
   router.post("/register",authValid.register, auth.postRegister);
   router.get("/verify/:token", auth.verifyAccount);
   router.get("/checkLogin", auth.checkLoggedIn);
-  router.post("/login", auth.postLogin);
+  router.post("/login", auth.postLoginLocal);
+  router.post("/facebook/login", auth.postLoginFb);
+
   router.get('/me', passPort.authenticate('jwt', { session: false }), (req, res) => {
     console.log(req.isAuthenticated())
     return res.json({
-        id: req.user.id,
-        name: req.user.username,
-        email: req.user.local.email
+      id: req.user.id,
+      name: req.user.username,
+      email: req.user.local.email
     });
 });
 

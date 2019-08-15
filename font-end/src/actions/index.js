@@ -16,6 +16,13 @@ export const login = (data) => {
     }
 }
 
+export const loginFB = (data) => {
+    return{
+        type : types.CALL_API_LOGIN_FB,
+        data
+    }
+}
+
 export const loginSuccess = (payload) => {
     return{
         type : types.LOGIN_SUCCESS,
@@ -23,10 +30,12 @@ export const loginSuccess = (payload) => {
     }
 }
 
-export const logoutUser = (history) => {
-    localStorage.removeItem('jwtToken');
-    setAuthToken(false);
-    loginSuccess({});
-    history.push('/login');
+export const logoutUser = (payload) => {
+    return{
+        type : types.LOGOUT_SUCCESS,
+        payload
+    }
+    // loginSuccess({});
+    // history.push('/login');
 }
 

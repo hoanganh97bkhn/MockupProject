@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Input from './../components/form/Input';
 import Checkbox from './../components/form/Checkbox';
-import NavBav from './../components/form/NavBav';
+import NavBar from '../components/form/NavBar';
+import FacebookLogin from 'react-facebook-login';
 import * as actions from './../actions/index';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -180,67 +181,81 @@ class register extends Component {
             loading: true
         })
     }
+    responseFacebook = (data) => {
+        console.log(data)
+        this.props.loginFB(data);
+    }
 
 
     render() {
         console.log(this.props.message)
         return (
-        <div className="container">
-            <NavBav openLogin={this.openLogin} openRegister={this.openRegister}></NavBav>
-            <div id={this.state.modal} className="register">
-                <div id="login-register">
-                    <form className="login-form" onSubmit={this.onSubmit}>
-                        <button onClick={this.closeModal} type="button" className="close">&times;</button>
-                        <h1>Login</h1>
-                        <Input onChangeData={this.handleChangeLogin} type={"email"} dataPlaceholder={"Email"} name={"email"}></Input>
-                        <Input onChangeData={this.handleChangeLogin} type={"password"} dataPlaceholder={"Password"} name={"password"}></Input>
-                        <button type="submit" className="btn btn-primary logbtn" disabled={this.state.loading}>
-                            Login  
-                            {this.state.loading ? 
-                            <span className="ml-1 spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            : null}
-                        </button>
-                        {/* {this.state.arrayError.length>0 ? this.state.arrayError.map((item, index)=>(
-                            <div key={index} className="notification">{item}</div>
-                        )) : null} */}
-                        
-                        <div className="bottom-text">
-                            Don't have account? <a onClick={this.openRegister}>Register</a>
-                        </div>
-                    </form>
+        <div className="register">
+            <div className="container">
+                <NavBar openLogin={this.openLogin} openRegister={this.openRegister}></NavBar>
+                <div id={this.state.modal} className="">
+                    <div id="login-register">
+                        <form className="login-form" onSubmit={this.onSubmit}>
+                            <button onClick={this.closeModal} type="button" className="close">&times;</button>
+                            <h1>Login</h1>
+                            <Input onChangeData={this.handleChangeLogin} type={"email"} dataPlaceholder={"Email"} name={"email"}></Input>
+                            <Input onChangeData={this.handleChangeLogin} type={"password"} dataPlaceholder={"Password"} name={"password"}></Input>
+                            <button type="submit" className="btn btn-primary logbtn" disabled={this.state.loading}>
+                                Login  
+                                {this.state.loading ? 
+                                <span className="ml-1 spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                : null}
+                            </button>
+                            <FacebookLogin
+                                appId="694327911031351" //APP ID NOT CREATED YET
+                                fields="name,email,picture"
+                                scope="public_profile"
+                                callback={this.responseFacebook}
+                                cssClass="btn btn-primary logbtn mt-1"
+                                icon="fa-facebook"
+                            />    
+                            {/* {this.state.arrayError.length>0 ? this.state.arrayError.map((item, index)=>(
+                                <div key={index} className="notification">{item}</div>
+                            )) : null} */}
+                            
+                            <div className="bottom-text">
+                                Don't have account? <a onClick={this.openRegister}>Register</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <div id={this.state.modalRegister} className="register box-register">
-                <div id="login-register">
-                    <form className="login-form" onSubmit={this.onSubmitRegister}>
-                        <button onClick={this.closeModalRegister} type="button" className="close">&times;</button>
-                        <h1>Register</h1>
-                        <Input onChangeData={this.handleChangeRegister} type={"text"} dataPlaceholder={"Username"} name={"username"}></Input>
-                        <Input onChangeData={this.handleChangeRegister} type={"email"} dataPlaceholder={"Email"} name={"email"} ></Input>
-                        <Input onChangeData={this.handleChangeRegister} type={"password"} dataPlaceholder={"Password"} name={"password"}></Input>
-                        <Input onChangeData={this.handleChangeRegister} type={"password"} dataPlaceholder={"Re-Password"} name={"password_confirmation"}></Input>
-                        <div className="gender">
-                            <Checkbox changeGender={this.handleChangeGender} name={"male"} title={"Male"} check={this.state.register.gender}></Checkbox>
-                            <Checkbox changeGender={this.handleChangeGender} name={"female"} title={"Female"} check={this.state.register.gender}></Checkbox>
-                        </div>
+                <div id={this.state.modalRegister} className="register box-register">
+                    <div id="login-register">
+                        <form className="login-form" onSubmit={this.onSubmitRegister}>
+                            <button onClick={this.closeModalRegister} type="button" className="close">&times;</button>
+                            <h1>Register</h1>
+                            <Input onChangeData={this.handleChangeRegister} type={"text"} dataPlaceholder={"Username"} name={"username"}></Input>
+                            <Input onChangeData={this.handleChangeRegister} type={"email"} dataPlaceholder={"Email"} name={"email"} ></Input>
+                            <Input onChangeData={this.handleChangeRegister} type={"password"} dataPlaceholder={"Password"} name={"password"}></Input>
+                            <Input onChangeData={this.handleChangeRegister} type={"password"} dataPlaceholder={"Re-Password"} name={"password_confirmation"}></Input>
+                            <div className="gender">
+                                <Checkbox changeGender={this.handleChangeGender} name={"male"} title={"Male"} check={this.state.register.gender}></Checkbox>
+                                <Checkbox changeGender={this.handleChangeGender} name={"female"} title={"Female"} check={this.state.register.gender}></Checkbox>
+                            </div>
 
-                        <button type="submit" className="btn btn-primary logbtn" disabled={this.state.loading}>
-                            Register  
-                            {this.state.loading ? 
-                            <span className="ml-1 spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            : null}
-                        </button>
-                        {this.state.arrayError.map((item, index)=>(
-                            <div  key={index} className="notification">{item}</div>
-                         ))}
-                        {this.state.arraySuccess.map((item, index)=>(
-                            <div key={index} className="notificationSuccess">{item}</div>
-                        ))}
-                        
-                        <div className="bottom-text">
-                            Do have account? <a onClick={this.openLogin}>Sing up</a>
-                        </div>
-                    </form>
+                            <button type="submit" className="btn btn-primary logbtn" disabled={this.state.loading}>
+                                Register  
+                                {this.state.loading ? 
+                                <span className="ml-1 spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                : null}
+                            </button>
+                            {this.state.arrayError.map((item, index)=>(
+                                <div  key={index} className="notification">{item}</div>
+                            ))}
+                            {this.state.arraySuccess.map((item, index)=>(
+                                <div key={index} className="notificationSuccess">{item}</div>
+                            ))}
+                            
+                            <div className="bottom-text">
+                                Do have account? <a onClick={this.openLogin}>Sing up</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -262,6 +277,9 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         login : (data) => {
             dispatch(actions.login(data))
+        },
+        loginFB: (data) => {
+            dispatch(actions.loginFB(data))
         }
     }
   }

@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 
 // setting cors port 3000
 app.use(cors({
-  origin : ['http://localhost:3000'],
+  origin : ['https://localhost:3000'],
 }))
 
 // Enable flash messages

@@ -25,9 +25,20 @@ let postRegister = async(req, res) => {
   }
 }
 
-let postLogin = async(req,res)=>{
+let postLoginLocal = async(req,res)=>{
   try {
-    let loginSuccess = await auth.login(req.body.email, req.body.password);
+    let loginSuccess = await auth.loginLocal(req.body.email, req.body.password);
+    return res.status(200).json(loginSuccess);
+  }
+  catch(error){
+    return res.status(201).json(error);
+  }
+}
+
+let postLoginFb = async(req, res)=>{
+  console.log(req.body)
+  try {
+    let loginSuccess = await auth.loginFb(req.body);
     return res.status(200).json(loginSuccess);
   }
   catch(error){
@@ -71,9 +82,10 @@ let checkLoggedIn = (req, res) => {
 
 module.exports = {
   postRegister,
-  postLogin,
+  postLoginLocal,
   verifyAccount,
   getLogout,
   checkLoggedIn,
+  postLoginFb
   // checkLoggedOut,
 };

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import brand from './../../image/brand.png'
 
-class NavBav extends Component {
+class NavBar extends Component {
   render() {
     return (
       <div className="navbar">
@@ -19,4 +19,4 @@ class NavBav extends Component {
   }
 }
 
-export default NavBav;
+export default NavBar;

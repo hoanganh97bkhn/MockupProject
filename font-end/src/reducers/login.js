@@ -1,5 +1,7 @@
 import * as types from '../constants/ActionTypes'
 import isEmpty from '../validation/is-empty';
+import setAuthToken from './../setAuthToken';
+
 
 let initialState = {
     isAuthenticated: false,
@@ -10,7 +12,6 @@ let myReducer = (state = initialState,action) => {
 
     switch(action.type){
         case types.LOGIN_SUCCESS :
-            console.log(!isEmpty(action.payload));
             return {
                 ...state,
                 isAuthenticated: !isEmpty(action.payload),
@@ -20,6 +21,14 @@ let myReducer = (state = initialState,action) => {
             state.type = "error"
             state.message = action.data.messageError;
             return state; 
+        case types.LOGOUT_SUCCESS:
+            localStorage.removeItem('jwtToken');
+            setAuthToken(false);
+            return {
+                ...state,
+                isAuthenticated: !isEmpty(action.payload),
+                user: action.payload
+            }
         default : 
             return state;
     }
