@@ -4,6 +4,8 @@ import UserModel from './../models/userModel';
 
 
 let updateUser = (req, res) => {
+
+  /** Setup folder images */
   let dir = `./public/images`;
   fs.ensureDir(dir, err => {
     console.log(err) // => null
@@ -25,7 +27,6 @@ let updateUser = (req, res) => {
           message: `${err}`
         })
       }
-      console.log('========',fields["phone"]);
       const user = await UserModel.findById(fields["_id"]);
       const file = `public/images/${user.path}`;
       if(user){
@@ -52,7 +53,7 @@ let updateUser = (req, res) => {
             nickname: fields['nickname'],
             avatar: fileName,
             gender: fields['gender'],
-            phone: fields['phone'],
+            phone: '('+fields['prefix']+')'+fields['phone'],
             address: fields['address'],
             updatedAt: Date.now()
           }
@@ -61,15 +62,18 @@ let updateUser = (req, res) => {
             nickname: fields['nickname'],
             avatar: arrayOfFiles.path.split("/")[2],
             gender: fields['gender'],
-            phone: fields['phone'],
+            phone: '('+fields['prefix']+')'+fields['phone'],
             address: fields['address'],
             updatedAt: Date.now()
           }
         }
 
         let updateInfo = await UserModel.findByIdAndUpdate(fields['_id'], postUser);
-        console.log(updateInfo);
-
+        if(!updateInfo){
+          res.status(500).send('Sever error!')
+        }
+        else
+        res.status(200).send("success")
       }
     })
 }

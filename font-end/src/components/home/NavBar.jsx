@@ -24,6 +24,7 @@ import {
 import {Icon, Input, Dropdown, Menu} from 'antd';
 
 const { Search } = Input;
+let imageUrl = avatar;
 // const menu = <Notification></Notification>;
 
 class NavBar extends Component {
@@ -51,6 +52,10 @@ class NavBar extends Component {
             data: {id : this.props.auth.user.id}
         })
         .then( (data) => {
+            if(data.data.avatar !== 'avatar-default.jpg'){
+                imageUrl = config.baseUrl + '/images/' + data.data.avatar
+            }
+            else imageUrl = avatar;
             this.setState({
                 user: data.data
             })
@@ -114,9 +119,9 @@ class NavBar extends Component {
                     <UncontrolledDropdown nav inNavbar>
                         <DropdownToggle nav caret>
                             {this.state.imagePreview != '' ? 
-                                <img className="avatar-small" src = {this.state.imagePreview} alt="avatar-default"></img> 
+                                <img className="avatar-small" src = {this.state.imagePreview} alt="avatarPreview"></img> 
                                 :
-                                <img className="avatar-small" src = {config.baseUrl + '/images/' + this.state.user.avatar} alt="avatar-default"></img>
+                                <img className="avatar-small" src = {imageUrl} alt="avatar-default"></img>
                             }
                             
                             &nbsp;{this.state.user.nickname}

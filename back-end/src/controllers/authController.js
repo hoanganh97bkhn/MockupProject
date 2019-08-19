@@ -62,10 +62,8 @@ let verifyAccount = async(req,res) => {
 
 
 let getInfoUser = async(req, res) => {
-  console.log(req.body.id)
   try{
     let userInfo = await auth.infoUser(req.body.id);
-    console.log(userInfo)
     return res.status(200).json(userInfo);
   }
   catch(error){

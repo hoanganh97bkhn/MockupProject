@@ -5,6 +5,7 @@ import config from './../../../../config/index';
 import avatar from './../../../../image/avatar-default.jpg'
 
 const { Option } = Select;
+let imagesUrl = avatar;
 
 class GeneralAccount extends Component {
     constructor(props){
@@ -16,10 +17,14 @@ class GeneralAccount extends Component {
             fileimages : '',
             loading: false,
             iconLoading: false,
+            keyInput : Date.now()
         };
     }
     componentWillMount = ()=>{
         console.log(this.props.user)
+        if(this.props.user.avatar !== 'avatar-default.jpg')
+            imagesUrl = `${config.baseUrl}/images/`+ this.props.user.avatar;
+        else imagesUrl = avatar;
         this.setState({
             updateUser: this.props.user
         })
@@ -35,8 +40,8 @@ class GeneralAccount extends Component {
                 this.setState({
                     fileimages: file,
                     imagePreviewUrl:  reader.result,
-            });
-        }
+                });
+            }
         }
     }
     handleSubmit = (e) => {
@@ -44,12 +49,11 @@ class GeneralAccount extends Component {
         let formData = new FormData();
         let data = this.props.form.getFieldsValue();
         let currentData = this.state.updateUser;
-        data = Object.assign(data, currentData)
+        data = Object.assign(currentData, data)
 
         for ( var key in data ) {
             formData.append(key, data[key]);
         }
-        
         formData.append('file',this.state.fileimages);
         this.setState({
             loading : false,
@@ -69,12 +73,13 @@ class GeneralAccount extends Component {
         })
 
     }
-    handleReset = (e) => {
+    handleReset = () => {
         this.props.form.resetFields();
         this.props.imagePreviewUrl('')
         this.setState({
             fileimages: '',
-            imagePreviewUrl:  ''
+            imagePreviewUrl:  '',
+            keyInput : Date.now()
         });
     }
     render() {
@@ -88,27 +93,31 @@ class GeneralAccount extends Component {
             sm: { span: 16 },
             },
         };
-        const formTailLayout = {
-            labelCol: { span: 4 },
-            wrapperCol: { span: 8, offset: 4 },
-        };
+    
         const { getFieldDecorator } = this.props.form;
         const prefixSelector = getFieldDecorator('prefix', {
-            initialValue: '86',
+            initialValue: this.state.updateUser.phone ? this.state.updateUser.phone.split(')')[0].split('(')[1] : '84',
         })(
             <Select style={{ width: 70 }}>
             <Option value="86">+86</Option>
-            <Option value="87">+87</Option>
+            <Option value="84">+84</Option>
             </Select>,
         );
         const prefixEmail = getFieldDecorator('email', {
-            initialValue: 'hoanganh.hn0301@gmail.com',
+            initialValue: this.state.updateUser.email,
         });
-
         const prefixNickname = getFieldDecorator('nickname', {
             initialValue: this.state.updateUser.nickname
         })
-        
+        const prefixPhone = getFieldDecorator('phone', {
+            initialValue: this.state.updateUser.phone ? this.state.updateUser.phone.split(')')[1] : '',
+        });
+        const prefixAddress = getFieldDecorator('address', {
+            initialValue: this.state.updateUser.address ? this.state.updateUser.address : '',
+        });
+        const prefixGender = getFieldDecorator('gender', {
+            initialValue: this.state.updateUser.gender,
+        });
         console.log(this.state.updateUser.nickname)
     return (
       <div>
@@ -116,10 +125,10 @@ class GeneralAccount extends Component {
                 <Col id="seting-profile" md={6}>
                     <div className="text-center" id="div-update-avatar">
                         <div id="image-edit-profile">
-                            <img src={this.state.imagePreviewUrl != '' ? this.state.imagePreviewUrl : avatar} className="avatar img-circle" alt="avatar"></img>
+                            <img src={this.state.imagePreviewUrl != '' ? this.state.imagePreviewUrl : imagesUrl} className="avatar img-circle" alt="avatar"></img>
                         </div>
                         <h6> Upload new image...</h6>
-                        <input onChange={this.handleImageChange} type="file" className="form-control" id="input-change-avatar" name="avatar"></input><br></br>
+                        <input onChange={this.handleImageChange} type="file" key={this.state.keyInput} className="form-control" id="input-change-avatar" name="avatar"></input><br></br>
                         <div id="show-button-update-avatar"></div>
                     </div>
                 </Col>
@@ -146,7 +155,7 @@ class GeneralAccount extends Component {
                         </Form.Item>
                         <Form.Item label="Gender">
                             {getFieldDecorator('gender')(
-                                <Radio.Group>
+                                <Radio.Group value={prefixGender}>
                                 <Radio value="male">Male</Radio>
                                 <Radio value="female">Female</Radio>
                                 </Radio.Group>,
@@ -155,10 +164,10 @@ class GeneralAccount extends Component {
                         <Form.Item label="Phone Number">
                             {getFieldDecorator('phone', {
                                 rules: [{ required: false, message: 'Please input your phone number!' }],
-                            })(<Input addonBefore={prefixSelector} style={{ width: '100%' }} />)}
+                            })(<Input defaultValue={prefixPhone} addonBefore={prefixSelector} style={{ width: '100%' }} />)}
                         </Form.Item>
                         <Form.Item label="Address">
-                            {getFieldDecorator('address') (<Input />)}
+                            {getFieldDecorator('address') (<Input defaultValue={prefixAddress}/>)}
                         </Form.Item>
                         <Form.Item wrapperCol={{ div: 14, offset: 8 }}>
                             <Button type="primary" htmlType="submit"  loading={this.state.loading}>
