@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   Form,
   Input,
-  Select,
+  message,
   Button,
 } from 'antd';
 import axios from 'axios';
@@ -12,31 +12,52 @@ class Password extends Component {
   constructor(props){
     super(props);
         this.state = {
-        confirmDirty: false,
+            confirmDirty: false,
         };
     }
-    handleSubmit = e => {
+    handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-          if (!err) {
-            console.log('Received values of form: ', values);
-          }
-        });
-      };
+        let data = this.props.form.getFieldsValue();
+        data.id = this.props.id
+        axios({
+            url: `${config.baseUrl}/user/update/password`,
+            method : 'post',
+            data: data
+        })
+        .then((response)=>{
+            console.log(response)
+            if(response.status === 200){
+                message.success('Update password success!', 10);
+                this.setState({
+                    loading : false,
+                    updateUser: data
+                });
+            }
+        })
+        .catch((error)=>{
+            console.log(error)
+            message.error(error.status, 10)
+        })
+    };
     
-      compareToFirstPassword = (rule, value, callback) => {
+    compareToFirstPassword = (rule, value, callback) => {
         const { form } = this.props;
         if (value && value !== form.getFieldValue('new_password')) {
-          callback('Two passwords that you enter is inconsistent!');
+            callback('Two passwords that you enter is inconsistent!');
         } else {
-          callback();
+            callback();
         }
       };
     
-      validateToNextPassword = (rule, value, callback) => {
+    validateToNextPassword = (rule, value, callback) => {
         const { form } = this.props;
+        let regexPassword = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
         if (value && this.state.confirmDirty) {
-          form.validateFields(['confirm'], { force: true });
+            form.validateFields(['confirm'], { force: true });
+        }
+        console.log(regexPassword.test(value));
+        if (!regexPassword.test(value)){
+            callback("Password no type")
         }
         callback();
       };
@@ -103,7 +124,7 @@ class Password extends Component {
                                 validator: this.compareToFirstPassword,
                             },
                             ],
-                        })(<Input.Password onBlur={this.handleConfirmBlur} />)}
+                        })(<Input.Password />)}
                     </Form.Item>
                     
                     <Form.Item {...tailFormItemLayout}>

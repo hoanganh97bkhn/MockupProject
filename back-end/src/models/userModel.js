@@ -36,7 +36,7 @@ UserSchema.statics = {
     return this.create(item);
   },
   findUserById (id){
-    return this.findById(id,{_id:1,email:1, nickname:1, avatar: 1, address:1, phone:1, gender: 1}).exec()
+    return this.findById(id,{_id:1,'local.email':1, nickname:1, avatar: 1, address:1, phone:1, gender: 1}).exec()
   },
   findByEmail(email){
     return this.findOne({"local.email": email}).exec();

@@ -172,6 +172,9 @@
 .gender .form-check-inline :hover{
   cursor: pointer;
 }
+.ant-message svg{
+  margin-bottom: 6px;
+}
 
 /*main page*/
 #loader{

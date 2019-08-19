@@ -11,7 +11,10 @@ class GeneralAccount extends Component {
     constructor(props){
         super(props);
         this.state = {
-            updateUser : {},
+            updateUser : {
+                prefix: '84',
+                phone : ''
+            },
             checkNick: false,
             imagePreviewUrl: '',
             fileimages : '',
@@ -44,29 +47,35 @@ class GeneralAccount extends Component {
             }
         }
     }
+    handleBtnSubmit = (e) => {
+        this.setState({
+            loading : true,
+        })
+    }
     handleSubmit = (e) => {
         e.preventDefault();
         let formData = new FormData();
         let data = this.props.form.getFieldsValue();
         let currentData = this.state.updateUser;
         data = Object.assign(currentData, data)
-
+        console.log(data)
         for ( var key in data ) {
             formData.append(key, data[key]);
         }
         formData.append('file',this.state.fileimages);
-        this.setState({
-            loading : false,
-            updateUser: data
-        })
-
         axios({
-            url: `${config.baseUrl}/info/user/update`,
+            url: `${config.baseUrl}/user/info/update`,
             method : 'post',
             data: formData
         })
         .then((response)=>{
-            console.log(response);
+            if(response.status === 200){
+                message.success('Update success!', 10);
+                this.setState({
+                    loading : false,
+                    updateUser: data
+                });
+            }
         })
         .catch((error)=>{
             console.log(error)
@@ -96,7 +105,7 @@ class GeneralAccount extends Component {
     
         const { getFieldDecorator } = this.props.form;
         const prefixSelector = getFieldDecorator('prefix', {
-            initialValue: this.state.updateUser.phone ? this.state.updateUser.phone.split(')')[0].split('(')[1] : '84',
+            initialValue: this.state.updateUser.phone && this.state.updateUser.phone.split(')')[0].split('(')[1] ? this.state.updateUser.phone.split(')')[0].split('(')[1] : this.state.updateUser.prefix,
         })(
             <Select style={{ width: 70 }}>
             <Option value="86">+86</Option>
@@ -104,13 +113,13 @@ class GeneralAccount extends Component {
             </Select>,
         );
         const prefixEmail = getFieldDecorator('email', {
-            initialValue: this.state.updateUser.email,
+            initialValue: this.state.updateUser.local.email,
         });
         const prefixNickname = getFieldDecorator('nickname', {
             initialValue: this.state.updateUser.nickname
         })
         const prefixPhone = getFieldDecorator('phone', {
-            initialValue: this.state.updateUser.phone ? this.state.updateUser.phone.split(')')[1] : '',
+            initialValue: this.state.updateUser.phone && this.state.updateUser.phone.split(')')[1] ? this.state.updateUser.phone.split(')')[1] : this.state.updateUser.phone,
         });
         const prefixAddress = getFieldDecorator('address', {
             initialValue: this.state.updateUser.address ? this.state.updateUser.address : '',
@@ -170,7 +179,7 @@ class GeneralAccount extends Component {
                             {getFieldDecorator('address') (<Input defaultValue={prefixAddress}/>)}
                         </Form.Item>
                         <Form.Item wrapperCol={{ div: 14, offset: 8 }}>
-                            <Button type="primary" htmlType="submit"  loading={this.state.loading}>
+                            <Button type="primary" htmlType="submit" onClick={this.handleBtnSubmit}  loading={this.state.loading}>
                                 Submit
                             </Button>
                             <Button onClick={this.handleReset} type="danger" ghost>

@@ -21,7 +21,8 @@ let initRouters = (app) => {
   router.post("/facebook/login", auth.postLoginFb);
 
   //update user
-  router.post("/info/user/update", userInfo.updateUser);
+  router.post("/user/info/update", userInfo.updateUser);
+  router.post("/user/update/password", userInfo.updatePassword);
 
   router.get('/me', passPort.authenticate('jwt', { session: false }), (req, res) => {
     console.log(req.isAuthenticated())

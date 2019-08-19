@@ -1,5 +1,5 @@
 import authService from './authService';
-import userService from './updateUserService';
+import userService from './userService';
 
 export const auth = authService;
 export const user = userService;

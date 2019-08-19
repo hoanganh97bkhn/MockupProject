@@ -1,7 +1,7 @@
 import homeController from './homeController';
 import authController from './authController';
-import updateUserController from './updateUserController';
+import userController from './userController';
 
 export const home = homeController;
 export const auth = authController;
-export const userInfo = updateUserController;
+export const userInfo = userController;
