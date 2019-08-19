@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Button, Tabs, Icon, Input } from 'antd';
 import GeneralAccount from './../helps/settingAccount/GeneralAccount';
+import Password from './../helps/settingAccount/Password';
 const { TabPane } = Tabs;
 
 class ContactManager extends Component {
@@ -42,7 +43,7 @@ class ContactManager extends Component {
                     }
                     key="2"
                     >
-                    
+                    <Password id={this.props.user._id}></Password>
                 </TabPane>
             </Tabs>
         </Modal>
