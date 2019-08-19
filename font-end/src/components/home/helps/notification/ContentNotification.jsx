@@ -13,14 +13,14 @@ class ContentNotification extends Component {
         <div className="noti_content">
             <span>
                 <img className="avatar-small" src={avatar}></img>
-                <strong>Trung Quân</strong>dawd dawdas dawd đã chấp nhận lời adaw dawd dawdaw mời kết bạn của bạn!
+                <strong>Hoang Anh</strong>dawd dawdas dawd đã chấp nhận lời adaw dawd dawdaw mời kết bạn của bạn!
             </span>
             <br></br>
             <br></br>
             <br></br>
             <span>
                 <img className="avatar-small" src={avatar}></img>
-                <strong>Trung Quân</strong> đã gửi cho bạn một lời mời kết bạn!
+                <strong>Hoang Anh</strong> đã gửi cho bạn một lời mời kết bạn!
             </span>
         </div>
         </a><div className="seeAll"><a href="#" id="noti_Button" data-toggle="modal" title="Thông báo"></a><a href="#">Xem tất cả</a></div>

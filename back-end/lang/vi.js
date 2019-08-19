@@ -1,5 +1,5 @@
 export const transValidation = {
-  username_incorrect: "UserName không được để trống!",
+  nickname_incorrect: "UserName không được để trống!",
   email_incorrect: "Email phải có dạng exmaple@abc.com!",
   gender_incorrect: "Ủa, tại sao trường giới tính lại bị sai?",
   password_incorrect: "Mật khẩu chứ ít nhất 8 ký tự, bao gổm kí tự và số",
@@ -21,8 +21,8 @@ export const transSuccess = {
     return `Tài khoản <strong>${userEmail}</strong> đã được tạo, vui lòng kiểm tra lại email của bạn để kích hoạt tài khoản trước khi đăng nhập. Xin cảm ơn!`
   },
   account_actived: "Kích hoạt tài khoản thành công, bạn đã có thể đăng nhập vào ứng dụng",
-  loginSuccess: (username) => {
-    return `Xin chào ${username}, chúc vui vẻ !`
+  loginSuccess: (nickname) => {
+    return `Xin chào ${nickname}, chúc vui vẻ !`
   },
   logout_success: "Đăng xuất tài khoản thành công!"
 }

@@ -11,7 +11,7 @@ class FindUser extends Component {
     return (
        <div>
            <Search
-                placeholder="Input username or email"
+                placeholder="Input nickname or email"
                 onSearch={value => console.log(value)}
                 style={{ width: max}}
                 size="large"

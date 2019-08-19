@@ -25,7 +25,7 @@ let register =  (name, email, gender, password) => {
 
   let salt = bcrypt.genSaltSync(saltRounds);
   let userItem = {
-    userName: name,
+    nickname: name,
     gender,
     local: {
       email,
@@ -76,10 +76,18 @@ let loginLocal = (email, password) => {
     }, (err, token) => {
         if(err) console.error('There is some error in token', err);
         else {
-          return resolve({message: transSuccess.loginSuccess(user.userName), token: `Bearer ${token}`});
+          return resolve({message: transSuccess.loginSuccess(user.nickname), token: `Bearer ${token}`});
         }
     });
     
+  })
+}
+
+let infoUser = (id) => {
+  return new Promise(async(resolve,reject) => {
+    let user = await UserModel.findUserById(id);
+    if(user) return resolve(user);
+    else return reject('Do not exist account!')
   })
 }
 
@@ -89,7 +97,7 @@ let loginFb = (data ) => {
     let user = await UserModel.findByFacebookUid(data.id);
     if(!user){
       let newUserItem = {
-        userName: data.name,
+        nickname: data.name,
         gender : data.gender !=undefined ? data.gender : "",
         local : {
           isActive: true,
@@ -113,7 +121,7 @@ let loginFb = (data ) => {
     }, (err, token) => {
         if(err) console.error('There is some error in token', err);
         else {
-          return resolve({message: transSuccess.loginSuccess(user.userName), token: `Bearer ${token}`});
+          return resolve({message: transSuccess.loginSuccess(user.nickname), token: `Bearer ${token}`});
         }
     });
     
@@ -139,5 +147,6 @@ module.exports = {
   register,
   verifyAccount,
   loginLocal,
-  loginFb
+  loginFb,
+  infoUser
 }

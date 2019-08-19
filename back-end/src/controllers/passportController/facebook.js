@@ -23,12 +23,12 @@ let initPassportFacebook = () => {
     try{
       let user = await UserModel.findByFacebookUid(profile.id);
       if(user){
-        return done(null, user, req.flash("success", transSuccess.loginSuccess(user.userName)));
+        return done(null, user, req.flash("success", transSuccess.loginSuccess(user.nickname)));
       }
 
       console.log(profile);
       let newUserItem = {
-        userName: profile.displayName,
+        nickname: profile.displayName,
         gender : profile.gender,
         local : {isActive: true},
         facebook: {
@@ -38,7 +38,7 @@ let initPassportFacebook = () => {
         }
       };
       let newUser = await UserModel.createNew(newUserItem);
-      return done(null, newUser, req.flash("success", transSuccess.loginSuccess(newUser.userName)));
+      return done(null, newUser, req.flash("success", transSuccess.loginSuccess(newUser.nickname)));
 
     } catch(error){
       console.log(error);

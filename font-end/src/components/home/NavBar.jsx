@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import brand from './../../image/brand.png';
-import avatar_default from './../../image/avatar-default.jpg';
+import avatar from './../../image/avatar-default.jpg';
 import ContactManager from './modal/ContactManager';
 import Notification from './modal/Notification';
+import SettingAccount from './modal/SettingAccount';
+import * as actions from './../../actions/index';
+import {connect} from 'react-redux';
+import axios from 'axios';
+import config from './../../config/index';
+
 import {
   Collapse,
   Navbar,
@@ -28,7 +34,37 @@ class NavBar extends Component {
     this.state = {
         isOpen: false,
         openModalContact : false,
+        openModalSetting : false,
+        user : {
+            avatar:'avatar-default.jpg',
+            nickname : 'nickname'
+        },
+        imagePreview : '',
     };
+  }
+
+  componentWillMount = () => {
+    if(this.props.auth.user.id){
+        axios({
+            url:`${config.baseUrl}/info/user`,
+            method: 'post',
+            data: {id : this.props.auth.user.id}
+        })
+        .then( (data) => {
+            this.setState({
+                user: data.data
+            })
+            }
+        )
+        .catch((error)=>{
+            console.log(error)
+        }) 
+    }
+  }
+  imagePreview = (data) => {
+    this.setState({
+        imagePreview : data
+    })
   }
   toggle() {
     this.setState({
@@ -39,6 +75,15 @@ class NavBar extends Component {
       this.setState({
           openModalContact: !this.state.openModalContact
       })
+  }
+  openModalSetting = () => {
+    this.setState({
+        openModalSetting: !this.state.openModalSetting
+    })
+}
+  logoutUser = () => {
+      this.props.logoutUser({});
+      window.location.href = '/login-register'
   }
   render() {
     return (
@@ -68,15 +113,20 @@ class NavBar extends Component {
 
                     <UncontrolledDropdown nav inNavbar>
                         <DropdownToggle nav caret>
-                            <img className="avatar-small" src={avatar_default} alt="avatar-default"></img>
-                            &nbsp;UserName
+                            {this.state.imagePreview != '' ? 
+                                <img className="avatar-small" src = {this.state.imagePreview} alt="avatar-default"></img> 
+                                :
+                                <img className="avatar-small" src = {config.baseUrl + '/images/' + this.state.user.avatar} alt="avatar-default"></img>
+                            }
+                            
+                            &nbsp;{this.state.user.nickname}
                         </DropdownToggle>
                         <DropdownMenu right>
-                        <DropdownItem>
+                        <DropdownItem onClick={this.openModalSetting}>
                             <Icon type="setting" />
                             &nbsp;Setting
                         </DropdownItem>
-                        <DropdownItem>
+                        <DropdownItem onClick={this.logoutUser}>
                             <Icon type="logout" />
                             &nbsp;Logout
                         </DropdownItem>
@@ -94,9 +144,24 @@ class NavBar extends Component {
             </Navbar>
             <ContactManager open={this.state.openModalContact} close={this.openModalContact}></ContactManager>
             {/* <Notification></Notification> */}
+            <SettingAccount open={this.state.openModalSetting} close={this.openModalSetting} user={this.state.user} imagePreviewUrl={this.imagePreview}></SettingAccount>
         </div>
     );
   }
 }
 
-export default NavBar;
+const mapStateToProps = (state) => {
+  return {
+        auth: state.login
+  }
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+          logoutUser : (data) => {
+            dispatch(actions.logoutUser(data));
+          }
+    }
+  }
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

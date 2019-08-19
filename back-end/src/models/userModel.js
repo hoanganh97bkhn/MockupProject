@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 let Schema = mongoose.Schema;
 
 let UserSchema = new Schema({
-  userName: String,
+  nickname: String,
   gender: {type: String, default: "male"},
   phone: {type: String, default: null},
   address: {type: String, default: null},
@@ -34,6 +34,9 @@ let UserSchema = new Schema({
 UserSchema.statics = {
   createNew(item){
     return this.create(item);
+  },
+  findUserById (id){
+    return this.findById(id,{_id:1, nickname:1, avatar: 1, address:1, phone:1, gender: 1}).exec()
   },
   findByEmail(email){
     return this.findOne({"local.email": email}).exec();

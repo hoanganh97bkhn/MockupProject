@@ -15,7 +15,7 @@ let postRegister = async(req, res) => {
     return res.status(201).json(errorArr);
   }
   try{
-    let createUserSuccess = await auth.register(req.body.username, req.body.email, req.body.gender, req.body.password);
+    let createUserSuccess = await auth.register(req.body.nickname, req.body.email, req.body.gender, req.body.password);
     successArr.push(createUserSuccess);
     return res.status(200).json(createUserSuccess);
   }
@@ -60,17 +60,17 @@ let verifyAccount = async(req,res) => {
   }
 }
 
-let getLogout = (req, res) => {
-  req.logout();  //remove session passport user
-  return res.status(200).json({messageSuccess: transSuccess.logout_success});
-};
 
-let checkLoggedIn = (req, res) => {
-  console.log(req.isAuthenticated())
-  if(req.isAuthenticated()){
-    return res.status(200).json(req.isAuthenticated());
+let getInfoUser = async(req, res) => {
+  console.log(req.body.id)
+  try{
+    let userInfo = await auth.infoUser(req.body.id);
+    console.log(userInfo)
+    return res.status(200).json(userInfo);
   }
-  else return res.status(201).json(req.username);
+  catch(error){
+    return res.status(404).send(error)
+  }
 }
 
 // let checkLoggedOut = (req, res, next) => {
@@ -84,8 +84,6 @@ module.exports = {
   postRegister,
   postLoginLocal,
   verifyAccount,
-  getLogout,
-  checkLoggedIn,
+  getInfoUser,
   postLoginFb
-  // checkLoggedOut,
 };

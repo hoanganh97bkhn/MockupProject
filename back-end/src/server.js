@@ -17,13 +17,12 @@ connectDB();
 configSession(app);
 
 // enable post data for request
+app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 // setting cors port 3000
-app.use(cors({
-  origin : ['https://localhost:3000'],
-}))
+app.use(cors())
 
 // Enable flash messages
 app.use(connectFlash())

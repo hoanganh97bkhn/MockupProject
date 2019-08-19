@@ -13,7 +13,7 @@ class InfoContact extends Component {
                     <img src={this.props.avatar}></img>
                 </div>
                 <div className="user-name">
-                    <p>UserName</p>
+                    <p>nickname</p>
                 </div>
                 <br></br>
                 <div className="user-address">

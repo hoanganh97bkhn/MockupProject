@@ -19,7 +19,7 @@ class register extends Component {
             },
             register:{
                 email: "",
-                username: "",
+                nickname: "",
                 password: "",
                 password_confirmation: "",
                 gender: "male",
@@ -138,7 +138,7 @@ class register extends Component {
 
     isCheckData = ()=>{
         let data = this.state.register;
-        if(data.email === "" || data.username === "" || data.password === ""){
+        if(data.email === "" || data.nickname === "" || data.password === ""){
             return false;
         }
         return true;
@@ -159,7 +159,7 @@ class register extends Component {
                 arrayError: ["Empty the field!"]
             })
         }
-        else if(this.state.register.password != this.state.register.password_confirmation){
+        else if(this.state.register.password !== this.state.register.password_confirmation){
             this.setState({
                 arrayError: ["Retype the wrong password"]
             })
@@ -182,13 +182,12 @@ class register extends Component {
         })
     }
     responseFacebook = (data) => {
-        console.log(data)
         this.props.loginFB(data);
     }
 
 
     render() {
-        console.log(this.props.message)
+        // console.log(this.props.message)
         return (
         <div className="register">
             <div className="container">
@@ -211,7 +210,7 @@ class register extends Component {
                                 fields="name,email,picture"
                                 scope="public_profile"
                                 callback={this.responseFacebook}
-                                cssClass="btn btn-primary logbtn mt-1"
+                                cssClass="fb-login"
                                 icon="fa-facebook"
                             />    
                             {/* {this.state.arrayError.length>0 ? this.state.arrayError.map((item, index)=>(
@@ -229,7 +228,7 @@ class register extends Component {
                         <form className="login-form" onSubmit={this.onSubmitRegister}>
                             <button onClick={this.closeModalRegister} type="button" className="close">&times;</button>
                             <h1>Register</h1>
-                            <Input onChangeData={this.handleChangeRegister} type={"text"} dataPlaceholder={"Username"} name={"username"}></Input>
+                            <Input onChangeData={this.handleChangeRegister} type={"text"} dataPlaceholder={"Nickname"} name={"nickname"}></Input>
                             <Input onChangeData={this.handleChangeRegister} type={"email"} dataPlaceholder={"Email"} name={"email"} ></Input>
                             <Input onChangeData={this.handleChangeRegister} type={"password"} dataPlaceholder={"Password"} name={"password"}></Input>
                             <Input onChangeData={this.handleChangeRegister} type={"password"} dataPlaceholder={"Re-Password"} name={"password_confirmation"}></Input>

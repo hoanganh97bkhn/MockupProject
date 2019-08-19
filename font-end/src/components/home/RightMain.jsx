@@ -57,7 +57,7 @@ class RightMain extends Component {
             <div className="top">
                 <Row>
                     <Col span={8}>
-                        To: <span><strong>UserName</strong></span>
+                        To: <span><strong>nickname</strong></span>
                     </Col>
                     <Col span={3} offset={10}>
                     <div>
@@ -75,15 +75,15 @@ class RightMain extends Component {
             </div>
             <div className="content-chat">
                 <div id="style-chat" className="chat" data-chat="" tabIndex="2">
-                    <div className="bubble me" data-mess-id="${item._id}">Hello, I'm Trung Quan, author of https://trungquandev.com</div>
-                    <div className="bubble you" data-mess-id="${item._id}">Really? I'm Trung Quan too, author of https://trungquandev.com, are you fake?</div>
+                    <div className="bubble me" data-mess-id="${item._id}">Hello, I'm Hoang Anh, author of https://hoanganh.com</div>
+                    <div className="bubble you" data-mess-id="${item._id}">Really? I'm Hoang Anh too, author of https://hoanganh.com, are you fake?</div>
                     <div className="bubble me" data-mess-id="${item._id}">This is me !!!</div>
                     <div className="bubble me bubble-image-file" data-mess-id="${item._id}">
                         <img src={avatar} className="show-image-chat"></img>
                     </div>
                     <div className="bubble me bubble-image-file" data-mess-id="${item._id}">
                             <a href={avatar} download="${ item.file.fileName }">
-                                Tệp văn bản - trungquandev.pdf
+                                Tệp văn bản - hoanganh.pdf
                             </a>
                         </div>
                     <div className="bubble you" data-mess-id="${item._id}">And this is me @@ !!!</div>
@@ -91,8 +91,8 @@ class RightMain extends Component {
                         <img src={avatar} className="show-image-chat"></img>
                     </div>
                     <div className="bubble you bubble-image-file" data-mess-id="${item._id}">
-                        <a href="../../libraries/fileExample/Tệp văn bản - trungquandev.docx" download="${ item.file.fileName }">
-                            Tệp văn bản - trungquandev.docx
+                        <a href="../../libraries/fileExample/Tệp văn bản - hoanganh.docx" download="${ item.file.fileName }">
+                            Tệp văn bản - hoanganh.docx
                         </a>
                     </div>
                 </div>

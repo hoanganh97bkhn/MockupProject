@@ -2,7 +2,7 @@ import {check} from "express-validator/check";
 import {transValidation} from "./../../lang/vi";
 
 let register = [
-  check("username", transValidation.username_incorrect)
+  check("nickname", transValidation.nickname_incorrect)
     .isLength({min: 1}),
   check("email", transValidation.email_incorrect)
     .isEmail()

@@ -27,7 +27,7 @@ class LeftMain extends Component {
                         <img src={avatar} alt=""></img>
                     </div>
                     <span className="name">
-                        Trung Quân
+                        Hoang Anh
                     </span>
                     <span className="time">Một phút trước</span>
                     <span className="preview">Xin chào</span>
@@ -52,9 +52,9 @@ class LeftMain extends Component {
                         <div className="dot online"></div>
                         <img className="avatar-online" src={avatar} alt=""></img>
                     </div>
-                    <span className="name">Trung Quân (admin)</span>
+                    <span className="name">Hoang Anh (admin)</span>
                     <span className="time">Bây giờ</span>
-                    <span className="preview">Xin chào <strong>Trung Quân</strong>...</span>
+                    <span className="preview">Xin chào <strong>Hoang Anh</strong>...</span>
                 </li>
             </a>
         </ul>
