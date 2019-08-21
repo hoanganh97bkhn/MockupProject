@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Button, Tabs, Icon, Input } from 'antd';
+import { Modal, Button, Tabs, Icon, Badge } from 'antd';
 import FindUser from '../helps/modal/FindUser';
 import Contact from './../helps/modal/Contact';
 import WaitConfirmation from './../helps/modal/WaitConfirmation';
@@ -42,6 +42,7 @@ class ContactManager extends Component {
                         <span className="tab-pane">
                             <Icon type="contacts" />
                             Contact
+                            <Badge count={100} overflowCount={99}></Badge>
                         </span>
                     }
                     key="2"
@@ -54,6 +55,7 @@ class ContactManager extends Component {
                         <span className="tab-pane">
                             <Icon type="loading" />
                             Wait For Confirmation
+                            <Badge count={100} overflowCount={99}></Badge>
                         </span>
                     }
                     key="3"
@@ -66,6 +68,7 @@ class ContactManager extends Component {
                         <span className="tab-pane"> 
                             <Icon type="check" />
                             Friend Request
+                            <Badge count={100} overflowCount={99}></Badge>
                         </span>
                     }
                     key="4"

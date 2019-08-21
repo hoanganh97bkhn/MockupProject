@@ -35,8 +35,8 @@ class Password extends Component {
             }
         })
         .catch((error)=>{
-            console.log(error)
-            message.error(error.status, 10)
+            message.error(error.response.statusText, 10);
+            this.props.form.resetFields();
         })
     };
     

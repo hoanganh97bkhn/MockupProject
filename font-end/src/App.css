@@ -262,6 +262,13 @@
 .modal-contact .tab-pane > i svg{
   margin-bottom: 5px;
 }
+.modal-contact .tab-pane{
+  position: relative;
+}
+.modal-contact .tab-pane .ant-badge{
+  position: absolute;
+  bottom: 30%;
+}
 .contactList>li {
   list-style-type: none;
   position: relative;

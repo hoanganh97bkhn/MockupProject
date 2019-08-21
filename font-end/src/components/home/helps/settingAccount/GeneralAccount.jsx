@@ -58,7 +58,6 @@ class GeneralAccount extends Component {
         let data = this.props.form.getFieldsValue();
         let currentData = this.state.updateUser;
         data = Object.assign(currentData, data)
-        console.log(data)
         for ( var key in data ) {
             formData.append(key, data[key]);
         }
@@ -69,6 +68,7 @@ class GeneralAccount extends Component {
             data: formData
         })
         .then((response)=>{
+            console.log(response)
             if(response.status === 200){
                 message.success('Update success!', 10);
                 this.setState({
@@ -79,6 +79,7 @@ class GeneralAccount extends Component {
         })
         .catch((error)=>{
             console.log(error)
+            message.error("Server error!", 10);
         })
 
     }

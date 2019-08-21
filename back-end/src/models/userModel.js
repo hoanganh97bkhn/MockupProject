@@ -55,6 +55,20 @@ UserSchema.statics = {
   },
   findByFacebookUid(uid){
     return this.findOne({"facebook.uid" : uid}).exec();
+  },
+  findAllForAddContact(deprecatedUserIds, keyword){
+    return this.find({
+      $and: [
+        {"_id" : {$nin: deprecatedUserIds}},
+        {'local.isActive': true},
+        {
+          $or: [
+            {"nickname": {"$regex": new RegExp(keyword, "i")}},
+            {"local.email": {"$regex": new RegExp(keyword, "i")}},
+          ]
+        }
+      ]
+    },{_id:1, nickname:1, address:1, avatar: 1}).exec()
   }
 }
 
