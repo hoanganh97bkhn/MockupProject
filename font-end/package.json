@@ -9,6 +9,7 @@
     "emoji-mart": "^2.11.1",
     "font-awesome": "^4.7.0",
     "jwt-decode": "^2.2.0",
+    "lodash": "^4.17.15",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-facebook-login": "^4.1.1",
@@ -17,7 +18,8 @@
     "react-scripts": "3.0.1",
     "reactstrap": "^8.0.1",
     "redux": "^4.0.4",
-    "redux-saga": "^1.0.5"
+    "redux-saga": "^1.0.5",
+    "socket.io-client": "^2.2.0"
   },
   "scripts": {
     "start": "HTTPS=true react-scripts start",

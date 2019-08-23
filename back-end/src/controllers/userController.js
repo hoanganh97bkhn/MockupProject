@@ -45,9 +45,8 @@ let updatePassword = async(req, res) => {
 }
 
 let getInfoUser = async(req, res) => {
-  console.log(req.user.id)
   try{
-    let userInfo = await user.infoUser(req.user.id);
+    let userInfo = await user.infoUser(req.body.id);
     return res.status(200).json(userInfo);
   }
   catch(error){

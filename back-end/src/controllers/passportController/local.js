@@ -7,7 +7,7 @@ let opts = {};
 let JWTStrategy = passPortJWT.Strategy;
 let ExtractJWT = passPortJWT.ExtractJwt;
 
-opts.jwtFromRequest = ExtractJWT.fromAuthHeaderAsBearerToken();
+opts.jwtFromRequest = ExtractJWT.fromAuthHeaderAsBearerToken()
 opts.secretOrKey = 'secret';
 /**
  * Valid user account type : local

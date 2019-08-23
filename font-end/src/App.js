@@ -12,11 +12,39 @@ import Home from './pages/home';
 import Register from './pages/register';
 import './App.css';
 import './AppResponsive.css';
+import io from 'socket.io-client';
+import initSockets from './sockets/index';
 
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+        //Khởi tạo state,
+        this.socket = null;
+    }
+    componentDidMount() {
+        if(localStorage.jwtToken){
+            this.socket = io('http://localhost:3001',{
+                query: "token=" + localStorage.jwtToken
+            });
+            this.props.setupSocket(this.socket);
+            initSockets(this.socket);
+        }
+    }
 
-    componentDidMount (){
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.login.type === "success") {
+            if(localStorage.jwtToken){
+                this.socket = io('http://localhost:3001',{
+                    query: "token=" + localStorage.jwtToken
+                });
+                this.props.setupSocket(this.socket);
+                initSockets(this.socket);
+            }
+        }
+    }
+
+    componentWillMount (){
         if(localStorage.jwtToken){
             console.log(localStorage.jwtToken);
             setAuthToken(localStorage.jwtToken);
@@ -46,11 +74,11 @@ class App extends Component {
     }
 }
 
-// const mapStateToProps = (state) => {
-//   return {
-//       message: state.register
-//   }
-// }
+const mapStateToProps = (state) => {
+  return {
+      login: state.login
+  }
+}
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
@@ -59,8 +87,11 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         logoutUser : (data) => {
           dispatch(actions.logoutUser(data));
+        },
+        setupSocket : (data) =>{
+            dispatch(actions.setupSocket(data))
         }
   }
 }
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

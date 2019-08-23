@@ -14,7 +14,34 @@ let findUser = async(req,res)=>{
   }
 }
 
+let listAddFriend = async(req,res)=>{
+  res.status(201).send('hello')
+}
+
+let addNew = async(req, res) => {
+  try{
+    let newContact = await contact.addNew(req.user.id, req.body.uid);
+    res.status(200).send({status: !!newContact})
+  }
+  catch(error){
+    return res.status(500).send(error);
+  }
+}
+
+let removeRequestContact = async(req, res) => {
+  try{
+    let removeReq = await contact.removeRequestContact(req.user.id, req.body.uid);
+    res.status(200).send({status: !!removeReq})
+  }
+  catch(error){
+    return res.status(500).send(error);
+  }
+}
+
 
 module.exports = {
   findUser,
+  listAddFriend,
+  addNew,
+  removeRequestContact
 };

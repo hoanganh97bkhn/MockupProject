@@ -29,15 +29,18 @@ let initRouters = (app) => {
 
   //contact
   router.post("/contact/search",authLogin, contact.findUser);
+  router.get("/contact/list/addfriend",authLogin, contact.listAddFriend);
+  router.post("/contact/add-new",authLogin, contact.addNew);
+  router.delete("/contact/remove-request-contact", authLogin, contact.removeRequestContact)
 
-  router.get('/me', passPort.authenticate('jwt', { session: false }), (req, res) => {
-    console.log(req.isAuthenticated())
-    return res.json({
-      id: req.user.id,
-      name: req.user.nickname,
-      email: req.user.local.email
-    });
-});
+//   router.get('/me', passPort.authenticate('jwt', { session: false }), (req, res) => {
+//     console.log(req.isAuthenticated())
+//     return res.json({
+//       id: req.user.id,
+//       name: req.user.nickname,
+//       email: req.user.local.email
+//     });
+// });
 
   // router.get("/", auth.checkLoggedIn, home.getHome);
   // router.get("/logout",auth.checkLoggedIn, auth.getLogout);

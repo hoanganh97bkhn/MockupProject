@@ -39,3 +39,16 @@ export const logoutUser = (payload) => {
     // history.push('/login');
 }
 
+export const getListAddFriend = () => {
+    return{
+        type : types.ADD_FRIEND,
+    }
+}
+
+export const setupSocket = (data) => {
+    return{
+        type : types.SETUP_SOCKET,
+        data : data
+    }
+}
+

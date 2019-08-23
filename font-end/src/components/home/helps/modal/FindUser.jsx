@@ -4,7 +4,7 @@ import avatar_default from './../../../../image/avatar-default.jpg';
 import { Input } from 'antd';
 import { max } from 'moment';
 import axios from 'axios';
-import connect from 'react-redux';
+import {connect} from 'react-redux';
 import config from './../../../../config/index';
 import * as actions from './../../../../actions/index'
 
@@ -60,14 +60,26 @@ class FindUser extends Component {
         value.titleDanger  = "Cancel Request"
       )
       else return value
-    })
-    this.setState({
-      listAddContact: [...this.state.listAddContact, item],
-      listUser: data
     });
+    axios({
+      url: `${config.baseUrl}/contact/add-new`,
+      method: "post",
+      data: {uid: item._id}
+    })
+    .then((res)=>{
+      console.log(res);
+      this.props.socket.emit("add-new-contact", {contactId : item._id})
+      this.setState({
+        listAddContact: [...this.state.listAddContact, item],
+        listUser: data
+      });
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
   }
 
-  handleCancelRequest = (index) => {
+  handleCancelRequest = (item, index) => {
     let data = this.state.listUser;
     data.map((value, i)=>{
       if(i===index) return (
@@ -75,13 +87,26 @@ class FindUser extends Component {
         value.titleDanger  = ""
       )
       else return value
+    });
+
+    //call api remove
+    axios({
+      url: `${config.baseUrl}/contact/remove-request-contact`,
+      method: "delete",
+      data: {uid: item._id}
     })
-    this.setState({
-      listAddContact: this.state.listAddContact.filter((item, i)=>{
-        if(i === index) return false;
-        else return true;
-      }),
-      listUser: data
+    .then((res)=>{
+      // console.log(res);
+      this.setState({
+        listAddContact: this.state.listAddContact.filter((element, i)=>{
+          if(i === index) return false;
+          else return true;
+        }),
+        listUser: data
+      })
+    })
+    .catch((error)=>{
+      console.log(error)
     })
   }
 
@@ -99,7 +124,7 @@ class FindUser extends Component {
                   {this.state.listUser.length > 0 ? 
                     this.state.listUser.map((item, index)=>{
                       return (
-                        <InfoContact clickSuccess={()=>this.handleAddFriend(item, index)} clickDanger={()=>this.handleCancelRequest(index)} key={index} avatar={urlImage(item.avatar)} titleSuccess={item.titleSuccess} titleDanger={item.titleDanger} nickname={item.nickname} address={item.address}></InfoContact>
+                        <InfoContact clickSuccess={()=>this.handleAddFriend(item, index)} clickDanger={()=>this.handleCancelRequest(item, index)} key={index} avatar={urlImage(item.avatar)} titleSuccess={item.titleSuccess} titleDanger={item.titleDanger} nickname={item.nickname} address={item.address}></InfoContact>
                       )
                     })  
                 : null }
@@ -110,4 +135,24 @@ class FindUser extends Component {
   }
 }
 
-export default (FindUser);
+const mapStateToProps = (state) => {
+  return {
+      socket: state.socket
+  }
+}
+
+// const mapDispatchToProps = (dispatch, props) => {
+//   return {
+//         loginSuccess : (data) => {
+//           dispatch(actions.loginSuccess(data))
+//         },
+//         logoutUser : (data) => {
+//           dispatch(actions.logoutUser(data));
+//         },
+//         setupSocket : (data) =>{
+//             dispatch(actions.setupSocket(data))
+//         }
+//   }
+// }
+
+export default connect(mapStateToProps, null)(FindUser);
