@@ -386,7 +386,7 @@
   position: absolute;
   z-index: 9999;
   width: 300px;
-  top: 55%;
+  top: 65%;
   right: 0%;
 }
 .menu-notification ul{
@@ -426,11 +426,25 @@
   height: 250px;
 }
 .menu-notification li{
-  padding: 5px
+  padding: 5px;
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: #e6e6e6;
 }
-.menu-notification li :hover{
+.menu-notification li:hover{
   cursor: pointer;
   background-color: #f1f1f1
+}
+.notifiList::before{
+  float: right;
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  color: transparent;
+  border: 10px solid #CCC;
+  border-color: transparent transparent #FFF;
+  margin: -20px 0px 0px 0px;
 }
 
 /* setting account */

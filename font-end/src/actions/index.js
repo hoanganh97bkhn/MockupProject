@@ -52,3 +52,16 @@ export const setupSocket = (data) => {
     }
 }
 
+export const ResAddNewContact = (data) => {
+    return{
+        type: types.RES_ADD_NEW_CONTACT,
+        data : data
+    }
+}  
+
+export const ResRemoveNewContact = (data) => {
+    return{
+        type: types.RES_REMOVE_NEW_CONTACT,
+        data : data
+    }
+}

@@ -22,15 +22,15 @@ class App extends Component {
         //Khởi tạo state,
         this.socket = null;
     }
-    componentDidMount() {
-        if(localStorage.jwtToken){
-            this.socket = io('http://localhost:3001',{
-                query: "token=" + localStorage.jwtToken
-            });
-            this.props.setupSocket(this.socket);
-            initSockets(this.socket);
-        }
-    }
+    // componentDidMount() {
+    //     if(localStorage.jwtToken){
+    //         this.socket = io('http://localhost:3001',{
+    //             query: "token=" + localStorage.jwtToken
+    //         });
+    //         this.props.setupSocket(this.socket);
+    //         initSockets(this.socket);
+    //     }
+    // }
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.login.type === "success") {

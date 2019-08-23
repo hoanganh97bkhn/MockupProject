@@ -91,7 +91,7 @@ class NavBar extends Component {
     }
     openNotification = () => {
         this.setState({
-            openModalNotifi: !this.state.openModalNotifi
+            openModalNotifi: true
         })
     }
     closeModalNotifi = () => {
@@ -126,8 +126,8 @@ class NavBar extends Component {
                             <NavLink ><i className="fa fa-user-plus"></i></NavLink>
                         </NavItem>
                         <NavItem className="icon-notification" onClick={this.openNotification}>
-                                <NavLink ><i className="fa fa-globe "></i></NavLink>
-                                <Notification open={this.state.openModalNotifi}></Notification>
+                            <NavLink ><i className="fa fa-bell "></i></NavLink>
+                            <Notification open={this.state.openModalNotifi}></Notification>
                         </NavItem>
 
                         <UncontrolledDropdown nav inNavbar>
