@@ -9,18 +9,16 @@ let addNewContact = (io) => {
     let currentUserId = socket.request.user._id;
     clients = pushSocketIdToArray(clients, currentUserId, socket.id)
 
-    socket.on("add-new-contact", (data) => {
+    socket.on("remove-request-contact", (data) => {
       let currentUser = {
         id: socket.request.user._id,
         nickname: socket.request.user.nickname,
-        avatar: socket.request.user.avatar,
-        content: "send you a friend invitation",
-        isRead: false 
+        avatar: socket.request.user.avatar
       };
 
-      //emit notification "response-add-new-contact"
+      //emit notification
       if(clients[data.contactId]) {
-        emitNotifyToArray(clients, data.contactId, io, "response-add-new-contact", currentUser);
+        emitNotifyToArray(clients, data.contactId, io, "response-remove-request-contact", currentUser);
       }
     });
 

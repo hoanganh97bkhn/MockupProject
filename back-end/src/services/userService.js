@@ -88,15 +88,7 @@ let updatePassword = (id,curPass,newPass) => {
   })
 }
 
-let infoUser = (id) => {
-  return new Promise(async(resolve,reject) => {
-    let user = await UserModel.findUserById(id);
-    if(user) return resolve(user);
-    else return reject('Do not exist account!')
-  })
-}
 module.exports = {
   updateUser,
   updatePassword,
-  infoUser
 }

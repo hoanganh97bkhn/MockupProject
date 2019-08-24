@@ -65,3 +65,10 @@ export const ResRemoveNewContact = (data) => {
         data : data
     }
 }
+
+export const resetNotifi = () => {
+    return{
+        type: types.RESET_NOTIFI,
+    }
+}
+

@@ -21,7 +21,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem } from 'reactstrap';
-import {Icon, Input, Dropdown, Menu} from 'antd';
+import {Icon, Input, Dropdown, Badge} from 'antd';
 
 const { Search } = Input;
 let imageUrl = avatar;
@@ -40,35 +40,41 @@ class NavBar extends Component {
             nickname : 'nickname'
         },
         imagePreview : '',
-        openModalNotifi: false
+        openModalNotifi: false,
+        badge: 0,
+        listNotifi: [],
+        listNotifiFromServer: []
     };
   }
     componentDidMount = () => {
         document.body.addEventListener('click', this.closeModalNotifi);
     }
     componentWillMount = () => {
-        if(this.props.auth.user.id){
-            axios({
-                url:`${config.baseUrl}/info/user`,
-                method: 'post',
-                data: {id : this.props.auth.user.id}
+        axios({
+            url:`${config.baseUrl}/home/user`,
+            method: 'post',
+        })
+        .then((response) => {
+            if(response.data.user.avatar !== 'avatar-default.jpg'){
+                imageUrl = config.baseUrl + '/images/' + response.data.user.avatar
+            }
+            else imageUrl = avatar;
+            this.setState({
+                user: response.data.user,
+                listNotifiFromServer: response.data.notifications,
             })
-            .then( (data) => {
-                if(data.data.avatar !== 'avatar-default.jpg'){
-                    imageUrl = config.baseUrl + '/images/' + data.data.avatar
-                }
-                else imageUrl = avatar;
-                this.setState({
-                    user: data.data
-                })
-                }
-            )
-            .catch((error)=>{
-                console.log(error)
-            }) 
-        }
+            }
+        )
+        .catch((error)=>{
+            console.log(error)
+        }) 
     }
-    
+    componentWillReceiveProps = (nextProps) => {
+        this.setState({
+            listNotifi: nextProps.addContactSocket.concat(this.state.listNotifiFromServer)
+        })
+    }
+
     imagePreview = (data) => {
         this.setState({
             imagePreview : data
@@ -90,6 +96,7 @@ class NavBar extends Component {
         })
     }
     openNotification = () => {
+        this.props.resetNotifi();
         this.setState({
             openModalNotifi: true
         })
@@ -104,6 +111,7 @@ class NavBar extends Component {
         window.location.href = '/login-register'
     }
     render() {
+        console.log(this.props.addContactSocket)
         return (
             <div className="navbar-main">
                 <Navbar className="container-fluid" light expand="md">
@@ -122,14 +130,17 @@ class NavBar extends Component {
                         <NavItem>
                             <NavLink ><i className="fa fa-home "></i></NavLink>
                         </NavItem>
-                        <NavItem onClick={this.openModalContact}>
-                            <NavLink ><i className="fa fa-user-plus"></i></NavLink>
-                        </NavItem>
-                        <NavItem className="icon-notification" onClick={this.openNotification}>
-                            <NavLink ><i className="fa fa-bell "></i></NavLink>
-                            <Notification open={this.state.openModalNotifi}></Notification>
-                        </NavItem>
-
+                        <Badge count={this.props.notifiSocket}>
+                            <NavItem onClick={this.openModalContact}>
+                                <NavLink ><i className="fa fa-user-plus"></i></NavLink>
+                            </NavItem>
+                        </Badge>
+                        <Badge count={this.props.notifiSocket}>
+                            <NavItem className="icon-notification" onClick={this.openNotification}>
+                                <NavLink ><i className="fa fa-bell "></i></NavLink>
+                                <Notification listSocket={this.state.listNotifi} open={this.state.openModalNotifi}></Notification>
+                            </NavItem>
+                        </Badge>
                         <UncontrolledDropdown nav inNavbar>
                             <DropdownToggle nav caret>
                                 {this.state.imagePreview != '' ? 
@@ -170,7 +181,10 @@ class NavBar extends Component {
 
 const mapStateToProps = (state) => {
   return {
-        auth: state.login
+        auth: state.login,
+        notifiSocket: state.countNotifi,
+        addContactSocket: state.addContact,
+        socket: state.socket
   }
 }
 
@@ -178,6 +192,9 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
           logoutUser : (data) => {
             dispatch(actions.logoutUser(data));
+          },
+          resetNotifi : ()=>{
+              dispatch(actions.resetNotifi());
           }
     }
   }

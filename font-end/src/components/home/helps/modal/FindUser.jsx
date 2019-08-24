@@ -67,7 +67,6 @@ class FindUser extends Component {
       data: {uid: item._id}
     })
     .then((res)=>{
-      console.log(res);
       this.props.socket.emit("add-new-contact", {contactId : item._id})
       this.setState({
         listAddContact: [...this.state.listAddContact, item],
@@ -96,7 +95,7 @@ class FindUser extends Component {
       data: {uid: item._id}
     })
     .then((res)=>{
-      // console.log(res);
+      this.props.socket.emit("remove-request-contact", {contactId : item._id})
       this.setState({
         listAddContact: this.state.listAddContact.filter((element, i)=>{
           if(i === index) return false;

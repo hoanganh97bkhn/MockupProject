@@ -3,6 +3,7 @@ import login from './login';
 import listUser from './listUser';
 import socket from './socket';
 import addContact from './addContact';
+import countNotifi from './countNotifi';
 import { combineReducers } from 'redux';
 
 const myReducer = combineReducers({
@@ -10,7 +11,8 @@ const myReducer = combineReducers({
     login ,
     listUser ,
     socket ,
-    addContact
+    addContact,
+    countNotifi
 });
 
 export default myReducer;

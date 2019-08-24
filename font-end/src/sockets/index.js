@@ -1,9 +1,7 @@
-import addNewContact from "./contact/addNewContact";
-import removeNewContact from "./contact/removeNewContact";
+import {addNewContact} from "./contact/addNewContact";
+import {removeNewContact} from "./contact/removeNewContact";
 
-let initSockets = (socket) => {
-  addNewContact(socket);
-  // removeNewContact(socket);
+export const initSockets = (socket,props) => {
+  addNewContact(socket,props);
+  removeNewContact(socket, props);
 }
-
-export default initSockets;

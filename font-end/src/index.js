@@ -9,7 +9,7 @@ import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from "redux-saga";
 import myReducer from './reducers/index';
 import { Provider } from 'react-redux';
-import watchSaga from "./sagas/saga";
+import watchSaga from "./sagas/saga"; 
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(myReducer, applyMiddleware(sagaMiddleware));

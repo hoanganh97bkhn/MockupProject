@@ -17,13 +17,14 @@ let authLogin = passPort.authenticate('jwt', { session: false });
  */
 
 let initRouters = (app) => {
+
+  //login-register
   router.post("/register",authValid.register, auth.postRegister);
   router.get("/verify/:token", auth.verifyAccount);
   router.post("/login", auth.postLoginLocal);
   router.post("/facebook/login", auth.postLoginFb);
 
   //update user
-  router.post("/info/user",authLogin, userInfo.getInfoUser);
   router.post("/user/info/update",authLogin, userInfo.updateUser);
   router.post("/user/update/password",authLogin, userInfo.updatePassword);
 
@@ -33,17 +34,9 @@ let initRouters = (app) => {
   router.post("/contact/add-new",authLogin, contact.addNew);
   router.delete("/contact/remove-request-contact", authLogin, contact.removeRequestContact)
 
-//   router.get('/me', passPort.authenticate('jwt', { session: false }), (req, res) => {
-//     console.log(req.isAuthenticated())
-//     return res.json({
-//       id: req.user.id,
-//       name: req.user.nickname,
-//       email: req.user.local.email
-//     });
-// });
-
-  // router.get("/", auth.checkLoggedIn, home.getHome);
-  // router.get("/logout",auth.checkLoggedIn, auth.getLogout);
+  //home-get data
+  router.post("/home/user",authLogin, home.getHome);
+  
   
   return app.use('/',router);
 

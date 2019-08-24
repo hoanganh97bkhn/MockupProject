@@ -1,15 +1,6 @@
-import {connect} from 'react-redux';
-import * as actions from './../../actions/index';
+/** export dispatch action add-new-contact */
 
-let addNewContact = (socket) => {
-  socket.on('response-add-new-contact', (response) => { this.props.ResAddNewContact(response)}); //lắng nghe khi có tin nhắn mới
+export const addNewContact = (socket,props) => {
+  socket.on('response-add-new-contact', (response) => {props.ResAddNewContact(response)}); //lắng nghe khi có tin nhắn mới
 }
 
-const mapDispatchToProps = (dispatch, props) => {
-  return {
-    ResAddNewContact: (data) =>{
-      dispatch(actions.ResAddNewContact(data))
-    }
-  }
-}
-export default connect(null, mapDispatchToProps)(addNewContact);

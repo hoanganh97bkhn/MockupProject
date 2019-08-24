@@ -44,18 +44,18 @@ let updatePassword = async(req, res) => {
   }
 }
 
-let getInfoUser = async(req, res) => {
-  try{
-    let userInfo = await user.infoUser(req.body.id);
-    return res.status(200).json(userInfo);
-  }
-  catch(error){
-    return res.status(404).send(error)
-  }
-}
+// let getInfoUser = async(req, res) => {
+//   try{
+//     let userInfo = await user.infoUser(req.body.id);
+//     return res.status(200).json(userInfo);
+//   }
+//   catch(error){
+//     return res.status(404).send(error)
+//   }
+// }
 
 module.exports = {
   updateUser,
   updatePassword,
-  getInfoUser
+  // getInfoUser
 };

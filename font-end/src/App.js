@@ -13,7 +13,7 @@ import Register from './pages/register';
 import './App.css';
 import './AppResponsive.css';
 import io from 'socket.io-client';
-import initSockets from './sockets/index';
+import {initSockets} from './sockets/index';
 
 
 class App extends Component {
@@ -22,15 +22,6 @@ class App extends Component {
         //Khởi tạo state,
         this.socket = null;
     }
-    // componentDidMount() {
-    //     if(localStorage.jwtToken){
-    //         this.socket = io('http://localhost:3001',{
-    //             query: "token=" + localStorage.jwtToken
-    //         });
-    //         this.props.setupSocket(this.socket);
-    //         initSockets(this.socket);
-    //     }
-    // }
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.login.type === "success") {
@@ -39,17 +30,17 @@ class App extends Component {
                     query: "token=" + localStorage.jwtToken
                 });
                 this.props.setupSocket(this.socket);
-                initSockets(this.socket);
+                initSockets(this.socket, this.props);
             }
         }
     }
 
     componentWillMount (){
         if(localStorage.jwtToken){
-            console.log(localStorage.jwtToken);
             setAuthToken(localStorage.jwtToken);
             const payload = jwt_decode(localStorage.jwtToken);
             this.props.loginSuccess(payload);
+
     
             const currentTime = Date.now() / 1000;
             if(payload.exp < currentTime) {
@@ -90,6 +81,12 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         setupSocket : (data) =>{
             dispatch(actions.setupSocket(data))
+        },
+        ResAddNewContact : (data) => {
+            dispatch(actions.ResAddNewContact(data))
+        },
+        ResRemoveNewContact : (data) => {
+            dispatch(actions.ResRemoveNewContact(data))
         }
   }
 }
