@@ -13,6 +13,13 @@ let myReducer = (state = initialState, action) => {
             return item.id !== action.data.id
           })
           return state
+        case types.MARK_ALL_READ:
+          state = state.map(item => {
+            return {
+              ...item,
+              isRead : true,
+            }
+          })
         default : 
           return state;
     }

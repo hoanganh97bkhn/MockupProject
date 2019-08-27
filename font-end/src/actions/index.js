@@ -72,3 +72,9 @@ export const resetNotifi = () => {
     }
 }
 
+export const resetIsRead = () => {
+    return {
+        type : types.MARK_ALL_READ
+    }
+}
+

@@ -1,7 +1,7 @@
 import express from 'express';
 import passPort from 'passport';
 import initPassportJWT from './../controllers/passportController/local';
-import {home, auth, userInfo, contact} from './../controllers/index';
+import {home, auth, userInfo, contact, timer, notifi} from './../controllers/index';
 import {authValid} from './../validation/index';
 
 
@@ -30,14 +30,24 @@ let initRouters = (app) => {
 
   //contact
   router.post("/contact/search",authLogin, contact.findUser);
-  router.get("/contact/list/addfriend",authLogin, contact.listAddFriend);
+  router.get("/contact/list",authLogin, contact.listContacts);
   router.post("/contact/add-new",authLogin, contact.addNew);
   router.delete("/contact/remove-request-contact", authLogin, contact.removeRequestContact)
 
   //home-get data
-  router.post("/home/user",authLogin, home.getHome);
+  router.get("/home/user",authLogin, home.getHome);
+  router.put("/notification/mark-all-as-read",authLogin, home.markAllAsRead);
+  router.get("/notification/data/list", authLogin, home.getListDataNotification);
   
+  //timer-notification
+  router.put("/timer/count/notification-general/reset", authLogin, timer.resetCountNotifGeneral)
+  router.put("/timer/count/notification-contact/reset", authLogin, timer.resetCountNotifContact)
   
+  //notification
+  router.post("/load/notification" ,authLogin, notifi.getMoreListDataNotif);
+
+
+
   return app.use('/',router);
 
  }

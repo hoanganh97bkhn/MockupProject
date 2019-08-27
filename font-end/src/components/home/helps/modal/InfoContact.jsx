@@ -27,7 +27,6 @@ class InfoContact extends Component {
                             {this.props.titleDanger}
                         </div> : null 
                     }
-                    
                 </div>
             </li>
         );

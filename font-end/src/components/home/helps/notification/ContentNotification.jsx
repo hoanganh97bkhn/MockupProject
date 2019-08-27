@@ -7,9 +7,9 @@ class ContentNotification extends Component {
         super(props);
     }
     render() {
-        const {avatar, nickname, content} = this.props.dataUserAddFriend
+        const {avatar, nickname, content, isRead} = this.props.dataUserAddFriend
         return (
-            <li className="_notifiList">
+            <li id={!isRead ? 'isRead' : ''} className="_notifiList ">
                 <div className="notifiPanel">
                     <div className="avatar">
                         <img src={avatar === 'avatar-default.jpg' ? avatarDefault : `${config.baseUrl}/images/${avatar}`}></img>

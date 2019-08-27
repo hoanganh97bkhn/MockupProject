@@ -74,7 +74,10 @@ class GeneralAccount extends Component {
                 this.setState({
                     loading : false,
                     updateUser: data
+                }, () => {
+                    window.location.reload();
                 });
+                ;
             }
         })
         .catch((error)=>{

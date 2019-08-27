@@ -1,12 +1,13 @@
 import UserModel from './../models/userModel';
+import NotificationModel from './../models/notificationModel';
+import ActiveAccountModel from "./../models/activeAccount";
 import bcrypt from "bcrypt";
 import uuidv4 from "uuid/v4";
 import {transErrors, transSuccess, transMail} from './../../lang/vi';
 import sendMail from './../config/mailer';
 import config from './../config/host';
 import jwt from 'jsonwebtoken';
-import { rejects } from 'assert';
-import decode from 'jwt-decode';
+
 
 let saltRounds = 7;
 
@@ -35,6 +36,18 @@ let register =  (name, email, gender, password) => {
   };
 
   let user = await UserModel.createNew(userItem);
+
+  //create accountTimer model
+  await ActiveAccountModel.createNew({'userId' : user._id});
+
+  //notification active
+  let notificationItem = {
+    senderId: "admin",
+    receiverId: user._id,
+    type: NotificationModel.types.WELLCOME,
+  };
+  await NotificationModel.model.createNew(notificationItem);
+
   let linkVerify = `${config.baseUrl}/login-register/${user.local.verifyToken}`;
   //send email
   sendMail(email, transMail.subject, transMail.template(linkVerify))
@@ -102,6 +115,18 @@ let loginFb = (data ) => {
         }
       };
       newUser = await UserModel.createNew(newUserItem);
+      
+      //create accountTimerModel
+      await ActiveAccountModel.createNew({'userId' : newUser._id});
+
+      //notification active
+      let notificationItem = {
+        senderId: "admin",
+        receiverId: newUser._id,
+        type: NotificationModel.types.WELLCOME,
+      };
+      await NotificationModel.model.createNew(notificationItem);
+      
     }
     user = user ? user : newUser;     
     const payload = {

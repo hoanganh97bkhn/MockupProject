@@ -14,8 +14,31 @@ let findUser = async(req,res)=>{
   }
 }
 
-let listAddFriend = async(req,res)=>{
-  res.status(201).send('hello')
+let listContacts = async(req,res)=>{
+  try {
+      //get contacts (10 item one time)
+    let contacts = await contact.getContacts(req.user._id);
+    //get contacts sent (10 item one time)
+    let contactsSent = await contact.getContactsSent(req.user._id);
+    //get contacts received (10 item one time)
+    let contactsReceived = await contact.getContactsReceived(req.user._id);
+    
+    // count contacts
+    let countAllContacts = await contact.countAllContacts(req.user._id);
+    let countAllContactsSent = await contact.countAllContactsSent(req.user._id);
+    let countAllContactsReceived = await contact.countAllContactsReceived(req.user._id);
+
+    res.status(200).send({
+      contacts,
+      contactsSent,
+      contactsReceived,
+      countAllContacts,
+      countAllContactsReceived,
+      countAllContactsSent
+    })
+  } catch (error) {
+    res.status(500).send(error);
+  }
 }
 
 let addNew = async(req, res) => {
@@ -41,7 +64,7 @@ let removeRequestContact = async(req, res) => {
 
 module.exports = {
   findUser,
-  listAddFriend,
+  listContacts,
   addNew,
   removeRequestContact
 };

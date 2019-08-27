@@ -1,5 +1,5 @@
+import ActiveAccountModel from './../../models/activeAccount';
 import {pushSocketIdToArray, emitNotifyToArray, removeSocketIdFromArray} from './../../helpers/socketHelper';
-
 
 let addNewContact = (io) => {
   let clients = {};
@@ -15,7 +15,7 @@ let addNewContact = (io) => {
         nickname: socket.request.user.nickname,
         avatar: socket.request.user.avatar,
         content: "send you a friend invitation",
-        isRead: false 
+        isRead: false,
       };
 
       //emit notification "response-add-new-contact"
@@ -24,9 +24,13 @@ let addNewContact = (io) => {
       }
     });
 
-    socket.on("disconnect", ()=>{
+    socket.on("disconnect", async()=>{
       //remove socketId
       clients = removeSocketIdFromArray(clients, currentUserId, socket);
+
+       //save active to database
+      await ActiveAccountModel.updateTimeOffline(socket.request.user._id);
+
     })
     console.log(clients);
   })

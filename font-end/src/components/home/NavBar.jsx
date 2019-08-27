@@ -42,17 +42,18 @@ class NavBar extends Component {
         imagePreview : '',
         openModalNotifi: false,
         badge: 0,
-        listNotifi: [],
-        listNotifiFromServer: []
+        listNotifiFromServer: [],
+        countGeneralNotif : 0,
+        countContactNotif : 0,
     };
   }
     componentDidMount = () => {
-        document.body.addEventListener('click', this.closeModalNotifi);
+        
     }
     componentWillMount = () => {
         axios({
             url:`${config.baseUrl}/home/user`,
-            method: 'post',
+            method: 'get',
         })
         .then((response) => {
             if(response.data.user.avatar !== 'avatar-default.jpg'){
@@ -61,7 +62,8 @@ class NavBar extends Component {
             else imageUrl = avatar;
             this.setState({
                 user: response.data.user,
-                listNotifiFromServer: response.data.notifications,
+                countGeneralNotif : response.data.generalNotif,
+                countContactNotif : response.data.contactNotif,
             })
             }
         )
@@ -69,12 +71,21 @@ class NavBar extends Component {
             console.log(error)
         }) 
     }
-    componentWillReceiveProps = (nextProps) => {
+    handleReadMore = (data) => {
         this.setState({
-            listNotifi: nextProps.addContactSocket.concat(this.state.listNotifiFromServer)
+            listNotifiFromServer : this.state.listNotifiFromServer.concat(data)
         })
     }
-
+    markAllAsRead = () => {
+        this.setState({
+            listNotifiFromServer: this.state.listNotifiFromServer.map((item) => {
+                return {
+                    ...item,
+                    isRead : true
+                }
+            })
+        })
+    }
     imagePreview = (data) => {
         this.setState({
             imagePreview : data
@@ -86,24 +97,80 @@ class NavBar extends Component {
         });
     }
     openModalContact = () => {
-        this.setState({
-            openModalContact: !this.state.openModalContact
-        })
+        if(!this.state.openModalContact){
+            axios({
+                url:`${config.baseUrl}/timer/count/notification-contact/reset`,
+                method :'put'
+            })
+            .then((res)=>{
+                this.setState({
+                    openModalContact: !this.state.openModalContact,
+                    countContactNotif: 0,
+                });
+                this.props.resetNotifi();
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        }
+        else {
+            this.setState({
+                openModalContact: !this.state.openModalContact,
+            });
+        }
     }
     openModalSetting = () => {
         this.setState({
             openModalSetting: !this.state.openModalSetting
         })
     }
-    openNotification = () => {
-        this.props.resetNotifi();
+    openNotification = (event) => {
+        event.preventDefault();
+        console.log('show')
         this.setState({
-            openModalNotifi: true
-        })
+            openModalNotifi: true,
+        }, () => {
+            document.addEventListener('click', this.closeModalNotifi);
+        });
+
+        if(!this.state.listNotifiFromServer.length){
+            axios({
+                url:`${config.baseUrl}/notification/data/list`,
+                method: 'get',
+            })
+            .then((res) => {
+                this.setState({
+                    countGeneralNotif: 0,
+                    listNotifiFromServer: res.data.notifications,
+                })
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        }
+        else if(this.props.notifiSocket){
+            axios({
+                url:`${config.baseUrl}/timer/count/notification-general/reset`,
+                method: 'put',
+            })
+            .then((res) => {
+                this.setState({
+                    countGeneralNotif: 0,
+                })
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        }
+        this.props.resetNotifi();
     }
-    closeModalNotifi = () => {
+    closeModalNotifi = (event) => {
+        event.preventDefault();
+        console.log('close')
         this.setState({
             openModalNotifi : false
+        }, () => {
+            document.removeEventListener('click', this.closeModalNotifi);
         })
     }
     logoutUser = () => {
@@ -111,7 +178,9 @@ class NavBar extends Component {
         window.location.href = '/login-register'
     }
     render() {
-        console.log(this.props.addContactSocket)
+        const listDataNotification = this.props.addContactSocket.concat(this.state.listNotifiFromServer);
+        const countGeneralNotif = this.props.notifiSocket + this.state.countGeneralNotif;
+        const countContactNotif = this.props.notifiSocket + this.state.countContactNotif;
         return (
             <div className="navbar-main">
                 <Navbar className="container-fluid" light expand="md">
@@ -130,15 +199,15 @@ class NavBar extends Component {
                         <NavItem>
                             <NavLink ><i className="fa fa-home "></i></NavLink>
                         </NavItem>
-                        <Badge count={this.props.notifiSocket}>
+                        <Badge count={countContactNotif}>
                             <NavItem onClick={this.openModalContact}>
                                 <NavLink ><i className="fa fa-user-plus"></i></NavLink>
                             </NavItem>
                         </Badge>
-                        <Badge count={this.props.notifiSocket}>
+                        <Badge count={countGeneralNotif}>
                             <NavItem className="icon-notification" onClick={this.openNotification}>
                                 <NavLink ><i className="fa fa-bell "></i></NavLink>
-                                <Notification listSocket={this.state.listNotifi} open={this.state.openModalNotifi}></Notification>
+                                <Notification readMore = {this.handleReadMore} listSocket={listDataNotification} open={this.state.openModalNotifi} markAllAsRead = {this.markAllAsRead}></Notification>
                             </NavItem>
                         </Badge>
                         <UncontrolledDropdown nav inNavbar>
@@ -172,7 +241,7 @@ class NavBar extends Component {
                         />
                     </div>
                 </Navbar>
-                <ContactManager open={this.state.openModalContact} close={this.openModalContact}></ContactManager>
+                <ContactManager countBadge = {countContactNotif} open={this.state.openModalContact} close={this.openModalContact}></ContactManager>
                 <SettingAccount open={this.state.openModalSetting} close={this.openModalSetting} user={this.state.user} imagePreviewUrl={this.imagePreview}></SettingAccount>
             </div>
         );
@@ -197,6 +266,6 @@ const mapDispatchToProps = (dispatch, props) => {
               dispatch(actions.resetNotifi());
           }
     }
-  }
+}
   
   export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

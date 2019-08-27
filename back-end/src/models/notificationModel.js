@@ -8,6 +8,7 @@ let notificationSchema = new Schema({
   receiverId: String,
   type: String,
   isRead: {type: Boolean, default: false},
+  isNotification : {type : Boolean, default: true},
   createdAt: {type: Number, default: Date.now} 
 });
 
@@ -33,20 +34,37 @@ notificationSchema.statics = {
    */
   getByUserIdAndLimit(userId, limit){
     return this.find({"receiverId" : userId}).sort({"createdAt" : -1}).limit(limit).exec();
+  },
+  updateMarkAllAsRead(userId){
+    return this.updateMany({"receiverId" : userId}, {"isRead" : true}).exec();
+  },
+  readMore(userId, skip, limit){
+    return this.find({"receiverId" : userId}).sort({"createdAt" : -1}).skip(skip).limit(limit).exec();
   }
 }
 
 const NOTIFICATION_TYPES = {
-  ADD_CONTACT: "add_contact"
+  WELLCOME : 'wellcome',
+  ADD_CONTACT: "add_contact",
 };
 const NOTIFICATION_CONTENTS = {
-  getContent: (notificationType, isRead, userId, nickname, avatar) => {
+  getContent: (_id, notificationType, isRead, userId, nickname, avatar) => {
     if(notificationType === NOTIFICATION_TYPES.ADD_CONTACT){
       return {
+        id: _id,
         userId: userId,
         nickname: nickname,
         avatar : avatar,
         content: "send you a friend invitation",
+        isRead: isRead
+      }
+    }
+    if(notificationType === NOTIFICATION_TYPES.WELLCOME){
+      return {
+        id: _id,
+        nickname: nickname,
+        avatar : avatar,
+        content: "Welcome, have fun!",
         isRead: isRead
       }
     }
