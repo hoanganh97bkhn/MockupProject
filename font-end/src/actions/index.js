@@ -238,10 +238,87 @@ export const removeCountListContactsReceived= () => {
     }
 }
 
-// //other
-// export const removeFindUser = (data) => {
-//     return {
-//         type : types.REMOVE_LIST_CONTACTS_SENT,
-//         data
-//     }
-// }
+// conversations
+export const getListUserConversations = (data) => {
+    return {
+        type : types.GET_LIST_USER_CONVERSATIONS,
+        data
+    }
+}
+
+export const addListUserConversations = (data) => {
+    return {
+        type : types.ADD_LIST_USER_CONVERSATIONS,
+        data
+    }
+}
+
+export const scrollListUserConversations = (data) => {
+    return {
+        type : types.SCROLL_LIST_USER_CONVERSATIONS,
+        data
+    }
+}
+
+export const removeListUserConversations = (data) => {
+    return {
+        type : types.REMOVE_LIST_USER_CONVERSATIONS,
+        data
+    }
+}
+
+export const getListGroupConversations = (data) => {
+    return {
+        type : types.GET_LIST_GROUP_CONVERSATIONS,
+        data
+    }
+}
+
+export const addListGroupConversations = (data) => {
+    return {
+        type : types.ADD_LIST_GROUP_CONVERSATIONS,
+        data
+    }
+}
+
+export const scrollListGroupConversations = (data) => {
+    return {
+        type : types.SCROLL_LIST_GROUP_CONVERSATIONS,
+        data
+    }
+}
+
+export const removeListGroupConversations = (data) => {
+    return {
+        type : types.REMOVE_LIST_GROUP_CONVERSATIONS,
+        data
+    }
+}
+
+export const getListAllConversations= (data) => {
+    return {
+        type : types.GET_LIST_ALL_CONVERSATIONS,
+        data
+    }
+}
+
+export const addListAllConversations= (data) => {
+    return {
+        type : types.ADD_LIST_ALL_CONVERSATIONS,
+        data
+    }
+}
+
+export const scrollListAllConversations= (data) => {
+    return {
+        type : types.SCROLL_LIST_ALL_CONVERSATIONS,
+        data
+    }
+}
+
+export const removeListAllConversations= (data) => {
+    return {
+        type : types.REMOVE_LIST_ALL_CONVERSATIONS,
+        data
+    }
+}

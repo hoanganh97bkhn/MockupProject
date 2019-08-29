@@ -1,4 +1,4 @@
-import {notification} from './../services/index';
+import {notification, message} from './../services/index';
 import {timer} from './../services/index';
 
 let getHome = async(req, res) => {
@@ -31,8 +31,6 @@ let getListDataNotification = async(req,res) => {
   }
 }
 
-
-
 let markAllAsRead = async(req, res) => {
   try {
     let markAllAsRead = await notification.markAllAsRead(req.user._id);
@@ -42,9 +40,19 @@ let markAllAsRead = async(req, res) => {
   }
 }
 
+let getAllConversationItems = async(req, res) => {
+  try {
+    let getAllConversationItems = await message.getAllConversationItems(req.user._id);
+    res.status(200).send(getAllConversationItems);
+  } catch (error) {
+    res.status(500).send(error)
+  }
+}
+
 
 module.exports = {
   getHome,
   markAllAsRead,
   getListDataNotification,
+  getAllConversationItems
 };
