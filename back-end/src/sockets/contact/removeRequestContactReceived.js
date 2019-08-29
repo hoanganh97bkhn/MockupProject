@@ -1,7 +1,7 @@
-import {pushSocketIdToArray, emitNotifyToArray, removeSocketIdFromArray} from './../../helpers/socketHelper';
+import {pushSocketIdToArray, emitNotifyToArray, removeSocketIdFromArray} from '../../helpers/socketHelper';
 
 
-let addNewContact = (io) => {
+let removeRequestContactReceived = (io) => {
   let clients = {};
   io.on("connection", (socket) => {
 
@@ -9,16 +9,16 @@ let addNewContact = (io) => {
     let currentUserId = socket.request.user._id;
     clients = pushSocketIdToArray(clients, currentUserId, socket.id)
 
-    socket.on("remove-request-contact", (data) => {
+    socket.on("remove-request-contact-received", (data) => {
       let currentUser = {
-        id: socket.request.user._id,
+        _id: socket.request.user._id,
         nickname: socket.request.user.nickname,
         avatar: socket.request.user.avatar
       };
 
       //emit notification
       if(clients[data.contactId]) {
-        emitNotifyToArray(clients, data.contactId, io, "response-remove-request-contact", currentUser);
+        emitNotifyToArray(clients, data.contactId, io, "response-remove-request-contact-received", currentUser);
       }
     });
 
@@ -30,4 +30,4 @@ let addNewContact = (io) => {
   })
 }
 
-module.exports = addNewContact;
+module.exports = removeRequestContactReceived;

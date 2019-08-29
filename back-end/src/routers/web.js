@@ -32,7 +32,13 @@ let initRouters = (app) => {
   router.post("/contact/search",authLogin, contact.findUser);
   router.get("/contact/list",authLogin, contact.listContacts);
   router.post("/contact/add-new",authLogin, contact.addNew);
-  router.delete("/contact/remove-request-contact", authLogin, contact.removeRequestContact)
+  router.delete("/contact/remove-request-contact-sent", authLogin, contact.removeRequestContactSent);
+  router.delete("/contact/remove-request-contact-received", authLogin, contact.removeRequestContactReceived);
+  router.delete("/contact/remove-contact", authLogin, contact.removeContact);
+  router.put("/contact/confirm-request-contact-received", authLogin, contact.confirmRequestContactReceived);
+  router.post("/contacts/readmore",authLogin, contact.readMoreContacts);
+  router.post("/contacts-sent/readmore",authLogin, contact.readMoreContactsSent);
+  router.post("/contacts-received/readmore",authLogin, contact.readMoreContactsReceived);
 
   //home-get data
   router.get("/home/user",authLogin, home.getHome);

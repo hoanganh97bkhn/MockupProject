@@ -33,7 +33,7 @@ let updateUser = async(req, res) => {
 
 let updatePassword = async(req, res) => {
   try{
-    console.log(req.user.id, req.body.cur_password, req.body.new_password)
+    console.log(req.user._id, req.body.cur_password, req.body.new_password)
     let updatePass = await user.updatePassword(req.body.id, req.body.cur_password, req.body.new_password);
     console.log(updatePass)
     res.status(200).send("success")

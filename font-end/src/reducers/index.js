@@ -1,18 +1,31 @@
-import register from './register';
-import login from './login';
-import listUser from './listUser';
+import register from './login/register';
+import login from './login/login';
+// import contactsSent from './otherContacts/contactsSent';
 import socket from './socket';
-import addContact from './addContact';
-import countNotifi from './countNotifi';
+import addContact from './otherContacts/addContact';
+import countNotifi from './otherContacts/countNotifi';
+import contacts from './contacts/contacts';
+import contactsSent from './contacts/contactsSent';
+import contacsReceived from './contacts/contactsReceived';
+import countContacts from './contacts/countContacts';
+import countContactsSent from './contacts/countContactsSent';
+import countContactsReceived from './contacts/countContactsReceived'
+import findUser from './contacts/findUser';
 import { combineReducers } from 'redux';
 
 const myReducer = combineReducers({
     register ,
     login ,
-    listUser ,
     socket ,
     addContact,
-    countNotifi
+    countNotifi,
+    contacts,
+    contactsSent,
+    contacsReceived,
+    countContacts,
+    countContactsSent,
+    countContactsReceived,
+    findUser
 });
 
 export default myReducer;

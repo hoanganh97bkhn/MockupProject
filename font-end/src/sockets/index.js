@@ -1,7 +1,13 @@
 import {addNewContact} from "./contact/addNewContact";
-import {removeNewContact} from "./contact/removeNewContact";
+import {removeNewContactSent} from "./contact/removeNewContactSent";
+import {removeNewContactReceived} from './contact/removeNewContactReceived';
+import {confirmNewContactReceived} from './contact/confirmNewContactReceived';
+import {removeContact} from './contact/removeContact';
 
-export const initSockets = (socket,props) => {
-  addNewContact(socket,props);
-  removeNewContact(socket, props);
+export const initSockets = (socket, props) => {
+  addNewContact(socket, props);
+  removeNewContactSent(socket, props);
+  removeNewContactReceived(socket, props);
+  confirmNewContactReceived(socket, props);
+  removeContact(socket, props);
 }

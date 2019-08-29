@@ -40,14 +40,53 @@ ContactSchema.statics = {
       ]
     }).exec();
   },
-  removeRequestContact(userId, contactId) {
+  removeRequestContactSent(userId, contactId) {
     return this.remove({
       $and: [
         {"userId" : userId},
-        {"contactId" : contactId}
+        {"contactId" : contactId},
+        {'status' : false}
       ]
     }).exec()
   },
+
+  removeRequestContactReceived(userId, contactId) {
+    return this.remove({
+      $and: [
+        {"userId" : contactId},
+        {"contactId" : userId},
+        {'status' : false}
+      ]
+    }).exec()
+  },
+
+  removeContact(userId ,contactId) {
+    return this.remove({
+      $or: [
+        {$and : [
+          {"userId" : contactId},
+          {"contactId" : userId},
+          {'status' : true}
+        ]},
+        {$and : [
+          {"userId" : userId},
+          {"contactId" : contactId},
+          {'status' : true}
+        ]},
+      ]
+    }).exec();
+  },
+
+  confirmRequestContactReceived(userId, contactId) {
+    return this.findOneAndUpdate({
+      $and: [
+        {"userId" : contactId},
+        {"contactId" : userId},
+        {'status' : false}
+      ]
+    },{'status' : true}).exec();
+  },
+
 
   /**
    * get friends by userId
@@ -134,6 +173,54 @@ ContactSchema.statics = {
         {"status" : false}
       ]
     }).exec()
+  },
+
+  /**
+   * readMoreContacts
+   * @param {*} userId 
+   * @param {*} skip 
+   * @param {*} limit 
+   */
+  readMoreContacts(userId, skip, limit) {
+    return this.find({
+      $and: [
+        {$or:[
+          {"userId" : userId},
+          {"contactId" : userId},
+        ]},
+        {'status' : true}
+      ]
+    }).sort({"createdAt": -1}).skip(skip).limit(limit).exec();
+  },
+
+  /**
+   * readMoreContacts
+   * @param {*} userId 
+   * @param {*} skip 
+   * @param {*} limit 
+   */
+  readMoreContactsSent(userId, skip, limit) {
+    return this.find({
+      $and: [
+        {'userId' : userId},
+        {'status' : false}
+      ]
+    }).sort({"createdAt": -1}).skip(skip).limit(limit).exec();
+  },
+
+  /**
+   * readMoreContacts
+   * @param {*} userId 
+   * @param {*} skip 
+   * @param {*} limit 
+   */
+  readMoreContactsReceived(userId, skip, limit) {
+    return this.find({
+      $and: [
+        {"contactId" : userId},
+        {"status" : false}
+      ]
+    }).sort({"createdAt": -1}).skip(skip).limit(limit).exec();
   },
 };
 

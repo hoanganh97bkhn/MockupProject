@@ -72,23 +72,47 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch, props) => {
-  return {
+    return {
         loginSuccess : (data) => {
-          dispatch(actions.loginSuccess(data))
+            dispatch(actions.loginSuccess(data))
         },
         logoutUser : (data) => {
-          dispatch(actions.logoutUser(data));
+            dispatch(actions.logoutUser(data));
         },
         setupSocket : (data) =>{
-            dispatch(actions.setupSocket(data))
+            dispatch(actions.setupSocket(data));
         },
-        ResAddNewContact : (data) => {
-            dispatch(actions.ResAddNewContact(data))
+        addListContactsReceived : (data) => {
+            dispatch(actions.addListContactsReceived(data));
         },
-        ResRemoveNewContact : (data) => {
-            dispatch(actions.ResRemoveNewContact(data))
+        removeListContactsReceived : (data) => {
+            dispatch(actions.removeListContactsReceived(data));
+        },
+        addCountListContactsReceived : () => {
+            dispatch(actions.addCountListContactsReceived());
+        },
+        removeCountListContactsReceived : () => {
+            dispatch(actions.removeCountListContactsReceived());
+        },
+        removeListContactsSent : (data) => {
+            dispatch(actions.removeListContactsSent(data));
+        },
+        removeCountListContactsSent : () => {
+            dispatch(actions.removeCountListContactsSent());
+        },
+        addListContacts : (data) => {
+            dispatch(actions.addListContacts(data));
+        },
+        addCountListContacts : () => {
+        dispatch(actions.addCountListContacts());
+        },
+        removeListContacts : (data) => {
+            dispatch(actions.removeListContacts(data))
+        },
+        removeCountListContacts : () => {
+            dispatch(actions.removeCountListContacts())
         }
-  }
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

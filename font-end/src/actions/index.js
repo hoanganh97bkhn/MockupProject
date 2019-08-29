@@ -39,9 +39,24 @@ export const logoutUser = (payload) => {
     // history.push('/login');
 }
 
-export const getListAddFriend = () => {
+export const setListAddFriend = (data) => {
     return{
         type : types.ADD_FRIEND,
+        data : data
+    }
+}
+
+export const setListRemoveFriend = (data) => {
+    return{
+        type : types.REMOVE_FRIEND,
+        data : data
+    }
+}
+
+export const cancelConactsSent = (data) => {
+    return {
+        type : types.CANCEL_CONTACTS_SENT,
+        data : data
     }
 }
 
@@ -51,6 +66,7 @@ export const setupSocket = (data) => {
         data : data
     }
 }
+
 
 export const ResAddNewContact = (data) => {
     return{
@@ -78,3 +94,154 @@ export const resetIsRead = () => {
     }
 }
 
+
+//list conatct
+export const getListContacts = (data) => {
+    return {
+        type : types.GET_LIST_CONTACTS,
+        data
+    }
+}
+
+export const addListContacts = (data) => {
+    return {
+        type : types.ADD_LIST_CONTACTS,
+        data
+    }
+}
+
+export const scrollListContacts = (data) => {
+    return {
+        type : types.SCROLL_LIST_CONTACTS,
+        data
+    }
+}
+
+export const removeListContacts = (data) => {
+    return {
+        type : types.REMOVE_LIST_CONTACTS,
+        data
+    }
+}
+
+export const getListContactsSent = (data) => {
+    return {
+        type : types.GET_LIST_CONTACTS_SENT,
+        data
+    }
+}
+
+export const addListContactsSent = (data) => {
+    return {
+        type : types.ADD_LIST_CONTACTS_SENT,
+        data
+    }
+}
+
+export const scrollListContactsSent = (data) => {
+    return {
+        type : types.SCROLL_LIST_CONTACTS_SENT,
+        data
+    }
+}
+
+export const removeListContactsSent = (data) => {
+    return {
+        type : types.REMOVE_LIST_CONTACTS_SENT,
+        data
+    }
+}
+
+export const getListContactsReceived= (data) => {
+    return {
+        type : types.GET_LIST_CONTACTS_RECEIVED,
+        data
+    }
+}
+
+export const addListContactsReceived= (data) => {
+    return {
+        type : types.ADD_LIST_CONTACTS_RECEIVED,
+        data
+    }
+}
+
+export const scrollListContactsReceived= (data) => {
+    return {
+        type : types.SCROLL_LIST_CONTACTS_RECEIVED,
+        data
+    }
+}
+
+export const removeListContactsReceived= (data) => {
+    return {
+        type : types.REMOVE_LIST_CONTACTS_RECEIVED,
+        data
+    }
+}
+
+//count list contacts
+export const countListContacts = (data) => {
+    return {
+        type : types.COUNT_LIST_CONTACTS,
+        data
+    }
+}
+
+export const addCountListContacts = () => {
+    return {
+        type : types.ADD_COUNT_LIST_CONTACTS,
+    }
+}
+
+export const removeCountListContacts = () => {
+    return {
+        type : types.REMOVE_COUNT_LIST_CONTACTS,
+    }
+}
+
+export const countListContactsSent = (data) => {
+    return {
+        type : types.COUNT_LIST_CONTACTS_SENT,
+        data
+    }
+}
+
+export const addCountListContactsSent = () => {
+    return {
+        type : types.ADD_COUNT_LIST_CONTACTS_SENT,
+    }
+}
+
+export const removeCountListContactsSent = () => {
+    return {
+        type : types.REMOVE_COUNT_LIST_CONTACTS_SENT,
+    }
+}
+
+export const countListContactsReceived= (data) => {
+    return {
+        type : types.COUNT_LIST_CONTACTS_RECEIVED,
+        data
+    }
+}
+
+export const addCountListContactsReceived= () => {
+    return {
+        type : types.ADD_COUNT_LIST_CONTACTS_RECEIVED,
+    }
+}
+
+export const removeCountListContactsReceived= () => {
+    return {
+        type : types.REMOVE_COUNT_LIST_CONTACTS_RECEIVED,
+    }
+}
+
+// //other
+// export const removeFindUser = (data) => {
+//     return {
+//         type : types.REMOVE_LIST_CONTACTS_SENT,
+//         data
+//     }
+// }

@@ -1,66 +1,73 @@
 import React, { Component } from 'react';
-import {Select} from 'antd';
-import avatar from './../../image/avatar-default.jpg';
-import { max } from 'moment';
+import {Select, Icon, Tooltip, Modal, Button} from 'antd';
+import UserChat from './helps/leftMain/UserChat';
+import GroupChat from './helps/leftMain/GroupChat';
+import AllChat from './helps/leftMain/AllChat';
+import ModalCreateGroupChat from './helps/leftMain/ModalCreateGroupChat';
 
 const {Option} = Select;
 
 class LeftMain extends Component {
-  handleChange = (value)=>{
-    console.log(`selected ${value}`);
-  }
-  render() {
-    return (
-      <div className="left">
-        <div className="select-chat">
-            <Select className="option-select" defaultValue="all-message" style={{ width: 240 }} onChange={this.handleChange}>
-                <Option value="all-message">All Chat</Option>
-                <Option value="group-chat">Group Chat</Option>
-                <Option value="chat">Chat</Option>
-            </Select>
+    constructor(props){
+        super(props);
+        this.state={
+            valueOption : 'all-message',
+            visible : false
+        }
+    }
+    handleChange = (value)=>{
+        this.setState({
+            valueOption: value
+        })
+    }
+    showModal = () => {
+        this.setState({
+          visible: true,
+        });
+    };
+    
+    handleOk = () => {
+        this.setState({
+            visible: false,
+        });
+    };
+
+    handleCancel = () => {
+        this.setState({
+            visible: false,
+        });
+    };
+
+    render() {
+        return (
+        <div className="left">
+            <div className="select-chat">
+                <Select className="option-select" defaultValue="all-message" style={{ width: 200 }} onChange={this.handleChange}>
+                    <Option value="all-message">All Chat</Option>
+                    <Option value="group-chat">Group Chat</Option>
+                    <Option value="user-chat">Chat</Option>
+                </Select>
+                <Tooltip placement="topLeft" title={'Create group chat'}>
+                    <Icon onClick={this.showModal} className="gr-chat" type="form" />
+                </Tooltip>
+            </div>
+                {this.state.valueOption === 'all-message' ? <AllChat/> : 
+                this.state.valueOption === 'group-chat'   ? <GroupChat/> :
+                                                            <UserChat/>
+                }
+            <div>
+                <Modal
+                    title="Create Group Chat"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                >
+                    <ModalCreateGroupChat/>
+                </Modal>
+            </div>
         </div>
-        <ul className="people no-padding-start">
-            <a href="#uidcontact._id" className="room-chat">
-                <li className="person" data-chat="contact._id">
-                    <div className="left-avatar">
-                        <div className="dot"></div>
-                        <img src={avatar} alt=""></img>
-                    </div>
-                    <span className="name">
-                        Hoang Anh
-                    </span>
-                    <span className="time">Một phút trước</span>
-                    <span className="preview">Xin chào</span>
-                </li>
-            </a>
-            <a href="#uidgroupChatItem._id" className="room-chat">
-                <li className="person group-chat" data-chat="groupChatItem._id">
-                    <div className="left-avatar">
-                        {/* <!-- <div className="dot"></div> --> */}
-                        <img src={avatar} alt=""></img>
-                    </div>
-                    <span className="name">
-                        <span className="group-chat-name">Group:</span> Group Chat
-                    </span>
-                    <span className="time">Hai giờ trước</span>
-                    <span className="preview">Chào cả nhóm</span>
-                </li>
-            </a>
-            <a href="#" className="room-chat" id="null-contact">
-                <li className="person active" data-chat="person-default">
-                    <div className="left-avatar">
-                        <div className="dot online"></div>
-                        <img className="avatar-online" src={avatar} alt=""></img>
-                    </div>
-                    <span className="name">Hoang Anh (admin)</span>
-                    <span className="time">Bây giờ</span>
-                    <span className="preview">Xin chào <strong>Hoang Anh</strong>...</span>
-                </li>
-            </a>
-        </ul>
-      </div>
-    );
-  }
+        );
+    }
 }
 
 export default LeftMain;

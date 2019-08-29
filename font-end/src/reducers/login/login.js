@@ -1,6 +1,7 @@
-import * as types from '../constants/ActionTypes'
-import isEmpty from '../validation/is-empty';
-import setAuthToken from './../setAuthToken';
+import * as types from './../../constants/ActionTypes'
+
+import isEmpty from '../../validation/is-empty';
+import setAuthToken from '../../setAuthToken';
 
 
 let initialState = {

@@ -52,6 +52,24 @@ class FindUser extends Component {
     })
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    
+    let data = this.state.listUser;
+    let item = nextProps.findUser[0];
+    if(data.length > 0) {
+      data.map((value, i)=>{
+        if(value._id === item._id) return (
+          value.titleSuccess = "Add Friend",
+          value.titleDanger  = ""
+        )
+        else return value
+      });
+      this.setState({
+        listUser: data
+      })
+    }
+  }
+
   handleAddFriend = (item, index) => {
     let data = this.state.listUser;
     data.map((value, i)=>{
@@ -67,7 +85,9 @@ class FindUser extends Component {
       data: {uid: item._id}
     })
     .then((res)=>{
-      this.props.socket.emit("add-new-contact", {contactId : item._id})
+      this.props.socket.emit("add-new-contact", {contactId : item._id});
+      this.props.addListContactsSent(item);
+      this.props.addCountListContactsSent();
       this.setState({
         listAddContact: [...this.state.listAddContact, item],
         listUser: data
@@ -87,15 +107,16 @@ class FindUser extends Component {
       )
       else return value
     });
-
     //call api remove
     axios({
-      url: `${config.baseUrl}/contact/remove-request-contact`,
+      url: `${config.baseUrl}/contact/remove-request-contact-sent`,
       method: "delete",
       data: {uid: item._id}
     })
     .then((res)=>{
-      this.props.socket.emit("remove-request-contact", {contactId : item._id})
+      this.props.socket.emit("remove-request-contact-sent", {contactId : item._id});
+      this.props.removeListContactsSent(item);
+      this.props.removeCountListContactsSent();
       this.setState({
         listAddContact: this.state.listAddContact.filter((element, i)=>{
           if(i === index) return false;
@@ -112,13 +133,13 @@ class FindUser extends Component {
   render() {
     return (
        <div>
-           <Search
+            <Search
                 placeholder="Input nickname or email"
                 onSearch={value => this.handleSearch(value)}
                 style={{ width: max}}
                 size="large"
             />
-            <div className="find-user-bottom">
+            <div id="style-contatcs" className="find-user-bottom">
                 <ul className="contactList">
                   {this.state.listUser.length > 0 ? 
                     this.state.listUser.map((item, index)=>{
@@ -136,22 +157,26 @@ class FindUser extends Component {
 
 const mapStateToProps = (state) => {
   return {
-      socket: state.socket
+      socket: state.socket,
+      findUser : state.findUser
   }
 }
 
-// const mapDispatchToProps = (dispatch, props) => {
-//   return {
-//         loginSuccess : (data) => {
-//           dispatch(actions.loginSuccess(data))
-//         },
-//         logoutUser : (data) => {
-//           dispatch(actions.logoutUser(data));
-//         },
-//         setupSocket : (data) =>{
-//             dispatch(actions.setupSocket(data))
-//         }
-//   }
-// }
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+        addListContactsSent : (data) => {
+          dispatch(actions.addListContactsSent(data))
+        },
+        removeListContactsSent : (data) => {
+          dispatch(actions.removeListContactsSent(data));
+        },
+        addCountListContactsSent : () => {
+          dispatch(actions.addCountListContactsSent());
+        },
+        removeCountListContactsSent : () => {
+          dispatch(actions.removeCountListContactsSent());
+        }
+  }
+}
 
-export default connect(mapStateToProps, null)(FindUser);
+export default connect(mapStateToProps, mapDispatchToProps)(FindUser);

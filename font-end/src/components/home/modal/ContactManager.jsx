@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import axios from 'axios';
 import config from './../../../config/index';
 import * as actions from './../../../actions/index';
+import { tsImportEqualsDeclaration } from '@babel/types';
 
 
 const { TabPane } = Tabs;
@@ -16,12 +17,7 @@ class ContactManager extends Component {
     constructor(props){
         super(props);
         this.state = {
-            contacts : [],
-            contactsSent : [],
-            contactsReceived : [],
-            countAllContacts : 0,
-            countAllContactsSent : 0,
-            countAllContactsReceived : 0,
+            removeFindUser : []
         }
     }
 
@@ -31,16 +27,15 @@ class ContactManager extends Component {
             method: 'GET',
           })
           .then((response) => {
-            console.log(response.data)
             let {contacts, contactsSent, contactsReceived, countAllContacts, countAllContactsReceived, countAllContactsSent} = response.data;
-            this.setState({
-                contacts : contacts,
-                contactsSent : contactsSent,
-                contactsReceived : contactsReceived,
-                countAllContacts : countAllContacts,
-                countAllContactsReceived : countAllContactsReceived,
-                countAllContactsSent : countAllContactsSent
-            })
+            this.props.getListContacts(contacts);
+            this.props.getListContactsSent(contactsSent);
+            this.props.getListContactsReceived(contactsReceived);
+
+            //count
+            this.props.countListContacts(countAllContacts);
+            this.props.countListContactsSent(countAllContactsSent);
+            this.props.countListContactsReceived(countAllContactsReceived);
           })
           .catch((error)=> {
             console.log(error)
@@ -69,7 +64,7 @@ class ContactManager extends Component {
                         }
                         key="1"
                         >
-                        <FindUser></FindUser>
+                        <FindUser removeFindUser={this.state.removeFindUser}></FindUser>
                     </TabPane>
 
                     <TabPane
@@ -77,12 +72,12 @@ class ContactManager extends Component {
                             <span className="tab-pane">
                                 <Icon type="contacts" />
                                 Contact
-                                <Badge count={this.state.countAllContacts} overflowCount={99} style={{ backgroundColor: '#52c41a' }}></Badge>
+                                <Badge count={this.props.countContacts} overflowCount={99} style={{ backgroundColor: '#52c41a' }}></Badge>
                             </span>
                         }
                         key="2"
                         >
-                        <Contact listData = {this.state.contacts}></Contact>
+                        <Contact ></Contact>
                     </TabPane>
 
                     <TabPane
@@ -90,12 +85,12 @@ class ContactManager extends Component {
                             <span className="tab-pane">
                                 <Icon type="loading" />
                                 Wait For Confirmation
-                                <Badge count={this.state.countAllContactsSent} overflowCount={99}></Badge>
+                                <Badge count={this.props.countContactsSent} overflowCount={99}></Badge>
                             </span>
                         }
                         key="3"
                         >
-                        <WaitConfirmation listData = {this.state.contactsSent}></WaitConfirmation>
+                        <WaitConfirmation></WaitConfirmation> 
                     </TabPane>
 
                     <TabPane
@@ -103,12 +98,12 @@ class ContactManager extends Component {
                             <span className="tab-pane" onClick={this.handleFriendRequest}> 
                                 <Icon type="check" />
                                 Friend Request
-                                <Badge count={this.state.countAllContactsReceived} overflowCount={99}></Badge>
+                                <Badge count={this.props.countContactsReceived} overflowCount={99}></Badge>
                             </span>
                         }
                         key="4"
                         >
-                        <FriendRequest listData = {this.state.contactsReceived}></FriendRequest>
+                        <FriendRequest></FriendRequest>
                     </TabPane>
                 </Tabs>
             </Modal>
@@ -119,8 +114,10 @@ class ContactManager extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        addContactSocket: state.addContact,
-        socket: state.socket
+        socket: state.socket,
+        countContacts: state.countContacts,
+        countContactsSent: state.countContactsSent,
+        countContactsReceived: state.countContactsReceived,
     }
   }
   
@@ -131,7 +128,25 @@ const mapStateToProps = (state) => {
             },
             resetNotifi : ()=>{
                 dispatch(actions.resetNotifi());
-            }
+            },
+            getListContacts : (data)=>{
+                dispatch(actions.getListContacts(data));
+            },
+            getListContactsSent : (data)=>{
+                dispatch(actions.getListContactsSent(data));
+            },
+            getListContactsReceived : (data)=>{
+                dispatch(actions.getListContactsReceived(data));
+            },
+            countListContacts : (data)=>{
+                dispatch(actions.countListContacts(data));
+            },
+            countListContactsSent : (data)=>{
+                dispatch(actions.countListContactsSent(data));
+            },
+            countListContactsReceived : (data)=>{
+                dispatch(actions.countListContactsReceived(data));
+            },
       }
   }
 

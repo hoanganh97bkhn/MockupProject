@@ -1,4 +1,5 @@
-import * as types from '../constants/ActionTypes'
+import * as types from './../../constants/ActionTypes'
+
 
 let initialState = [];
 
@@ -10,7 +11,7 @@ let myReducer = (state = initialState, action) => {
           return state;
         case types.RES_REMOVE_NEW_CONTACT : 
           state = state.filter(item => {
-            return item.id !== action.data.id
+            return item._id !== action.data._id
           })
           return state
         case types.MARK_ALL_READ:

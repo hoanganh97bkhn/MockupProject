@@ -46,6 +46,7 @@ notificationSchema.statics = {
 const NOTIFICATION_TYPES = {
   WELLCOME : 'wellcome',
   ADD_CONTACT: "add_contact",
+  CONFIRM_FRIEND : 'confirm_friend'
 };
 const NOTIFICATION_CONTENTS = {
   getContent: (_id, notificationType, isRead, userId, nickname, avatar) => {
@@ -65,6 +66,15 @@ const NOTIFICATION_CONTENTS = {
         nickname: nickname,
         avatar : avatar,
         content: "Welcome, have fun!",
+        isRead: isRead
+      }
+    }
+    if(notificationType === NOTIFICATION_TYPES.CONFIRM_FRIEND){
+      return {
+        id: _id,
+        nickname: nickname,
+        avatar : avatar,
+        content: "accepted the friend request",
         isRead: isRead
       }
     }

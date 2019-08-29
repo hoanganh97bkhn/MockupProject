@@ -270,6 +270,10 @@
   bottom: 0%;
   margin-left: 3px;
 }
+.find-user-bottom{
+  max-height: 50vh;
+  overflow-y: auto;
+}
 .contactList>li {
   list-style-type: none;
   position: relative;
@@ -336,6 +340,29 @@
 .contactPanel .action-danger:hover{
   border-color: #e74c3c;
   background-color: #e74c3c;
+}
+#style-contatcs::-webkit-scrollbar {
+	width: 6px;
+	background-color: #fff;
+}
+
+#style-contatcs::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: #ffffff;
+  border: none;
+}
+#style-contatcs::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #aaa;
+  border: 1px solid #aaa;
+}
+
+#style-contatcs::-webkit-scrollbar-thumb:hover {
+  background: #fff;
+}
+
+#style-contatcs::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(left, #22ADD4, #1E98BA);
 }
 /* notification*/
 
@@ -574,6 +601,14 @@ h6{
 }
 .group-chat-name {
   color: #ff7675 !important;
+}
+.left .gr-chat svg{
+  height: 25px;
+  width: 25px;
+  margin-left: 10px;
+}
+.left .gr-chat:hover{
+  cursor: pointer;
 }
 
 /*right main*/

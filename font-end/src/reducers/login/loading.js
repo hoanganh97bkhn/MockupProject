@@ -1,4 +1,5 @@
-import * as types from '../constants/ActionTypes'
+import * as types from './../../constants/ActionTypes'
+
 import { stat } from 'fs';
 
 let initialState = false;

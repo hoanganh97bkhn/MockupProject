@@ -75,7 +75,16 @@ UserSchema.statics = {
         }
       ]
     },{_id:1, nickname:1, address:1, avatar: 1}).exec()
-  }
+  },
+  getNormalUserDataById (id){
+    if(id === 'admin') return {
+      _id: 'admin',
+      nickname: "admin",
+      avatar : "avatar-default.jpg"
+    }
+    else
+      return this.findById(id ,{_id:1, nickname:1, address:1, avatar: 1, gender: 1}).exec()
+  },
 }
 
 UserSchema.methods = {

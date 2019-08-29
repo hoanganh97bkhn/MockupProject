@@ -10,7 +10,7 @@ let updateUser =  (req, form) => {
       }
       const arrayOfFiles = files["file"];
       let postUser = {};
-      const user = await UserModel.findById(req.user.id);
+      const user = await UserModel.findById(req.user._id);
       const file = `public/images/${user.avatar}`;
       if(arrayOfFiles){
         if(user){
@@ -57,7 +57,7 @@ let updateUser =  (req, form) => {
             updatedAt: Date.now()
           }
         }
-        let updateInfo = await UserModel.findByIdAndUpdate(req.user.id, postUser);
+        let updateInfo = await UserModel.findByIdAndUpdate(req.user._id, postUser);
         console.log(updateInfo)
         if(!updateInfo){
           return reject ('Sever error!')

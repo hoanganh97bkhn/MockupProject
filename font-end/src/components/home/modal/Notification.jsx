@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Spin } from 'antd';
+import { Spin, Icon } from 'antd';
 import ContentNotification from './../helps/notification/ContentNotification';
 import config from './../../../config/index';
 import axios from 'axios';
 import {connect} from 'react-redux';
 import * as actions from './../../../actions/index';
 
+
+const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 class Notification extends Component {
   constructor(props){
     super(props);
@@ -50,7 +52,6 @@ class Notification extends Component {
         }
       })
       .then((res) => {
-        console.log(res.data)
         this.props.readMore(res.data)
         this.setState({
           displaySpiner : 'none'
@@ -67,7 +68,6 @@ class Notification extends Component {
   }
 
   render() {
-    console.log(this.props.listSocket)
     const list = this.props.listSocket;
     return (
       <div className="menu-notification" style={{display: this.props.open ? 'block' : 'none'}}>
@@ -77,14 +77,14 @@ class Notification extends Component {
               <a onClick={this.markAllAsRead} className="reset-notification" href={'#'}>Mark All as Read</a> 
             </div>
             
-            <div id="box-list" className="box-list" onScroll={this.handleScrollLoadNotif}>
+            <div id="style-contatcs" className="box-list" onScroll={this.handleScrollLoadNotif}>
               {list.length > 0 ? list.map((item,index) => {
                 return (
                   <ContentNotification id={index} key={index} dataUserAddFriend = {item} resetAll = {this.state.reset}/>
                 )
               }) : null}
               <div style={{textAlign:'center', display: this.state.displaySpiner}}>
-                <Spin/>
+                <Spin ndicator={antIcon}/>
               </div>
             </div>
             

@@ -1,7 +1,7 @@
 import ActiveAccountModel from './../../models/activeAccount';
 import {pushSocketIdToArray, emitNotifyToArray, removeSocketIdFromArray} from './../../helpers/socketHelper';
 
-let addNewContact = (io) => {
+let confirmRequestContactReceived = (io) => {
   let clients = {};
   io.on("connection", (socket) => {
 
@@ -9,18 +9,18 @@ let addNewContact = (io) => {
     let currentUserId = socket.request.user._id;
     clients = pushSocketIdToArray(clients, currentUserId, socket.id)
 
-    socket.on("add-new-contact", (data) => {
+    socket.on("confirm-request-contact-received", (data) => {
       let currentUser = {
         _id: socket.request.user._id,
         nickname: socket.request.user.nickname,
         avatar: socket.request.user.avatar,
-        content: "send you a friend invitation",
+        content: "accepted the friend request",
         isRead: false,
       };
 
       //emit notification "response-add-new-contact"
       if(clients[data.contactId]) {
-        emitNotifyToArray(clients, data.contactId, io, "response-add-new-contact", currentUser);
+        emitNotifyToArray(clients, data.contactId, io, "response-confirm-request-contact-received", currentUser);
       }
     });
 
@@ -36,4 +36,4 @@ let addNewContact = (io) => {
   })
 }
 
-module.exports = addNewContact;
+module.exports = confirmRequestContactReceived;
