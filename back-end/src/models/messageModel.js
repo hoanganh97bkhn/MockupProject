@@ -20,8 +20,8 @@ let messageSchema = new Schema({
   text: String,
   file: {
     data: Buffer,
-    contentFile: String,
-
+    contentType: String,
+    fileName : String
   },
   createdAt: {type: Number, default: Date.now},
   updatedAt: {type: Number, default: null},
