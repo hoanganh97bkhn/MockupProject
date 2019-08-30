@@ -786,3 +786,12 @@ h6{
 .write .action-chat i{
   margin-left: auto;
 }
+
+/*other*/
+.text-over{
+  width: 40%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-bottom: 0px;
+}

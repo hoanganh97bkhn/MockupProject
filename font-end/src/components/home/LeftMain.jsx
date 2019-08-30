@@ -38,6 +38,10 @@ class LeftMain extends Component {
         });
     };
 
+    handleOpenChat = (item) => {
+        this.props.handleOpenChat(item)
+    }
+
     render() {
         return (
         <div className="left">
@@ -51,9 +55,9 @@ class LeftMain extends Component {
                     <Icon onClick={this.showModal} className="gr-chat" type="form" />
                 </Tooltip>
             </div>
-                {this.state.valueOption === 'all-message' ? <AllChat/> : 
-                this.state.valueOption === 'group-chat'   ? <GroupChat/> :
-                                                            <UserChat/>
+                {this.state.valueOption === 'all-message' ? <AllChat handleOpenChat={this.handleOpenChat}/> : 
+                this.state.valueOption === 'group-chat'   ? <GroupChat handleOpenChat={this.handleOpenChat}/> :
+                                                            <UserChat handleOpenChat={this.handleOpenChat}/>
                 }
             <div>
                 <Modal

@@ -2,6 +2,21 @@ import * as types from './../constants/ActionTypes';
 import setAuthToken from './../setAuthToken';
 let data = [];
 
+//user
+export const getUser = (data) => {
+    return {
+        type: types.GET_USER,
+        data
+    }
+}
+export const updateUser = (data) => {
+    return {
+        type: types.UPDATE_USER,
+        data
+    }
+}
+
+//login-register
 export const register = (data) => {
     return{
         type : types.CALL_API_REGISTER,
@@ -267,6 +282,8 @@ export const removeListUserConversations = (data) => {
     }
 }
 
+// all-conversation-groups
+
 export const getListGroupConversations = (data) => {
     return {
         type : types.GET_LIST_GROUP_CONVERSATIONS,
@@ -295,6 +312,8 @@ export const removeListGroupConversations = (data) => {
     }
 }
 
+// all-conversation-
+
 export const getListAllConversations= (data) => {
     return {
         type : types.GET_LIST_ALL_CONVERSATIONS,
@@ -319,6 +338,35 @@ export const scrollListAllConversations= (data) => {
 export const removeListAllConversations= (data) => {
     return {
         type : types.REMOVE_LIST_ALL_CONVERSATIONS,
+        data
+    }
+}
+
+// all-conversation-with-messages
+export const getListAllConversationWithMessages= (data) => {
+    return {
+        type : types.GET_LIST_ALL_CONVERSATION_WITH_MESSAGES,
+        data
+    }
+}
+
+export const addListAllConversationWithMessages= (data) => {
+    return {
+        type : types.ADD_LIST_ALL_CONVERSATION_WITH_MESSAGES,
+        data
+    }
+}
+
+export const scrollListAllConversationWithMessages= (data) => {
+    return {
+        type : types.SCROLL_LIST_ALL_CONVERSATION_WITH_MESSAGES,
+        data
+    }
+}
+
+export const removeListAllConversationWithMessages= (data) => {
+    return {
+        type : types.REMOVE_LIST_ALL_CONVERSATION_WITH_MESSAGES,
         data
     }
 }

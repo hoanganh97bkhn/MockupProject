@@ -4,7 +4,7 @@ import avatar_default from './../../../../image/avatar-default.jpg';
 import config from './../../../../config/index';
 import * as actions from './../../../../actions/index';
 import axios from 'axios';
-import {Spin, Icon, message} from 'antd';
+import {Spin, Icon, message, Modal} from 'antd';
 import {connect} from 'react-redux';
 
 
@@ -14,7 +14,26 @@ let urlImage = (avatar) => {
   else return avatar_default
 }
 
+const { confirm } = Modal;
 const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />
+
+function handleDeleteContacts (item, props){
+  axios({
+    url: `${config.baseUrl}/contact/remove-contact`,
+    method: "delete",
+    data: {uid: item._id}
+  })
+  .then((res)=>{
+    message.success(`Delete friend ${item.nickname} success!`);
+    props.socket.emit("remove-contact", {contactId : item._id});
+    props.removeListContacts(item);
+    props.removeCountListContacts();
+  })
+  .catch((error)=>{
+    message.error(`Delete friend ${item.nickname} error!`);
+    console.log(error)
+  })
+}
 
 class Contact extends Component {
   constructor(props){
@@ -22,6 +41,7 @@ class Contact extends Component {
     this.state={
       skip : 0,
       displaySpiner : 'none',
+      visible: false 
     }
   }
 
@@ -36,23 +56,38 @@ class Contact extends Component {
       skip : nextProps.contacts.length
     })
   }
+  showDeleteConfirm = (item, props)=>{
+    confirm({
+      title: `Are you sure delete ${item.nickname} from contacts list?`,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk(){
+        handleDeleteContacts(item, props)
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
 
-  handleDeleteFriend = (item, index) => {
-    //call api remove
-    axios({
-      url: `${config.baseUrl}/contact/remove-contact`,
-      method: "delete",
-      data: {uid: item._id}
-    })
-    .then((res)=>{
-      message.success(`Delete friend ${item.nickname} success!`);
-      this.props.socket.emit("remove-contact", {contactId : item._id});
-      this.props.removeListContacts(item);
-      this.props.removeCountListContacts();
-    })
-    .catch((error)=>{
-      console.log(error)
-    })
+  handleDeleteContacts (item){
+    console.log('hello')
+    // axios({
+    //   url: `${config.baseUrl}/contact/remove-contact`,
+    //   method: "delete",
+    //   data: {uid: item._id}
+    // })
+    // .then((res)=>{
+    //   message.success(`Delete friend ${item.nickname} success!`);
+    //   this.props.socket.emit("remove-contact", {contactId : item._id});
+    //   this.props.removeListContacts(item);
+    //   this.props.removeCountListContacts();
+    // })
+    // .catch((error)=>{
+    //   message.error(`Delete friend ${item.nickname} error!`);
+    //   console.log(error)
+    // })
   }
 
   handleScrollLoad = (event) =>{
@@ -99,7 +134,7 @@ class Contact extends Component {
                         titleSuccess={"Messgae"} 
                         titleDanger={"Delete"}
                         clickSuccess = {() => this.handleMessage(item, index)}
-                        clickDanger={()=>this.handleDeleteFriend(item, index)}>
+                        clickDanger={()=>this.showDeleteConfirm(item, this.props)}>
                       </InfoContact> )
                   })  
               : null }

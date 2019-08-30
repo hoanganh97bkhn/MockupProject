@@ -1,6 +1,6 @@
+import user from './user/user';
 import register from './login/register';
 import login from './login/login';
-// import contactsSent from './otherContacts/contactsSent';
 import socket from './socket';
 import addContact from './otherContacts/addContact';
 import countNotifi from './otherContacts/countNotifi';
@@ -14,9 +14,11 @@ import findUser from './contacts/findUser';
 import allConversations from './messages/allConversations';
 import groupConversations from './messages/groupConversations';
 import userConversations from './messages/userConversations';
+import allConversationWithMessages from './messages/allConversationWithMessages';
 import { combineReducers } from 'redux';
 
 const myReducer = combineReducers({
+    user,
     register ,
     login ,
     socket ,
@@ -31,7 +33,8 @@ const myReducer = combineReducers({
     findUser,
     allConversations,
     userConversations,
-    groupConversations
+    groupConversations,
+    allConversationWithMessages
 });
 
 export default myReducer;

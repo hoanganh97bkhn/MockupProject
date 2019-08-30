@@ -11,6 +11,11 @@ let urlImage = (avatar) => {
 }
 
 class UserChat extends Component {
+
+  handleOpenChat = (item) => {
+    this.props.handleOpenChat(item)
+  }
+  
   render() {
     const listData = this.props.userConversations;
     return (
@@ -18,16 +23,16 @@ class UserChat extends Component {
                 { listData.map( (item, index) => {
                     return (
                         <a key ={index}  href = {"#uid_" + item._id} className="room-chat">
-                            <li className="person" data-chat={item._id}>
+                            <li className="person" data-chat={item._id} onClick={(e) => {this.handleOpenChat(item)}}>
                                 <div className="left-avatar">
                                     <div className="dot"></div>
                                     <img src={urlImage(item.avatar)} alt=""></img>
                                 </div>
-                                <span className="name">
+                                <p className="name text-over">
                                     {item.nickname}
-                                </span>
+                                </p>
                                 <span className="time">Một phút trước</span>
-                                <span className="preview">Xin chào</span>
+                                <span className="preview text-over">Xin chào</span>
                             </li>
                         </a>
                     )

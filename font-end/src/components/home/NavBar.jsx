@@ -56,6 +56,7 @@ class NavBar extends Component {
             method: 'get',
         })
         .then((response) => {
+            this.props.getUser(response.data.user);
             if(response.data.user.avatar !== 'avatar-default.jpg'){
                 imageUrl = config.baseUrl + '/images/' + response.data.user.avatar
             }
@@ -264,6 +265,9 @@ const mapDispatchToProps = (dispatch, props) => {
           },
           resetNotifi : ()=>{
               dispatch(actions.resetNotifi());
+          },
+          getUser : (data) => {
+              dispatch(actions.getUser(data));
           }
     }
 }

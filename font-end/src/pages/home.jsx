@@ -11,6 +11,13 @@ import * as actions from './../actions/index';
 
 class home extends Component {
 
+    constructor(props){
+        super(props);
+        this.state = {
+            item_chat_room: ''
+        }
+    }
+
 
     componentWillMount = ()=>{
         axios({
@@ -21,6 +28,10 @@ class home extends Component {
             this.props.getListUserConversations(res.data.userConversations);
             this.props.getListGroupConversations(res.data.groupConversations);
             this.props.getListAllConversations(res.data.allConversations);
+            this.props.getListAllConversationWithMessages(res.data.allConversationsWithMessages);
+            this.setState({
+                item_chat_room : res.data.allConversations[0]
+            })
         })
         .catch((error) => {
             console.log(error)
@@ -31,6 +42,12 @@ class home extends Component {
         if(!this.props.auth.isAuthenticated) {
             this.props.history.push('/login-register');
         }
+    }
+
+    handleOpenChat = (item) => {
+        this.setState({
+            item_chat_room : item
+        })
     }
     
     render() {
@@ -43,10 +60,10 @@ class home extends Component {
             <NavBar></NavBar>
             <Row guiter={16} className="row-content">
                 <Col className="left-main" span={6}>
-                    <LeftMain></LeftMain>
+                    <LeftMain handleOpenChat = {this.handleOpenChat}></LeftMain>
                 </Col>
                 <Col className="right-main" span={18}>
-                    <RightMain></RightMain>
+                    <RightMain handleOpenChat = {this.state.item_chat_room}></RightMain>
                 </Col>
             </Row>
         </div>
@@ -71,6 +88,9 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         getListAllConversations : (data) => {
             dispatch(actions.getListAllConversations(data))
+        },
+        getListAllConversationWithMessages : (data) => {
+            dispatch(actions.getListAllConversationWithMessages(data))
         }
     }
 }
