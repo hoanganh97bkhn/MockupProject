@@ -32,6 +32,35 @@ let getAllConversationItems = (currentUserId) => {
         return -item.updatedAt;
       })
 
+      /**get message for userConversations */
+      let userConversationsWithMessagesPromise = userConversations.map(async(conversation) => {
+        let getMessages = await MessageModel.model.getMessages(currentUserId, conversation._id, LIMIT_MESSAGES_TAKEN);
+
+        conversation = conversation.toObject();
+        conversation.messages = getMessages;
+        return conversation
+      });
+
+      let userConversationsWithMessages = await Promise.all(userConversationsWithMessagesPromise);
+      userConversationsWithMessages = _.sortBy(userConversationsWithMessages, (item) => {
+        return -item.updatedAt;
+      })
+
+      /**get message for groupConversations */
+      let groupConversationsWithMessagesPromise = groupConversations.map(async(conversation) => {
+        let getMessages = await MessageModel.model.getMessages(currentUserId, conversation._id, LIMIT_MESSAGES_TAKEN);
+
+        conversation = conversation.toObject();
+        conversation.messages = getMessages;
+        return conversation
+      });
+
+      let groupConversationsWithMessages = await Promise.all(groupConversationsWithMessagesPromise);
+      groupConversationsWithMessages = _.sortBy(groupConversationsWithMessages, (item) => {
+        return -item.updatedAt;
+      })
+
+      /**get message for allConversations */
       let allConversationsWithMessagesPromise = allConversations.map(async(conversation) => {
         let getMessages = await MessageModel.model.getMessages(currentUserId, conversation._id, LIMIT_MESSAGES_TAKEN);
 
@@ -45,8 +74,30 @@ let getAllConversationItems = (currentUserId) => {
         return -item.updatedAt;
       })
 
-      resolve({userConversations, groupConversations, allConversations, allConversationsWithMessages});
+      resolve({userConversationsWithMessages, groupConversationsWithMessages, allConversations, allConversationsWithMessages});
     }catch (error) {
+      reject(error)
+    }
+  })
+}
+
+let getAllImages = (currentUserId, messageId) => {
+  return new Promise(async(resolve, reject) => {
+    try {
+      let getImages =await MessageModel.model.getAllImages(currentUserId, messageId);
+      resolve(getImages)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+let getAllFiles = (currentUserId, messageId) => {
+  return new Promise(async(resolve, reject) => {
+    try {
+      let getFile = await MessageModel.model.getAllFiles(currentUserId, messageId);
+      resolve(getFile)
+    } catch (error) {
       reject(error)
     }
   })
@@ -54,5 +105,7 @@ let getAllConversationItems = (currentUserId) => {
 
 module.exports = {
   getAllConversationItems,
+  getAllImages,
+  getAllFiles,
 
 }

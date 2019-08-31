@@ -13,6 +13,12 @@ let urlImage = (avatar) => {
 }
 
 class AllChat extends Component {
+    constructor(props){
+        super(props);
+        this.state={
+            idFocus: ''
+        }
+    }
 
     handleScrollLoad = (event) =>{
         let element = event.target;
@@ -44,8 +50,11 @@ class AllChat extends Component {
           
         // }
     }
-    handleOpenChat = (item) => {
-        this.props.handleOpenChat(item)
+    handleOpenChat = (item, idFocus) => {
+        this.props.handleOpenChat(item);
+        this.setState({
+            idFocus : idFocus
+        })
     }
     render() {
         const listData = this.props.allConversationWithMessages;
@@ -53,8 +62,8 @@ class AllChat extends Component {
             <ul className="people no-padding-start" onScroll={this.handleScrollLoad}>
                 {listData.map((item, index) => {
                     if(!item.members) return (
-                        <a key ={index}  href = {"#uid_" + item._id} className="room-chat">
-                            <li className="person" data-chat={item._id} onClick={(e) => {this.handleOpenChat(item)}}>
+                        <a key ={index}  href = {"#uid_" + item._id} className={"room-chat"}>
+                            <li className={item._id == this.state.idFocus? "person active" : "person"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item, item._id)}}>
                                 <div className="left-avatar">
                                     <div className="dot"></div>
                                     <img src={urlImage(item.avatar)} alt=""></img>
@@ -68,8 +77,8 @@ class AllChat extends Component {
                         </a>
                     )
                     else return (
-                        <a key ={index}  href = {"#uid_" + item._id} className="room-chat">
-                            <li className="person group-chat" data-chat={item._id} onClick={(e) => {this.handleOpenChat(item)}}>
+                        <a key ={index}  href = {"#uid_" + item._id} className={"room-chat"}>
+                            <li className={item._id == this.state.idFocus? "person group-chat active" : "person group-chat"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item, item._id)}}>
                                 <div className="left-avatar">
                                     {/* <!-- <div className="dot"></div> --> */}
                                     <img src={group_avatar} alt=""></img>
@@ -89,8 +98,9 @@ class AllChat extends Component {
 }
 
 function mapStateToProps(state) {
-  return {
-    allConversationWithMessages : state.allConversationWithMessages  };
+    return {
+        allConversationWithMessages : state.allConversationWithMessages  
+    };
 }
 
 export default connect(mapStateToProps,)(AllChat);

@@ -11,9 +11,18 @@ let urlImage = (avatar) => {
 }
 
 class UserChat extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+        idFocus: ''
+    }
+  }
 
-  handleOpenChat = (item) => {
-    this.props.handleOpenChat(item)
+  handleOpenChat = (item , idFocus) => {
+    this.props.handleOpenChat(item);
+    this.setState({
+      idFocus : idFocus
+  })
   }
   
   render() {
@@ -23,7 +32,7 @@ class UserChat extends Component {
                 { listData.map( (item, index) => {
                     return (
                         <a key ={index}  href = {"#uid_" + item._id} className="room-chat">
-                            <li className="person" data-chat={item._id} onClick={(e) => {this.handleOpenChat(item)}}>
+                            <li className={item._id == this.state.idFocus? "person active" : "person"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item, item._id)}}>
                                 <div className="left-avatar">
                                     <div className="dot"></div>
                                     <img src={urlImage(item.avatar)} alt=""></img>

@@ -51,8 +51,42 @@ messageSchema.statics = {
           {"receiverId" : senderId},
         ]}
       ]
-    }).sort({"createAt" : -1}).limit(limit).exec();
-  }
+    }).sort({"createAt" : 1}).limit(limit).exec();
+  },
+
+  getAllImages(senderId, receiverId){
+    return this.find({
+      $or: [
+        {$and: [
+          {"senderId" : senderId},
+          {"receiverId" : receiverId},
+          {"messageType" : MESSAGE_TYPES.IMAGE}
+        ]},
+        {$and: [
+          {"senderId" : receiverId},
+          {"receiverId" : senderId},
+          {"messageType" : MESSAGE_TYPES.IMAGE}
+        ]}
+      ]
+    }).sort({"createAt" : 1}).exec();
+  },
+
+  getAllFiles(senderId, receiverId){
+    return this.find({
+      $or: [
+        {$and: [
+          {"senderId" : senderId},
+          {"receiverId" : receiverId},
+          {"messageType" : MESSAGE_TYPES.FILE}
+        ]},
+        {$and: [
+          {"senderId" : receiverId},
+          {"receiverId" : senderId},
+          {"messageType" : MESSAGE_TYPES.FILE}
+        ]}
+      ]
+    }).sort({"createAt" : 1}).exec();
+  },
 }
 
 const MESSAGE_CONVERSATION_TYPES = {

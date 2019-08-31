@@ -45,6 +45,8 @@ let initRouters = (app) => {
   router.put("/notification/mark-all-as-read",authLogin, home.markAllAsRead);
   router.get("/notification/data/list", authLogin, home.getListDataNotification);
   router.get("/message/conversation/list", authLogin, home.getAllConversationItems);
+  router.get("/message/image/list", authLogin, home.getAllImages);
+  router.get("/message/file/list", authLogin, home.getAllFiles);
   
   //timer-notification
   router.put("/timer/count/notification-general/reset", authLogin, timer.resetCountNotifGeneral)

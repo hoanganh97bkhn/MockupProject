@@ -11,9 +11,18 @@ let urlImage = (avatar) => {
 }
 
 class GroupChat extends Component {
-  
-  handleOpenChat = (item) => {
-    this.props.handleOpenChat(item)
+  constructor(props){
+    super(props);
+    this.state={
+        idFocus: ''
+    }
+  }
+
+  handleOpenChat = (item, idFocus) => {
+    this.props.handleOpenChat(item);
+    this.setState({
+      idFocus : idFocus
+  })
   }
   render() {
       const listData = this.props.groupConversations;
@@ -22,7 +31,7 @@ class GroupChat extends Component {
             {listData.map( (item, index) => {
                 return (
                     <a key ={index}  href = {"#uid_" + item._id} className="room-chat">
-                    <li className="person group-chat" data-chat={item._id} onClick={(e) => {this.handleOpenChat(item)}}>
+                    <li className={item._id == this.state.idFocus? "person group-chat active" : "person group-chat"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item, item._id)}}>
                         <div className="left-avatar">
                             {/* <!-- <div className="dot"></div> --> */}
                             <img src={group_avatar} alt=""></img>

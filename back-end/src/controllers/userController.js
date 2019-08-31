@@ -22,7 +22,6 @@ let updateUser = async(req, res) => {
 
   try{
     let userUpdate = await user.updateUser(req, form);
-    console.log("dkm",userUpdate);
     if(userUpdate) 
       res.status(200).send("success");
   }

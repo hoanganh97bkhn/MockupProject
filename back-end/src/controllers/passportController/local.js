@@ -14,7 +14,7 @@ opts.secretOrKey = 'secret';
  */
 let initPassportJWT = () => {
   passPort.use(new JWTStrategy(opts, (jwt_payload, done) => {
-    UserModel.findById(jwt_payload.id)
+    UserModel.findById(jwt_payload.id,{"local.password" : 0})
         .then(user => {
             if(user) {
                 return done(null, user);

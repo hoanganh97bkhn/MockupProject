@@ -38,7 +38,7 @@ let markAllAsRead = async(req, res) => {
   } catch (error) {
     console.log(error)
   }
-}
+} 
 
 let getAllConversationItems = async(req, res) => {
   try {
@@ -49,10 +49,30 @@ let getAllConversationItems = async(req, res) => {
   }
 }
 
+let getAllImages = async(req, res) => {
+  try {
+    let getAllImages = await message.getAllImages(req.user._id, req.query.messageId);
+    res.status(200).send(getAllImages)
+  } catch (error){
+    res.status(500).send(error)
+  }
+}
+
+let getAllFiles = async(req, res) => {
+  try {
+    let getAllFiles = await message.getAllFiles(req.user._id, req.query.messageId);
+    res.status(200).send(getAllFiles)
+  } catch (error){
+    res.status(500).send(error)
+  }
+}
+
 
 module.exports = {
   getHome,
   markAllAsRead,
   getListDataNotification,
-  getAllConversationItems
+  getAllConversationItems,
+  getAllImages,
+  getAllFiles
 };

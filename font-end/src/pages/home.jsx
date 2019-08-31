@@ -25,8 +25,8 @@ class home extends Component {
             method : 'GET',
         })
         .then((res) => {
-            this.props.getListUserConversations(res.data.userConversations);
-            this.props.getListGroupConversations(res.data.groupConversations);
+            this.props.getListUserConversations(res.data.userConversationsWithMessages);
+            this.props.getListGroupConversations(res.data.groupConversationsWithMessages);
             this.props.getListAllConversations(res.data.allConversations);
             this.props.getListAllConversationWithMessages(res.data.allConversationsWithMessages);
             this.setState({

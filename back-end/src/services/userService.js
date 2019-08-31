@@ -13,16 +13,6 @@ let updateUser =  (req, form) => {
       const user = await UserModel.findById(req.user._id);
       const file = `public/images/${user.avatar}`;
       if(arrayOfFiles){
-        if(user){
-          fs.pathExists(file, (err, exists) => {
-            if(exists){
-              fs.remove(file, err => {
-                if (err) return reject ('server error!')
-              })
-            } // => null
-            console.log(err) // => false
-          })
-        }
         if (arrayOfFiles.length > 0) {
           let fileName = [];
           arrayOfFiles.forEach((eachFile) => {
