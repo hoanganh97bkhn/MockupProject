@@ -1,0 +1,47 @@
+{
+  "name": "font-end",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "antd": "^3.21.4",
+    "axios": "^0.19.0",
+    "bootstrap": "^4.3.1",
+    "emoji-mart": "^2.11.1",
+    "font-awesome": "^4.7.0",
+    "jwt-decode": "^2.2.0",
+    "lodash": "^4.17.15",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-facebook-login": "^4.1.1",
+    "react-grid-gallery": "^0.5.5",
+    "react-justified-grid": "^0.0.8",
+    "react-redux": "^7.1.0",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.0.1",
+    "reactstrap": "^8.0.1",
+    "redux": "^4.0.4",
+    "redux-saga": "^1.0.5",
+    "socket.io-client": "^2.2.0"
+  },
+  "scripts": {
+    "start": "HTTPS=true react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
