@@ -10,6 +10,16 @@ let urlImage = (avatar) => {
     else return avatar_default
 }
 
+let helperPreview = (item) => {
+  if(item.messages[item.messages.length -1]){
+      console.log(item.messages[item.messages.length -1])
+      if((item.messages[item.messages.length -1]).messageType === "image") return "[image]";
+      else if((item.messages[item.messages.length -1]).messageType === "file") return "[file]";
+      else return ((item.messages[item.messages.length -1]).text)
+  }
+  else return "[null]"
+}
+
 class UserChat extends Component {
   constructor(props){
     super(props);
@@ -19,7 +29,7 @@ class UserChat extends Component {
   }
 
   handleOpenChat = (item , idFocus) => {
-    this.props.handleOpenChat(item);
+    this.props.handleOpenChat(item._id);
     this.setState({
       idFocus : idFocus
   })
@@ -41,7 +51,7 @@ class UserChat extends Component {
                                     {item.nickname}
                                 </p>
                                 <span className="time">Một phút trước</span>
-                                <span className="preview text-over">Xin chào</span>
+                                <span className="preview text-over">{helperPreview(item)}</span>
                             </li>
                         </a>
                     )

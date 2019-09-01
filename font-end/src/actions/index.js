@@ -350,9 +350,10 @@ export const getListAllConversationWithMessages= (data) => {
     }
 }
 
-export const addListAllConversationWithMessages= (data) => {
+export const addListAllConversationWithMessages= (_id, data) => {
     return {
         type : types.ADD_LIST_ALL_CONVERSATION_WITH_MESSAGES,
+        _id,
         data
     }
 }

@@ -9,7 +9,14 @@ let myReducer = (state = initialState,action) => {
         state = state.concat(action.data)
         return state;
       case types.ADD_LIST_ALL_CONVERSATION_WITH_MESSAGES :
-        state = [action.data, ...state];
+        state.map((item,index) => {
+          if(item._id === action._id){
+            item.messages = [...item.messages, action.data];
+            return item;
+          }
+          else return item
+        });
+        console.log(state)
         return state;
       case types.REMOVE_LIST_ALL_CONVERSATION_WITH_MESSAGES : 
         state = state.filter(item => {

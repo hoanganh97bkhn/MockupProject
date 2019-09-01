@@ -97,6 +97,9 @@ class NavBar extends Component {
             isOpen: !this.state.isOpen
         });
     }
+    handleReloadHome = () => {
+        window.location.reload();
+    }
     openModalContact = () => {
         if(!this.state.openModalContact){
             axios({
@@ -197,7 +200,7 @@ class NavBar extends Component {
                     </div>
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
-                        <NavItem>
+                        <NavItem onClick={this.handleReloadHome}>
                             <NavLink ><i className="fa fa-home "></i></NavLink>
                         </NavItem>
                         <Badge count={countContactNotif}>

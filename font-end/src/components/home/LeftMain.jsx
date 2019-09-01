@@ -38,8 +38,8 @@ class LeftMain extends Component {
         });
     };
 
-    handleOpenChat = (item) => {
-        this.props.handleOpenChat(item)
+    handleOpenChat = (_id) => {
+        this.props.handleOpenChat(_id)
     }
 
     render() {

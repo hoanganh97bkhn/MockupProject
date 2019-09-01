@@ -10,6 +10,16 @@ let urlImage = (avatar) => {
     else return avatar_default
 }
 
+let helperPreview = (item) => {
+  if(item.messages[item.messages.length -1]){
+      console.log(item.messages[item.messages.length -1])
+      if((item.messages[item.messages.length -1]).messageType === "image") return "[image]";
+      else if((item.messages[item.messages.length -1]).messageType === "file") return "[file]";
+      else return ((item.messages[item.messages.length -1]).text)
+  }
+  else return "[null]"
+}
+
 class GroupChat extends Component {
   constructor(props){
     super(props);
@@ -19,7 +29,7 @@ class GroupChat extends Component {
   }
 
   handleOpenChat = (item, idFocus) => {
-    this.props.handleOpenChat(item);
+    this.props.handleOpenChat(item._id);
     this.setState({
       idFocus : idFocus
   })
@@ -40,7 +50,7 @@ class GroupChat extends Component {
                             <span className="group-chat-name">Group:</span> {item.name}
                         </p>
                         <span className="time">Hai giờ trước</span>
-                        <span className="preview">Chào cả nhóm</span>
+                        <span className="preview">{helperPreview(item)}</span>
                     </li>
                 </a>
                 )

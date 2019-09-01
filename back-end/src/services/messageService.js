@@ -34,7 +34,7 @@ let getAllConversationItems = (currentUserId) => {
 
       /**get message for userConversations */
       let userConversationsWithMessagesPromise = userConversations.map(async(conversation) => {
-        let getMessages = await MessageModel.model.getMessages(currentUserId, conversation._id, LIMIT_MESSAGES_TAKEN);
+        let getMessages = await MessageModel.model.getMessagesInPersonal(currentUserId, conversation._id, LIMIT_MESSAGES_TAKEN);
 
         conversation = conversation.toObject();
         conversation.messages = getMessages;
@@ -48,7 +48,7 @@ let getAllConversationItems = (currentUserId) => {
 
       /**get message for groupConversations */
       let groupConversationsWithMessagesPromise = groupConversations.map(async(conversation) => {
-        let getMessages = await MessageModel.model.getMessages(currentUserId, conversation._id, LIMIT_MESSAGES_TAKEN);
+        let getMessages = await MessageModel.model.getMessagesInGroup(conversation._id, LIMIT_MESSAGES_TAKEN);
 
         conversation = conversation.toObject();
         conversation.messages = getMessages;
@@ -61,15 +61,22 @@ let getAllConversationItems = (currentUserId) => {
       })
 
       /**get message for allConversations */
-      let allConversationsWithMessagesPromise = allConversations.map(async(conversation) => {
-        let getMessages = await MessageModel.model.getMessages(currentUserId, conversation._id, LIMIT_MESSAGES_TAKEN);
+      // let allConversationsWithMessagesPromise = allConversations.map(async(conversation) => {
+      //   conversation = conversation.toObject();
 
-        conversation = conversation.toObject();
-        conversation.messages = getMessages;
-        return conversation
-      });
+      //   if(conversation.members){
 
-      let allConversationsWithMessages = await Promise.all(allConversationsWithMessagesPromise);
+      //   }
+      //   else {}
+      //   let getMessages = await MessageModel.model.getMessages(currentUserId, conversation._id, LIMIT_MESSAGES_TAKEN);
+
+        
+      //   conversation.messages = getMessages;
+      //   return conversation
+      // });
+
+      // let allConversationsWithMessages = await Promise.all(allConversationsWithMessagesPromise);
+      let allConversationsWithMessages = userConversationsWithMessages.concat(groupConversationsWithMessages)
       allConversationsWithMessages = _.sortBy(allConversationsWithMessages, (item) => {
         return -item.updatedAt;
       })

@@ -14,7 +14,7 @@ class home extends Component {
     constructor(props){
         super(props);
         this.state = {
-            item_chat_room: ''
+            id_chat_room: ''
         }
     }
 
@@ -27,10 +27,9 @@ class home extends Component {
         .then((res) => {
             this.props.getListUserConversations(res.data.userConversationsWithMessages);
             this.props.getListGroupConversations(res.data.groupConversationsWithMessages);
-            this.props.getListAllConversations(res.data.allConversations);
             this.props.getListAllConversationWithMessages(res.data.allConversationsWithMessages);
             this.setState({
-                item_chat_room : res.data.allConversations[0]
+                id_chat_room : res.data.allConversationsWithMessages.length>0 ? res.data.allConversationsWithMessages[0]._id : '' 
             })
         })
         .catch((error) => {
@@ -44,9 +43,9 @@ class home extends Component {
         }
     }
 
-    handleOpenChat = (item) => {
+    handleOpenChat = (_id) => {
         this.setState({
-            item_chat_room : item
+            id_chat_room : _id
         })
     }
     
@@ -63,7 +62,7 @@ class home extends Component {
                     <LeftMain handleOpenChat = {this.handleOpenChat}></LeftMain>
                 </Col>
                 <Col className="right-main" span={18}>
-                    <RightMain handleOpenChat = {this.state.item_chat_room}></RightMain>
+                    <RightMain handleOpenChat = {this.state.id_chat_room}></RightMain>
                 </Col>
             </Row>
         </div>
@@ -74,7 +73,7 @@ class home extends Component {
 const mapStateToProps = (state) => {
     return {
         auth: state.login,
-
+        
     }
 }
 
@@ -85,9 +84,6 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         getListGroupConversations : (data) => {
             dispatch(actions.getListGroupConversations(data))
-        },
-        getListAllConversations : (data) => {
-            dispatch(actions.getListAllConversations(data))
         },
         getListAllConversationWithMessages : (data) => {
             dispatch(actions.getListAllConversationWithMessages(data))
