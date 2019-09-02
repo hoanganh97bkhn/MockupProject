@@ -11,19 +11,21 @@ class RightMain extends Component {
         this.state={
             id_chat_room : '',
             listData : {},
-            dataMessage : []
+            dataMessage : [],
+            isGroup : false
         }
     }
 
     componentWillReceiveProps = (nextProps) => {
-        let data = this.props.allConversationWithMessages.filter((item, index) => {
+        let data = nextProps.allConversations.filter((item, index) => {
             if(item._id === nextProps.handleOpenChat) return true;
             else return false;
         })
         this.setState({
             id_chat_room : nextProps.handleOpenChat,
             listData : data,
-            dataMessage : data.length>0 ? data[0].messages : []
+            dataMessage : data.length>0 ? data[0].messages : [],
+            isGroup : data.length>0 && data[0].members ? true : false
         })
     }
 
@@ -34,12 +36,11 @@ class RightMain extends Component {
     }
 
     render() {
-        
         return (
             <div className="right">
                 <RightTop data= {this.state.listData.length>0 ? this.state.listData[0] : this.state.listData}/>
                 <ContentChat data = {this.state.dataMessage.length>0 ? this.state.dataMessage : this.state.dataMessage}/>
-                <RightWrite dataId = {this.state.id_chat_room} handleChangeSendMess = {this.handleChangeSendMess}/>
+                <RightWrite dataId = {this.state.id_chat_room} isGroup = {this.state.isGroup} handleChangeSendMess = {this.handleChangeSendMess}/>
             </div>
         );
     }
@@ -47,7 +48,7 @@ class RightMain extends Component {
 
 function mapStateToProps(state) {
     return {
-        allConversationWithMessages : state.allConversationWithMessages
+        allConversations : state.allConversations
     };
 }
 

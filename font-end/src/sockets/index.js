@@ -3,6 +3,7 @@ import {removeNewContactSent} from "./contact/removeNewContactSent";
 import {removeNewContactReceived} from './contact/removeNewContactReceived';
 import {confirmNewContactReceived} from './contact/confirmNewContactReceived';
 import {removeContact} from './contact/removeContact';
+import {chatTextEmoji} from './chat/chatTextEmoji';
 
 export const initSockets = (socket, props) => {
   addNewContact(socket, props);
@@ -10,4 +11,6 @@ export const initSockets = (socket, props) => {
   removeNewContactReceived(socket, props);
   confirmNewContactReceived(socket, props);
   removeContact(socket, props);
+  chatTextEmoji(socket, props);
+  
 }

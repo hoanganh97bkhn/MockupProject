@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import avatar_default from './../../../../image/avatar-default.jpg';
-import group_avatar from './../../../../image/group-avatar.png';
 import config from './../../../../config/index';
 
-let urlImage = (avatar) => {
-    if(avatar !== "avatar-default.jpg")
-      return `${config.baseUrl}/images/${avatar}`
-    else return avatar_default
-}
 
 let helperPreview = (item) => {
   if(item.messages[item.messages.length -1]){
@@ -44,7 +37,7 @@ class GroupChat extends Component {
                     <li className={item._id == this.state.idFocus? "person group-chat active" : "person group-chat"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item, item._id)}}>
                         <div className="left-avatar">
                             {/* <!-- <div className="dot"></div> --> */}
-                            <img src={group_avatar} alt=""></img>
+                            <img src={`${config.baseUrl}/images/${item.avatar}`} alt=""></img>
                         </div>
                         <p className="name text-over">
                             <span className="group-chat-name">Group:</span> {item.name}

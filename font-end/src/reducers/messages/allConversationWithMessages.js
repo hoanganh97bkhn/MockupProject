@@ -1,14 +1,15 @@
-import * as types from '../../constants/ActionTypes'
+import * as types from '../../constants/ActionTypes';
+import _ from 'lodash';
 
 let initialState = []
 
 let myReducer = (state = initialState,action) => {
 
     switch(action.type){
-      case types.GET_LIST_ALL_CONVERSATION_WITH_MESSAGES :
+      case types.GET_LIST_ALL_CONVERSATIONS :
         state = state.concat(action.data)
         return state;
-      case types.ADD_LIST_ALL_CONVERSATION_WITH_MESSAGES :
+      case types.ADD_LIST_ALL_CONVERSATIONS :
         state.map((item,index) => {
           if(item._id === action._id){
             item.messages = [...item.messages, action.data];
@@ -16,14 +17,17 @@ let myReducer = (state = initialState,action) => {
           }
           else return item
         });
-        console.log(state)
+        let item = _.remove(state, (info)=>{
+          return (info._id === action._id);
+        });
+        state = _.concat(item, state);
         return state;
-      case types.REMOVE_LIST_ALL_CONVERSATION_WITH_MESSAGES : 
+      case types.REMOVE_LIST_ALL_CONVERSATIONS : 
         state = state.filter(item => {
           return item._id !== action.data._id
         })
         return state;
-      case types.SCROLL_LIST_ALL_CONVERSATION_WITH_MESSAGES:
+      case types.SCROLL_LIST_ALL_CONVERSATIONS:
         state = state.concat(action.data);
         return state;
       default : 

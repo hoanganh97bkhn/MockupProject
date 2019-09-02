@@ -30,22 +30,32 @@ class ContentChat extends Component {
                         if(item.messageType === "text"){
                             return (
                                 <div key={index} className={"bubble " + (item.senderId == user._id ? "me" : "you")} >{item.text}
-                                    <img src={`${config.baseUrl}/images/${item.sender.avatar}`} className="avatar-small" title={item.sender.name}></img>
+                                    {item.senderId != user._id ? 
+                                        <img src={`${config.baseUrl}/images/${item.sender.avatar}`} className="avatar-small" title={item.sender.name}></img>
+                                        : null
+                                    }
+                                    
                                 </div>
                             )
                         }
                         else if(item.messageType === "image"){
                             return (
-                                <div key={index} className={(item.senderId == user._id ? "me" : "you") + " bubble bubble-image-file"}>
-                                    <img src={`${config.baseUrl}/images/${item.sender.avatar}`} className="avatar-small" title={item.sender.name}></img>
+                                <div key={index} className={(item.senderId == user._id ? "me" : "you") + " bubble image bubble-image-file"}>
+                                    {item.senderId != user._id ? 
+                                        <img src={`${config.baseUrl}/images/${item.sender.avatar}`} className="avatar-small" title={item.sender.name}></img>
+                                        : null
+                                    }
                                     <img src={`data:${item.file.contentType}; base64, ${bufferToBase64(item.file.data)}`} className="show-image-chat" ></img>
                                 </div>
                             )
                         }
                         else if(item.messageType === "file"){
                             return (
-                                <div key={index} className={(item.senderId == user._id ? "me" : "you") + " bubble bubble-image-file"}>
-                                    <img src={`${config.baseUrl}/images/${item.sender.avatar}`} className="avatar-small" title={item.sender.name}></img>
+                                <div key={index} className={(item.senderId == user._id ? "me" : "you") + " bubble file bubble-image-file"}>
+                                    {item.senderId != user._id ? 
+                                        <img src={`${config.baseUrl}/images/${item.sender.avatar}`} className="avatar-small" title={item.sender.name}></img>
+                                        : null
+                                    }
                                     <a href={`data:${item.file.contentType}; base64, ${bufferToBase64(item.file.data)}`} download={ item.file.fileName}>
                                     { item.file.fileName }
                                     </a>

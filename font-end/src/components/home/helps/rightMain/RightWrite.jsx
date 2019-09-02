@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Input} from 'antd'
+import axios from 'axios';
+import {Input, message} from 'antd'
 import { Picker, Emoji, getEmojiDataFromNative } from 'emoji-mart';
 import * as actions from './../../../../actions/index';
+import config from './../../../../config/index';
 const {TextArea} = Input;
 
 let ObjectSendMess = (data, id, avatar, name)=>{
@@ -80,13 +82,37 @@ class RightWrite extends Component {
         e.preventDefault();
         let user = this.props.user
         let index = this.props.dataId;
-        this.props.addListAllConversationWithMessages(this.props.dataId, ObjectSendMess(this.state.newMessage,user._id,user.avatar,user.nickname));
-        this.props.handleChangeSendMess(ObjectSendMess(this.state.newMessage,user._id,user.avatar,user.nickname));
-        this.setState({
-            newMessage : '',
-            ObjectMessage : {...this.state.ObjectMessage, [index] : ''},
-        });
+        let messageVal = ObjectSendMess(this.state.newMessage, user._id, user.avatar, user.nickname);
+        let data = {
+            uid: index,
+            messageVal : this.state.newMessage,
+            isGroup : this.props.isGroup
+        }
+        if(this.state.newMessage !== ''){
+            axios({
+                url : `${config.baseUrl}/message/add-new-text-emoji`, 
+                method :'POST',
+                data : data
+            })
+            .then((res)=>{
+                this.props.addListAllConversations(this.props.dataId, messageVal);
+                this.props.addListGroupConversations(this.props.dataId, messageVal);
+                this.props.addListUserConversations(this.props.dataId, messageVal);
+                //this.props.handleChangeSendMess(messageVal);
+                this.props.socket.emit("chat-text-emoji", {uid : this.props.dataId, messageVal : messageVal, isGroup : this.props.isGroup});
+                this.setState({
+                    newMessage : '',
+                    ObjectMessage : {...this.state.ObjectMessage, [index] : ''},
+                });
+            })
+            .catch((error)=>{
+                message.error(error.response.statusText,5)
+            })
+        }
+        
+        
     }
+
     
     render() {
         return (
@@ -98,7 +124,7 @@ class RightWrite extends Component {
                         <i className="fa fa-video-camera"></i>
                     </div>
                     <div className="col-9"> 
-                        <div className="write-chat ">
+                        <div className="write-chat">
                             <TextArea 
                                 onPressEnter={this.handleSendMessage} 
                                 rows={1} className="search-txt" 
@@ -109,7 +135,7 @@ class RightWrite extends Component {
                         <div onClick={this.handleOpenMoji}>{this.state.openMoji ? <Picker set="emojione" onSelect={this.addEmoji} onSkinChange={document.removeEventListener('click', this.handleCloseMoji)}/> : null}</div>
                     </div>
                     <div className="col-auto">
-                        <i className="fa fa-paper-plane"></i>
+                        <i className="fa fa-paper-plane" onClick={this.handleSendMessage}></i>
                     </div>
                 </div>
             </div>
@@ -119,15 +145,25 @@ class RightWrite extends Component {
 
 function mapStateToProps(state) {
     return {
-        user : state.user
+        user : state.user,
+        socket : state.socket
     };
 }
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        addListAllConversationWithMessages : (id, data) => {
-            dispatch(actions.addListAllConversationWithMessages(id, data));
+        addListAllConversations : (id, data) => {
+            dispatch(actions.addListAllConversations(id, data));
+        },
+        addListGroupConversations : (id, data) => {
+            dispatch(actions.addListGroupConversations(id, data));
         },   
+        addListUserConversations : (id, data) => {
+            dispatch(actions.addListUserConversations(id, data));
+        },    
+        checkChangeListMessage : (data) => {
+            dispatch(actions.checkChangeListMessage(data));
+        },  
     }
 }
 

@@ -51,7 +51,7 @@ messageSchema.statics = {
           {"receiverId" : senderId},
         ]}
       ]
-    }).sort({"createAt" : 1}).limit(limit).exec();
+    }).sort({"createdAt" : -1}).limit(limit).exec();
   },
   /**
    * get Message in group
@@ -59,7 +59,7 @@ messageSchema.statics = {
    * @param {*} limit 
    */
   getMessagesInGroup(receiverId, limit){
-    return this.find({"receiverId" : receiverId},).sort({"createAt" : 1}).limit(limit).exec();
+    return this.find({"receiverId" : receiverId},).sort({"createdAt" : -1}).limit(limit).exec();
   },
 
   getAllImages(senderId, receiverId){
@@ -95,6 +95,10 @@ messageSchema.statics = {
       ]
     }).sort({"createAt" : 1}).exec();
   },
+
+  addNewTexEmoji(){
+
+  }
 }
 
 const MESSAGE_CONVERSATION_TYPES = {

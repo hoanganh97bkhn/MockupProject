@@ -261,9 +261,10 @@ export const getListUserConversations = (data) => {
     }
 }
 
-export const addListUserConversations = (data) => {
+export const addListUserConversations = (_id, data) => {
     return {
         type : types.ADD_LIST_USER_CONVERSATIONS,
+        _id,
         data
     }
 }
@@ -291,9 +292,10 @@ export const getListGroupConversations = (data) => {
     }
 }
 
-export const addListGroupConversations = (data) => {
+export const addListGroupConversations = (_id, data) => {
     return {
         type : types.ADD_LIST_GROUP_CONVERSATIONS,
+        _id,
         data
     }
 }
@@ -314,6 +316,35 @@ export const removeListGroupConversations = (data) => {
 
 // all-conversation-
 
+// export const getListAllConversations= (data) => {
+//     return {
+//         type : types.GET_LIST_ALL_CONVERSATIONS,
+//         data
+//     }
+// }
+
+// export const addListAllConversations= (data) => {
+//     return {
+//         type : types.ADD_LIST_ALL_CONVERSATIONS,
+//         data
+//     }
+// }
+
+// export const scrollListAllConversations= (data) => {
+//     return {
+//         type : types.SCROLL_LIST_ALL_CONVERSATIONS,
+//         data
+//     }
+// }
+
+// export const removeListAllConversations= (data) => {
+//     return {
+//         type : types.REMOVE_LIST_ALL_CONVERSATIONS,
+//         data
+//     }
+// }
+
+// all-conversation-with-messages
 export const getListAllConversations= (data) => {
     return {
         type : types.GET_LIST_ALL_CONVERSATIONS,
@@ -321,9 +352,10 @@ export const getListAllConversations= (data) => {
     }
 }
 
-export const addListAllConversations= (data) => {
+export const addListAllConversations= (_id, data) => {
     return {
         type : types.ADD_LIST_ALL_CONVERSATIONS,
+        _id,
         data
     }
 }
@@ -342,32 +374,12 @@ export const removeListAllConversations= (data) => {
     }
 }
 
-// all-conversation-with-messages
-export const getListAllConversationWithMessages= (data) => {
-    return {
-        type : types.GET_LIST_ALL_CONVERSATION_WITH_MESSAGES,
-        data
-    }
-}
+/** change list message when new message */
 
-export const addListAllConversationWithMessages= (_id, data) => {
+export const checkChangeListMessage = (data) => {
     return {
-        type : types.ADD_LIST_ALL_CONVERSATION_WITH_MESSAGES,
-        _id,
-        data
-    }
-}
-
-export const scrollListAllConversationWithMessages= (data) => {
-    return {
-        type : types.SCROLL_LIST_ALL_CONVERSATION_WITH_MESSAGES,
-        data
-    }
-}
-
-export const removeListAllConversationWithMessages= (data) => {
-    return {
-        type : types.REMOVE_LIST_ALL_CONVERSATION_WITH_MESSAGES,
-        data
+        type: types.CHECK_CHANGE_LIST_MESSAGE,
+        
+        data 
     }
 }

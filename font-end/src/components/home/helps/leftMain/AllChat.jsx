@@ -1,16 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import avatar_default from './../../../../image/avatar-default.jpg';
-import group_avatar from './../../../../image/group-avatar.png';
 import config from './../../../../config/index';
-import axios from 'axios';
-
-
-let urlImage = (avatar) => {
-    if(avatar !== "avatar-default.jpg")
-      return `${config.baseUrl}/images/${avatar}`
-    else return avatar_default
-}
+import _ from 'lodash';
+import {covertTimestampToHumanTime} from './../../../../helpers/clientHelper';
 
 let helperPreview = (item) => {
     if(item.messages[item.messages.length -1]){
@@ -20,6 +12,14 @@ let helperPreview = (item) => {
     }
     else return "[null]"
 }
+
+let helperTime = (item) => {
+    if(item.messages[item.messages.length -1]){
+       let time = covertTimestampToHumanTime(item.messages[item.messages.length -1].createdAt);
+       return time
+    }
+}
+
 class AllChat extends Component {
     constructor(props){
         super(props);
@@ -59,6 +59,11 @@ class AllChat extends Component {
           
         // }
     }
+
+    // componentWillReceiveProps = (nextProps) => {
+    //     let uid = nextProps.checkChangeList;
+        
+    // }
    
     handleOpenChat = (item, idFocus) => {
         this.props.handleOpenChat(item._id);
@@ -69,18 +74,18 @@ class AllChat extends Component {
     render() {
         return (
             <ul className="people no-padding-start" onScroll={this.handleScrollLoad}>
-                {this.props.allConversationWithMessages.length> 0 ? this.props.allConversationWithMessages.map((item, index) => {
+                {this.props.allConversations.length> 0 ? this.props.allConversations.map((item, index) => {
                     if(!item.members) return (
                         <a key ={index}  href = {"#uid_" + item._id} className={"room-chat"}>
                             <li className={item._id == this.state.idFocus? "person active" : "person"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item, item._id, index)}}>
                                 <div className="left-avatar">
                                     <div className="dot"></div>
-                                    <img src={urlImage(item.avatar)} alt=""></img>
+                                    <img src={`${config.baseUrl}/images/${item.avatar}`} alt=""></img>
                                 </div>
                                 <p className="name text-over">
                                     {item.nickname}
                                 </p>
-                                <span className="time">Một phút trước</span>
+                                <span className="time">{helperTime(item)}</span>
                                 <span className="preview">{helperPreview(item)}</span>
                             </li>
                         </a>
@@ -90,12 +95,12 @@ class AllChat extends Component {
                             <li className={item._id == this.state.idFocus? "person group-chat active" : "person group-chat"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item, item._id)}}>
                                 <div className="left-avatar">
                                     {/* <!-- <div className="dot"></div> --> */}
-                                    <img src={group_avatar} alt=""></img>
+                                    <img src={`${config.baseUrl}/images/${item.avatar}`} alt=""></img>
                                 </div>
                                 <p className="name text-over">
                                     <span className="group-chat-name">Group:</span> {item.name}
                                 </p>
-                                <span className="time">Hai giờ trước</span>
+                                <span className="time">{helperTime(item)}</span>
                                 <span className="preview">{helperPreview(item)}</span>
                             </li>
                         </a>
@@ -108,7 +113,8 @@ class AllChat extends Component {
 
 function mapStateToProps(state) {
     return {
-        allConversationWithMessages : state.allConversationWithMessages  
+        allConversations : state.allConversations,
+        // checkChangeList : state.checkChangeList  
     };
 }
 

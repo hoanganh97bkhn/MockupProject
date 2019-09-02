@@ -1,8 +1,8 @@
 import express from 'express';
 import passPort from 'passport';
 import initPassportJWT from './../controllers/passportController/local';
-import {home, auth, userInfo, contact, timer, notifi} from './../controllers/index';
-import {authValid} from './../validation/index';
+import {home, auth, userInfo, contact, message, timer, notifi} from './../controllers/index';
+import {authValid, messageValid} from './../validation/index';
 
 
 //Init all passPort
@@ -47,6 +47,9 @@ let initRouters = (app) => {
   router.get("/message/conversation/list", authLogin, home.getAllConversationItems);
   router.get("/message/image/list", authLogin, home.getAllImages);
   router.get("/message/file/list", authLogin, home.getAllFiles);
+
+  //message
+  router.post("/message/add-new-text-emoji", authLogin, messageValid.checkMessageLength, message.addNewTexEmoji )
   
   //timer-notification
   router.put("/timer/count/notification-general/reset", authLogin, timer.resetCountNotifGeneral)

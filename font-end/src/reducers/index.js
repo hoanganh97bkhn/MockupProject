@@ -11,10 +11,10 @@ import countContacts from './contacts/countContacts';
 import countContactsSent from './contacts/countContactsSent';
 import countContactsReceived from './contacts/countContactsReceived'
 import findUser from './contacts/findUser';
-import allConversations from './messages/allConversations';
 import groupConversations from './messages/groupConversations';
 import userConversations from './messages/userConversations';
-import allConversationWithMessages from './messages/allConversationWithMessages';
+import allConversations from './messages/allConversationWithMessages';
+import checkChangeList from './messages/changeList';
 import { combineReducers } from 'redux';
 
 const myReducer = combineReducers({
@@ -31,10 +31,10 @@ const myReducer = combineReducers({
     countContactsSent,
     countContactsReceived,
     findUser,
-    allConversations,
     userConversations,
     groupConversations,
-    allConversationWithMessages
+    allConversations,
+    checkChangeList
 });
 
 export default myReducer;

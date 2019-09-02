@@ -37,7 +37,7 @@ let getAllConversationItems = (currentUserId) => {
         let getMessages = await MessageModel.model.getMessagesInPersonal(currentUserId, conversation._id, LIMIT_MESSAGES_TAKEN);
 
         conversation = conversation.toObject();
-        conversation.messages = getMessages;
+        conversation.messages = _.reverse(getMessages);
         return conversation
       });
 
@@ -51,7 +51,7 @@ let getAllConversationItems = (currentUserId) => {
         let getMessages = await MessageModel.model.getMessagesInGroup(conversation._id, LIMIT_MESSAGES_TAKEN);
 
         conversation = conversation.toObject();
-        conversation.messages = getMessages;
+        conversation.messages = _.reverse(getMessages);
         return conversation
       });
 
@@ -110,9 +110,74 @@ let getAllFiles = (currentUserId, messageId) => {
   })
 }
 
+let addNewTexEmoji = (sender, receiverId, messageVal, isGroup) => {
+  return new Promise(async(resolve, reject) => {
+    try {
+      if(isGroup){
+        let getChatGroupReceiver = await ChatGroupModel.getChatGroupById(receiverId);
+        if(!getChatGroupReceiver){
+          reject("Group not found")
+        }
+        let receiver = {
+          id: getChatGroupReceiver._id,
+          name : getChatGroupReceiver.name,
+          avatar : "group-avatar.png"
+        };
+
+        let newMessageItem = {
+          senderId : sender.id,
+          receiverId : receiver.id,
+          conversationType : MessageModel.conversationTypes.GROUP,
+          messageType : MessageModel.messageTypes.TEXT,
+          sender: sender,
+          receiver: receiver,
+          text: messageVal,
+          createdAt: Date.now(),
+        }
+
+        //create new message
+        let newMessage = await MessageModel.model.createNew(newMessageItem);
+        //update gr chat
+        await ChatGroupModel.updateWhenHasNewMessage(getChatGroupReceiver._id, getChatGroupReceiver.messageAmount + 1);
+        resolve(newMessage)
+      } else {
+        let getUserReceiver = await UserModel.getNormalUserDataById(receiverId);
+        if(!getUserReceiver){
+          reject("Contact not found")
+        }
+        let receiver = {
+          id: getUserReceiver._id,
+          name : getUserReceiver.nickname,
+          avatar : getUserReceiver.avatar
+        };
+
+        let newMessageItem = {
+          senderId : sender.id,
+          receiverId : receiver.id,
+          conversationType : MessageModel.conversationTypes.PERSONAL,
+          messageType : MessageModel.messageTypes.TEXT,
+          sender: sender,
+          receiver: receiver,
+          text: messageVal,
+          createdAt: Date.now(),
+        }
+
+        //create new message
+        let newMessage = await MessageModel.model.createNew(newMessageItem);
+        //update contact
+        console.log(sender.id, getUserReceiver._id)
+        await ContactModel.updateWhenHasNewMessage(sender.id, getUserReceiver._id)
+        resolve(newMessage)
+      }
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
 module.exports = {
   getAllConversationItems,
   getAllImages,
   getAllFiles,
-
+  addNewTexEmoji
 }

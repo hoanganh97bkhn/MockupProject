@@ -27,7 +27,7 @@ class home extends Component {
         .then((res) => {
             this.props.getListUserConversations(res.data.userConversationsWithMessages);
             this.props.getListGroupConversations(res.data.groupConversationsWithMessages);
-            this.props.getListAllConversationWithMessages(res.data.allConversationsWithMessages);
+            this.props.getListAllConversations(res.data.allConversationsWithMessages);
             this.setState({
                 id_chat_room : res.data.allConversationsWithMessages.length>0 ? res.data.allConversationsWithMessages[0]._id : '' 
             })
@@ -85,8 +85,8 @@ const mapDispatchToProps = (dispatch, props) => {
         getListGroupConversations : (data) => {
             dispatch(actions.getListGroupConversations(data))
         },
-        getListAllConversationWithMessages : (data) => {
-            dispatch(actions.getListAllConversationWithMessages(data))
+        getListAllConversations : (data) => {
+            dispatch(actions.getListAllConversations(data))
         }
     }
 }

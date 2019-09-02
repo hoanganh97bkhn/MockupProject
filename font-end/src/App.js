@@ -111,7 +111,16 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         removeCountListContacts : () => {
             dispatch(actions.removeCountListContacts())
-        }
+        },
+        addListAllConversations : (id, data) => {
+            dispatch(actions.addListAllConversations(id, data));
+        },
+        addListGroupConversations : (id, data) => {
+            dispatch(actions.addListGroupConversations(id, data));
+        },   
+        addListUserConversations : (id, data) => {
+            dispatch(actions.addListUserConversations(id, data));
+        },    
     }
 }
 
