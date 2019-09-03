@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import config from './../../../../config/index';
+import typingImage from './../../../../image/typing.gif';
 import {bufferToBase64} from './../../../../helpers/clientHelper';
 
 class ContentChat extends Component {
@@ -63,6 +64,12 @@ class ContentChat extends Component {
                             )
                         }
                     }) : null}
+                    {this.props.isTyping ? 
+                        <div className="bubble image bubble-image-file you bubble-typing-gif">
+                            <img src={typingImage} ></img>
+                        </div>
+                    : null}
+                    
                     <div style={{ float:"left", clear: "both" }}
                         ref={(el) => { this.messagesEnd = el; }}>
                     </div>

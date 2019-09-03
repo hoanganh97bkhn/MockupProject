@@ -120,7 +120,17 @@ const mapDispatchToProps = (dispatch, props) => {
         },   
         addListUserConversations : (id, data) => {
             dispatch(actions.addListUserConversations(id, data));
-        },    
+        },
+        addOnTyping : (data) => {
+            dispatch(actions.addOnTyping(data))
+        },
+        removeOnTyping : (data) => {
+            dispatch(actions.removeOnTyping(data))
+        },
+        addOnMessage : (data) => {
+            dispatch(actions.addOnMessage(data))
+        },
+           
     }
 }
 

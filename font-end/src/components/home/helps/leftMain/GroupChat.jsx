@@ -40,7 +40,7 @@ class GroupChat extends Component {
                             <img src={`${config.baseUrl}/images/${item.avatar}`} alt=""></img>
                         </div>
                         <p className="name text-over">
-                            <span className="group-chat-name">Group:</span> {item.name}
+                            <span className="group-chat-name">{item.name}</span>
                         </p>
                         <span className="time">Hai giờ trước</span>
                         <span className="preview">{helperPreview(item)}</span>

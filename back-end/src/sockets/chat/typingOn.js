@@ -2,7 +2,7 @@ import ActiveAccountModel from './../../models/activeAccount';
 import {pushSocketIdToArray, emitNotifyToArray, removeSocketIdFromArray} from './../../helpers/socketHelper';
 import _ from 'lodash';
 
-let chatTextEmoji = (io) => {
+let typingOn = (io) => {
   let clients = {};
   io.on("connection", (socket) => {
 
@@ -14,11 +14,10 @@ let chatTextEmoji = (io) => {
       clients = pushSocketIdToArray(clients, grId._id, socket.id);
     })
 
-    socket.on("chat-text-emoji", (data) => {
+    socket.on("user-is-typing", (data) => {
       if(data.isGroup) {
         let response = {
           currentUserId : data.uid,
-          message : data.messageVal
         };
         //emit notification "response-chat-text-emoji"
         if(clients[data.uid]) {
@@ -26,18 +25,17 @@ let chatTextEmoji = (io) => {
             return item !== socket.id
           });
           arrayEmitGroup.forEach((socketId)=>{
-            io.sockets.connected[socketId].emit("response-chat-text-emoji", response);
+            io.sockets.connected[socketId].emit("response-user-is-typing-on", response);
           })
         }
       } else {
         let response = {
           currentUserId : socket.request.user._id,
-          message : data.messageVal
         };
 
         //emit notification "response-chat-text-emoji"
         if(clients[data.uid]) {
-          emitNotifyToArray(clients, data.uid, io, "response-chat-text-emoji", response);
+          emitNotifyToArray(clients, data.uid, io, "response-user-is-typing-on", response);
         }
       }
     });
@@ -56,4 +54,4 @@ let chatTextEmoji = (io) => {
   })
 }
 
-module.exports = chatTextEmoji;
+module.exports = typingOn;

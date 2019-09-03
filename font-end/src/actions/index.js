@@ -383,3 +383,33 @@ export const checkChangeListMessage = (data) => {
         data 
     }
 }
+
+/** chat message */
+
+export const addOnTyping = (data) => {
+    return {
+        type: types.ADD_ON_TYPING,
+        data 
+    }
+}
+
+export const removeOnTyping = (data) => {
+    return {
+        type: types.REMOVE_ON_TYPING,
+        data 
+    }
+}
+
+export const addOnMessage = (data) => {
+    return {
+        type: types.ADD_ON_MESSAGE,
+        data 
+    }
+}
+
+export const removeOnMessage = (data) => {
+    return {
+        type: types.REMOVE_ON_MESSAGE,
+        data 
+    }
+}

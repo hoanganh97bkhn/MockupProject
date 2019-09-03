@@ -564,7 +564,7 @@ h6{
   line-height: 22px;
   color: #1a1a1a;
   font-family: 'Source Sans Pro', sans-serif;
-  font-weight: 600;
+  /* font-weight: 600; */
 }
 .left .people .person.active span, .left .people .person:hover span {
   background: transparent;
@@ -661,8 +661,8 @@ h6{
 
 .right .bubble.me {
   float: right;
-  color: #1a1a1a;
-  background-color: #eceff1;
+  color: #fff;
+  background-color: #3578E5;
   -ms-flex-item-align: end;
   align-self: flex-end;
   -webkit-animation-name: slideFromRight;
@@ -684,8 +684,8 @@ h6{
 .right .bubble.you {
   position: relative;
   float: left;
-  color: #fff;
-  background-color: #3578E5;
+  color: #1a1a1a;
+  background-color: #eceff1;
   -ms-flex-item-align: start;
   align-self: flex-start;
   -webkit-animation-name: slideFromLeft;
@@ -723,7 +723,7 @@ h6{
 }
 .right .bubble.me:before {
   right: -3px;
-  background-color: #eceff1;
+  background-color: #3578E5;
 }
 .right .bubble:before {
   position: absolute;
@@ -737,7 +737,7 @@ h6{
 }
 .right .bubble.you:before {
   left: -3px;
-  background-color: #3578E5;
+  background-color: #eceff1;
 }
 .bubble-image-file:before {
   background-color: #FFF !important;
@@ -844,4 +844,15 @@ h6{
 .modal-file .ant-modal-body{
   height: 50vh;
   overflow-y: auto
+}
+
+.bubble-typing-gif {
+  margin-left: -20px !important;
+  background-color: #fff !important;
+}
+.bubble-typing-gif:before{
+  background-color: #fff !important;
+}
+.bubble-typing-gif img {
+  width: 25%
 }

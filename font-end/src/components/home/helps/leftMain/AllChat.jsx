@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import * as actions from './../../../../actions/index';
 import config from './../../../../config/index';
 import _ from 'lodash';
 import {covertTimestampToHumanTime} from './../../../../helpers/clientHelper';
@@ -67,6 +68,7 @@ class AllChat extends Component {
    
     handleOpenChat = (item, idFocus) => {
         this.props.handleOpenChat(item._id);
+        this.props.removeOnMessage(item._id);
         this.setState({
             idFocus : idFocus
         })
@@ -98,7 +100,7 @@ class AllChat extends Component {
                                     <img src={`${config.baseUrl}/images/${item.avatar}`} alt=""></img>
                                 </div>
                                 <p className="name text-over">
-                                    <span className="group-chat-name">Group:</span> {item.name}
+                                    <span className="group-chat-name">{item.name}</span> 
                                 </p>
                                 <span className="time">{helperTime(item)}</span>
                                 <span className="preview">{helperPreview(item)}</span>
@@ -114,8 +116,16 @@ class AllChat extends Component {
 function mapStateToProps(state) {
     return {
         allConversations : state.allConversations,
-        // checkChangeList : state.checkChangeList  
+        message : state.message
     };
 }
 
-export default connect(mapStateToProps,)(AllChat);
+function mapDispatchToProps(dispatch, props){
+    return {
+        removeOnMessage : (data) => {
+            dispatch(actions.removeOnMessage(data))
+        },
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AllChat);

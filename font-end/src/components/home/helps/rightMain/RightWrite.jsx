@@ -73,15 +73,39 @@ class RightWrite extends Component {
     
     handleInputChange = (e) => {
         let index = this.props.dataId;
+        let data = {
+            uid: index,
+            isGroup : this.props.isGroup
+        }
+        this.props.socket.emit("user-is-typing",data);
         this.setState({
             newMessage: e.target.value,
             ObjectMessage : {...this.state.ObjectMessage, [index] : e.target.value},
         })
     }
+
+    handleonBlur = () => {
+        let index = this.props.dataId;
+        let data = {
+            uid: index,
+            isGroup : this.props.isGroup
+        }
+        this.props.socket.emit("user-is-off-typing",data);
+    }
+
     handleSendMessage = (e) =>{
         e.preventDefault();
         let user = this.props.user
         let index = this.props.dataId;
+        
+        //off typing
+        let dataTyping = {
+            uid: index,
+            isGroup : this.props.isGroup
+        }
+        this.props.socket.emit("user-is-off-typing",dataTyping);
+
+        //send -chat -realtime
         let messageVal = ObjectSendMess(this.state.newMessage, user._id, user.avatar, user.nickname);
         let data = {
             uid: index,
@@ -98,7 +122,6 @@ class RightWrite extends Component {
                 this.props.addListAllConversations(this.props.dataId, messageVal);
                 this.props.addListGroupConversations(this.props.dataId, messageVal);
                 this.props.addListUserConversations(this.props.dataId, messageVal);
-                //this.props.handleChangeSendMess(messageVal);
                 this.props.socket.emit("chat-text-emoji", {uid : this.props.dataId, messageVal : messageVal, isGroup : this.props.isGroup});
                 this.setState({
                     newMessage : '',
@@ -109,10 +132,7 @@ class RightWrite extends Component {
                 message.error(error.response.statusText,5)
             })
         }
-        
-        
     }
-
     
     render() {
         return (
@@ -129,7 +149,8 @@ class RightWrite extends Component {
                                 onPressEnter={this.handleSendMessage} 
                                 rows={1} className="search-txt" 
                                 value={this.state.newMessage} 
-                                onChange={this.handleInputChange}/>
+                                onChange={this.handleInputChange}
+                                onBlur = {this.handleonBlur}/>
                             <i className="fa fa-smile-o" onClick={this.handleOpenMoji}></i>
                         </div>
                         <div onClick={this.handleOpenMoji}>{this.state.openMoji ? <Picker set="emojione" onSelect={this.addEmoji} onSkinChange={document.removeEventListener('click', this.handleCloseMoji)}/> : null}</div>

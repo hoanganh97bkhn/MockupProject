@@ -15,6 +15,8 @@ import groupConversations from './messages/groupConversations';
 import userConversations from './messages/userConversations';
 import allConversations from './messages/allConversationWithMessages';
 import checkChangeList from './messages/changeList';
+import typing from './chat/typing';
+import message from './chat/message';
 import { combineReducers } from 'redux';
 
 const myReducer = combineReducers({
@@ -34,7 +36,9 @@ const myReducer = combineReducers({
     userConversations,
     groupConversations,
     allConversations,
-    checkChangeList
+    checkChangeList,
+    typing,
+    message
 });
 
 export default myReducer;
