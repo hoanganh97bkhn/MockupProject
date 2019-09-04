@@ -2,22 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import {Input, message} from 'antd'
-import { Picker, Emoji, getEmojiDataFromNative } from 'emoji-mart';
+import { Picker, Emoji } from 'emoji-mart';
 import * as actions from './../../../../actions/index';
 import config from './../../../../config/index';
 const {TextArea} = Input;
 
-let ObjectSendMess = (data, id, avatar, name)=>{
-    return {
-        messageType : "text",
-        senderId : id,
-        sender : {
-            avatar : avatar,
-            name : name
-        },
-        text : data
-    }
-}
 class RightWrite extends Component {
     constructor(props){
         super(props);
@@ -25,7 +14,12 @@ class RightWrite extends Component {
             text:'',
             openMoji : false,
             newMessage : '',
-            ObjectMessage : {}
+            ObjectMessage : {},
+            imageData : '',
+            imageDataPrview : '',
+            keyInput : Date.now(),
+            keyInputFile : Date.now()/2,
+            fileData : '',
         }
     }
 
@@ -84,6 +78,63 @@ class RightWrite extends Component {
         })
     }
 
+    handleInputChangeImage = (e) => {
+        e.preventDefault();
+        let reader = new FileReader();
+        let file = e.target.files[0];
+        if(file){
+            if(file.type != "image/png" && file.type != "image/jpeg" && file.type != "image/jpg"){
+                message.error('error file type', 5);
+            }
+            else if(file.size >= 1048576){
+                message.error('error file size', 5);
+            }
+            else{
+                reader.readAsDataURL(file);
+                reader.onloadend = () => {
+                this.setState({
+                    imageData: file,
+                    imageDataPrview : reader.result
+                });
+            }
+            }
+        }
+    }
+
+    handleInputChangeFile = (e) => {
+        e.preventDefault();
+        let reader = new FileReader();
+        let file = e.target.files[0];
+        if(file){
+            if(file.size >= 1048576){
+                message.error('error file size', 5);
+            }
+            else{
+                reader.readAsDataURL(file);
+                reader.onloadend = () => {
+                this.setState({
+                    fileData: file,
+                });
+            }
+            }
+        }
+    }
+
+    resetFileData = () => {
+        this.setState({
+            fileData : '',
+            keyInputFile : Date.now()/2,
+        })
+    }
+
+    resetImgData = () => {
+        this.setState({
+            imageData : '',
+            keyInput : Date.now(),
+            imageDataPrview : ''
+        })
+    }
+
     handleonBlur = () => {
         let index = this.props.dataId;
         let data = {
@@ -95,18 +146,16 @@ class RightWrite extends Component {
 
     handleSendMessage = (e) =>{
         e.preventDefault();
-        let user = this.props.user
         let index = this.props.dataId;
         
         //off typing
-        let dataTyping = {
+        let _data = {
             uid: index,
             isGroup : this.props.isGroup
         }
-        this.props.socket.emit("user-is-off-typing",dataTyping);
+        this.props.socket.emit("user-is-off-typing",_data);
 
         //send -chat -realtime
-        let messageVal = ObjectSendMess(this.state.newMessage, user._id, user.avatar, user.nickname);
         let data = {
             uid: index,
             messageVal : this.state.newMessage,
@@ -119,10 +168,10 @@ class RightWrite extends Component {
                 data : data
             })
             .then((res)=>{
-                this.props.addListAllConversations(this.props.dataId, messageVal);
-                this.props.addListGroupConversations(this.props.dataId, messageVal);
-                this.props.addListUserConversations(this.props.dataId, messageVal);
-                this.props.socket.emit("chat-text-emoji", {uid : this.props.dataId, messageVal : messageVal, isGroup : this.props.isGroup});
+                this.props.addListAllConversations(this.props.dataId, res.data);
+                this.props.addListGroupConversations(this.props.dataId, res.data);
+                this.props.addListUserConversations(this.props.dataId, res.data);
+                this.props.socket.emit("chat-text-emoji", {uid : this.props.dataId, messageVal : res.data, isGroup : this.props.isGroup});
                 this.setState({
                     newMessage : '',
                     ObjectMessage : {...this.state.ObjectMessage, [index] : ''},
@@ -132,6 +181,57 @@ class RightWrite extends Component {
                 message.error(error.response.statusText,5)
             })
         }
+        if(this.state.imageData !== ''){
+            let formData = new FormData();
+            formData.append('file', this.state.imageData);
+            formData.append('uid', index);
+            formData.append('isGroup', this.props.isGroup)
+            axios({
+                url : `${config.baseUrl}/message/add-new-image`,
+                method :'POST',
+                data : formData
+            })
+            .then((res)=>{
+                this.props.addListAllConversations(this.props.dataId, res.data);
+                this.props.addListGroupConversations(this.props.dataId, res.data);
+                this.props.addListUserConversations(this.props.dataId, res.data);
+                this.props.socket.emit("chat-text-emoji", {uid : this.props.dataId, messageVal : res.data, isGroup : this.props.isGroup});
+                this.setState({
+                    imageData : '',
+                    keyInput : Date.now(),
+                    imageDataPrview : ''
+                });
+            })
+            .catch((error)=>{
+                message.error("Server error",5)
+            })
+        }
+
+        if(this.state.fileData !== ''){
+            let formData = new FormData();
+            formData.append('file', this.state.fileData);
+            formData.append('uid', index);
+            formData.append('isGroup', this.props.isGroup)
+            axios({
+                url : `${config.baseUrl}/message/add-new-file`,
+                method :'POST',
+                data : formData
+            })
+            .then((res)=>{
+                this.props.addListAllConversations(this.props.dataId, res.data);
+                this.props.addListGroupConversations(this.props.dataId, res.data);
+                this.props.addListUserConversations(this.props.dataId, res.data);
+                this.props.socket.emit("chat-text-emoji", {uid : this.props.dataId, messageVal : res.data, isGroup : this.props.isGroup});
+                this.setState({
+                    fileData : '',
+                    keyInputFile : Date.now()/2,
+                });
+            })
+            .catch((error)=>{
+                message.error("Server error",5)
+            })
+        }
+       
     }
     
     render() {
@@ -139,11 +239,29 @@ class RightWrite extends Component {
             <div className="write">
                 <div className="row">
                     <div className="col-2 action-chat">
-                        <i className="fa fa-photo"></i>
-                        <i className="fa fa-paperclip"></i>
+                        <label htmlFor="input-image"><i className="fa fa-photo"></i></label>
+                            <input key={this.state.keyInput} className="input-image" id="input-image" type="file" style={{position: "fixed", top: "-100em"}} onChange={this.handleInputChangeImage}></input>
+                        <label htmlFor="input-file"><i className="fa fa-paperclip"></i></label>
+                            <input key={this.state.keyInputFile} className="input-file" id="input-file" type="file" style={{position: "fixed", top: "-110em"}} onChange={this.handleInputChangeFile}></input>
                         <i className="fa fa-video-camera"></i>
                     </div>
-                    <div className="col-9"> 
+                    <div className="col-9">
+                        <div className="test">
+                            <div className="row">
+                                {this.state.imageDataPrview === '' ? null : 
+                                <div className="img-prev col-auto">
+                                    <img className="avatar-prev" src={this.state.imageDataPrview}></img>
+                                    <button type="button" onClick={this.resetImgData} className="remove-img close">×</button>
+                                </div>
+                                }
+                                {this.state.fileData === '' ? null : 
+                                <div className="img-prev col-auto">
+                                    <div className="file-preview" style={{color : 'red'}}> {this.state.fileData.name} </div>
+                                    <button type="button" onClick={this.resetFileData} className="remove-img close">×</button>
+                                </div>
+                                }
+                            </div>
+                        </div> 
                         <div className="write-chat">
                             <TextArea 
                                 onPressEnter={this.handleSendMessage} 
@@ -152,12 +270,14 @@ class RightWrite extends Component {
                                 onChange={this.handleInputChange}
                                 onBlur = {this.handleonBlur}/>
                             <i className="fa fa-smile-o" onClick={this.handleOpenMoji}></i>
+                            
                         </div>
-                        <div onClick={this.handleOpenMoji}>{this.state.openMoji ? <Picker set="emojione" onSelect={this.addEmoji} onSkinChange={document.removeEventListener('click', this.handleCloseMoji)}/> : null}</div>
+                        
+                        <div onClick={this.handleOpenMoji}>{this.state.openMoji ? <Picker set="emojione" onSelect={this.addEmoji} onSkinChange={document.removeEventListener('click', this.handleCloseMoji)}/> : null}</div>           
                     </div>
                     <div className="col-auto">
                         <i className="fa fa-paper-plane" onClick={this.handleSendMessage}></i>
-                    </div>
+                    </div>                    
                 </div>
             </div>
         );

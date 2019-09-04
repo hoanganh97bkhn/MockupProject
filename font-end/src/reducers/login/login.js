@@ -13,7 +13,6 @@ let myReducer = (state = initialState,action) => {
 
     switch(action.type){
         case types.LOGIN_SUCCESS :
-            console.log(action)
             return {
                 ...state,
                 type: "success",

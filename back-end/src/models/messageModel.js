@@ -76,7 +76,7 @@ messageSchema.statics = {
           {"messageType" : MESSAGE_TYPES.IMAGE}
         ]}
       ]
-    }).sort({"createAt" : 1}).exec();
+    }).sort({"createdAt" : -1}).exec();
   },
 
   getAllFiles(senderId, receiverId){
@@ -93,7 +93,7 @@ messageSchema.statics = {
           {"messageType" : MESSAGE_TYPES.FILE}
         ]}
       ]
-    }).sort({"createAt" : 1}).exec();
+    }).sort({"createdAt" : -1}).exec();
   },
 
   addNewTexEmoji(){

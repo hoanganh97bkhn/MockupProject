@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import {Icon, Spin} from 'antd';
+import axios from 'axios';
 import config from './../../../../config/index';
 import typingImage from './../../../../image/typing.gif';
 import {bufferToBase64} from './../../../../helpers/clientHelper';
+import * as actions from './../../../../actions/index';
 
+
+const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 class ContentChat extends Component {
     constructor(props) {
-        super(props)
+        super(props);
+        this.state = {
+            loading : false
+        }
     }
 
     scrollToBottom = () => {
@@ -21,11 +29,41 @@ class ContentChat extends Component {
         this.scrollToBottom();
     }
 
+    handleScrollLoad = (event) =>{
+        let element = event.target;
+        if(element.scrollTop === 0){
+          this.setState({
+            loading : true
+          })
+          axios({
+            url:`${config.baseUrl}/message/readmore`,
+            method: 'post',
+            data: {
+              skip: this.state.skip
+            }
+          })
+          .then((res) => {
+            this.props.scrollListContacts(res.data)
+            this.setState({
+              loading : false
+            })
+          })
+          .catch((error) => {
+            console.log(error);
+            this.setState({
+              loading : false
+            })
+          })
+          
+        }
+      }
+
     render() {
         let user = this.props.user;
         let dataMessage = this.props.data;
         return (
-            <div className="content-chat" >
+            <div className="content-chat" onScroll={this.handleScrollLoad}>
+                <div style={{textAlign : 'center', marginTop: '15px'}}><Spin indicator={antIcon} spinning={this.state.loading}/></div>
                 <div id="style-chat" className="chat" data-chat="" tabIndex="2" >
                     {dataMessage.length >0 ? dataMessage.map((item, index) => {
                         if(item.messageType === "text"){

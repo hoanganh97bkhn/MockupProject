@@ -18,7 +18,6 @@ class RightMain extends Component {
     }
 
     componentWillReceiveProps = (nextProps) => {
-        console.log(nextProps.typing);
         let data = nextProps.allConversations.filter((item, index) => {
             if(item._id === nextProps.handleOpenChat) return true;
             else return false;
@@ -39,7 +38,6 @@ class RightMain extends Component {
     }
 
     render() {
-        console.log(this.state.isTyping)
         return (
             <div className="right">
                 <RightTop data= {this.state.listData.length>0 ? this.state.listData[0] : this.state.listData}/>

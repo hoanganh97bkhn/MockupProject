@@ -49,7 +49,10 @@ let initRouters = (app) => {
   router.get("/message/file/list", authLogin, home.getAllFiles);
 
   //message
-  router.post("/message/add-new-text-emoji", authLogin, messageValid.checkMessageLength, message.addNewTexEmoji )
+  router.post("/message/add-new-text-emoji", authLogin, messageValid.checkMessageLength, message.addNewTexEmoji );
+  router.post("/message/add-new-image", authLogin, message.addNewImage );
+  router.post("/message/add-new-file", authLogin, message.addNewFile);
+
   
   //timer-notification
   router.put("/timer/count/notification-general/reset", authLogin, timer.resetCountNotifGeneral)

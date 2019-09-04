@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Row,Col,Icon,List, Empty} from 'antd';
+import {Row, Col, Icon, List, Empty, Spin} from 'antd';
 import axios from 'axios';
 import config from './../../../../config/index';
 import {Modal} from 'antd';
 import Gallery from 'react-grid-gallery';
 import {bufferToBase64} from './../../../../helpers/clientHelper';
-import { func } from 'prop-types';
-import { EMFILE } from 'constants';
-
 
 function mapStateToProps(state) {
     return {
 
     };
 }
+
+const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 function coverImages(item){
     return {
@@ -33,7 +32,9 @@ class RightTop extends Component {
             listImage : [],
             listFile : [],
             visibleImage: false,
-            visibleFile: false
+            visibleFile: false,
+            loading: false,
+            isEmpty : false,
         }
     }
 
@@ -50,36 +51,52 @@ class RightTop extends Component {
     };
 
     handleModalImage = () =>{
+        this.setState({
+            visibleImage: !this.state.visibleImage,
+            loading : true,
+        })
         axios({
             url: `${config.baseUrl}/message/image/list?messageId=${this.props.data._id}`,
             method: 'get'
         })
         .then((res)=>{
             this.setState({
-                visibleImage: !this.state.visibleImage,
+                loading: false,
                 listImage : res.data.map((item, index) => {
                     return coverImages(item)
-                })
+                }),
+                isEmpty : res.data.length === 0 
             })
         })
         .catch((err) => {
-            console.log(err)
+            console.log(err);
+            this.setState({
+                loading :false
+            })
         })
     }
 
     handleModalFile = () =>{
+        this.setState({
+            visibleFile: !this.state.visibleFile,
+            loading : true,
+        })
+
         axios({
             url: `${config.baseUrl}/message/file/list?messageId=${this.props.data._id}`,
             method: 'get'
         })
         .then((res)=>{
             this.setState({
-                visibleFile: !this.state.visibleFile,
-                listFile : res.data
+                listFile : res.data,
+                loading :false
             })
         })
         .catch((err) => {
-            console.log(err)
+            console.log(err);
+            this.setState({
+                loading :false
+            })
         })
     }
 
@@ -92,13 +109,13 @@ class RightTop extends Component {
                         To: <span><strong>{data.nickname? data.nickname : data.name}</strong></span>
                     </Col>
                     <Col span={3} offset={10}>
-                    <div onClick={this.handleModalImage} style={{cursor: "pointer"}}>
+                    <div onClick={this.handleModalImage} style={{cursor: "pointer", width: "50%"}}>
                         Image
                         <Icon type="file-image" />
                         </div>
                     </Col>
                     <Col span={3}>
-                    <div onClick={this.handleModalFile} style={{cursor: "pointer"}}>
+                    <div onClick={this.handleModalFile} style={{cursor: "pointer",  width: "50%"}}>
                         File
                         <Icon type="paper-clip" />
                         </div>
@@ -112,8 +129,11 @@ class RightTop extends Component {
                     onOk={this.handleOpenModalImage}
                     onCancel={this.handleOpenModalImage}
                 >
+                    <div style={{textAlign : 'center', marginTop: '15px'}}><Spin indicator={antIcon} spinning={this.state.loading}/></div>
                     {/** LIST image */}
-                    {this.state.listImage.length>0 ? <Gallery images={this.state.listImage} /> : <Empty/>}
+                    <Gallery images={this.state.listImage} />
+                    {this.state.isEmpty ? <Empty/> : null}
+                    
                 </Modal>
 
                 <Modal
@@ -124,6 +144,7 @@ class RightTop extends Component {
                     onOk={this.handleOpenModalFile}
                     onCancel={this.handleOpenModalFile}
                 >
+                    <div style={{textAlign : 'center', marginTop: '15px'}}><Spin indicator={antIcon} spinning={this.state.loading}/></div>
                     {/** LIST file */}
                     {this.state.listFile.length>0 ? 
                         <List
