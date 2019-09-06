@@ -6,6 +6,7 @@ import removeContact from './contact/removeContact';
 import chatTextEmoji from './chat/chatTextEmoji';
 import typingOn from './chat/typingOn';
 import typingOff from './chat/typingOff';
+import chatVideo from './chat/chatVideo';
 
 let initSockets = (io) => {
   addNewContact(io);
@@ -16,6 +17,7 @@ let initSockets = (io) => {
   chatTextEmoji(io);
   typingOn(io);
   typingOff(io);
+  chatVideo(io);
 }
 
 module.exports = initSockets;

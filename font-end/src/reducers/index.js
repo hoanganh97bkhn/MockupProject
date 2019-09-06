@@ -17,6 +17,7 @@ import allConversations from './messages/allConversationWithMessages';
 import checkChangeList from './messages/changeList';
 import typing from './chat/typing';
 import message from './chat/message';
+import chatVideo from "./chat/chatVideo";
 import { combineReducers } from 'redux';
 
 const myReducer = combineReducers({
@@ -38,7 +39,8 @@ const myReducer = combineReducers({
     allConversations,
     checkChangeList,
     typing,
-    message
+    message,
+    chatVideo
 });
 
 export default myReducer;

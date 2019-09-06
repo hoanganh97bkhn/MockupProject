@@ -8,11 +8,12 @@ import http from 'http';
 import socketio from 'socket.io';
 import initSockets from "./sockets/index";
 import configSocketIo from './config/socketio';
-
-
+import events from 'events';
 
 //Init app
 let app = express();
+
+events.EventEmitter.defaultMaxListeners = 25;
 
 //init server with socket.io & express
 let server = http.createServer(app);

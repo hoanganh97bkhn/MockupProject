@@ -130,6 +130,19 @@ const mapDispatchToProps = (dispatch, props) => {
         addOnMessage : (data) => {
             dispatch(actions.addOnMessage(data))
         },
+        openModalCaller : (data) => {
+            dispatch(actions.openModalCaller(data))
+        },
+        openModalListener : (data) => {
+            dispatch(actions.openModalListener(data))
+        },
+        closeModalCaller : () => {
+            dispatch(actions.closeModalCaller())
+        },
+        closeModalListener : () => {
+            dispatch(actions.closeModalListener())
+        },
+
            
     }
 }

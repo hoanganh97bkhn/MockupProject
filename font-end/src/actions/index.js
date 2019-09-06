@@ -413,3 +413,45 @@ export const removeOnMessage = (data) => {
         data 
     }
 }
+
+export const openModalCaller = (data) => {
+    return {
+        type : types.OPEN_MODAL_CALLER,
+        data
+    }
+}
+
+export const closeModalCaller= () => {
+    return {
+        type : types.CLOSE_MODAL_CALLER,
+        data
+    }
+}
+
+export const openModalListener = (data) => {
+    return {
+        type : types.OPEN_MODAL_LISTENER,
+        data
+    }
+}
+
+export const closeModalListener = () => {
+    return {
+        type : types.CLOSE_MODAL_LISTENER,
+        data
+    }
+}
+
+//streamming
+export const openStream = (stream) => {
+    return {
+        type : types.OPEN_MODAL_STREAM,
+        data : stream
+    }
+}
+
+export const closeStream = () => {
+    return {
+        type : types.CLOSE_MODAL_STREAM,
+    }
+}

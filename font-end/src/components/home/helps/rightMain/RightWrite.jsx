@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import {Input, message} from 'antd'
+import {Input, message, Modal} from 'antd'
 import { Picker, Emoji } from 'emoji-mart';
 import * as actions from './../../../../actions/index';
 import config from './../../../../config/index';
+import ModalCallVideo from './ModalCallVideo';
 const {TextArea} = Input;
 
 class RightWrite extends Component {
@@ -20,6 +21,8 @@ class RightWrite extends Component {
             keyInput : Date.now(),
             keyInputFile : Date.now()/2,
             fileData : '',
+            isOpenModal: false,
+            isOpen : false
         }
     }
 
@@ -231,7 +234,22 @@ class RightWrite extends Component {
                 message.error("Server error",5)
             })
         }
-       
+    }
+
+    handleCallVideo = () => {
+        this.setState({
+            isOpen : true,
+        })
+        let data = this.props.dataContactId;
+        let listenerId = this.props.dataId;
+        let callerName = this.props.user.nickname;
+        let listenerName = data.nickname? data.nickname : data.name
+        let dataToEmit = {
+            listenerId,
+            callerName,
+            listenerName
+        }
+        this.props.socket.emit("caller-check-listener-online-or-not", dataToEmit);
     }
     
     render() {
@@ -243,7 +261,7 @@ class RightWrite extends Component {
                             <input key={this.state.keyInput} className="input-image" id="input-image" type="file" style={{position: "fixed", top: "-100em"}} onChange={this.handleInputChangeImage}></input>
                         <label htmlFor="input-file"><i className="fa fa-paperclip"></i></label>
                             <input key={this.state.keyInputFile} className="input-file" id="input-file" type="file" style={{position: "fixed", top: "-110em"}} onChange={this.handleInputChangeFile}></input>
-                        <i className="fa fa-video-camera"></i>
+                        {!this.props.isGroup ? <i className="fa fa-video-camera" onClick={this.handleCallVideo}></i> : null}
                     </div>
                     <div className="col-9">
                         <div className="test">
@@ -279,6 +297,11 @@ class RightWrite extends Component {
                         <i className="fa fa-paper-plane" onClick={this.handleSendMessage}></i>
                     </div>                    
                 </div>
+                <Modal
+                    title="Video Call"
+                    visible={this.state.visible}
+                    />
+                <ModalCallVideo/>
             </div>
         );
     }
@@ -287,7 +310,8 @@ class RightWrite extends Component {
 function mapStateToProps(state) {
     return {
         user : state.user,
-        socket : state.socket
+        socket : state.socket,
+        stream : state.stream
     };
 }
 
@@ -304,6 +328,9 @@ const mapDispatchToProps = (dispatch, props) => {
         },    
         checkChangeListMessage : (data) => {
             dispatch(actions.checkChangeListMessage(data));
+        },
+        openModalCaller : (data) => {
+            dispatch(actions.openModalCaller(data))
         },  
     }
 }

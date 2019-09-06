@@ -41,8 +41,12 @@ class RightMain extends Component {
         return (
             <div className="right">
                 <RightTop data= {this.state.listData.length>0 ? this.state.listData[0] : this.state.listData}/>
-                <ContentChat data = {this.state.dataMessage.length>0 ? this.state.dataMessage : this.state.dataMessage} isTyping={this.state.isTyping}/>
-                <RightWrite dataId = {this.state.id_chat_room} isGroup = {this.state.isGroup} handleChangeSendMess = {this.handleChangeSendMess}/>
+                <ContentChat data = {this.state.dataMessage.length>0 ? this.state.dataMessage : this.state.dataMessage} 
+                            isTyping={this.state.isTyping}
+                            />
+                <RightWrite dataId = {this.state.id_chat_room} isGroup = {this.state.isGroup} 
+                            handleChangeSendMess = {this.handleChangeSendMess}
+                            dataContactId= {this.state.listData.length>0 ? this.state.listData[0] : this.state.listData}/>
             </div>
         );
     }

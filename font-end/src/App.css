@@ -781,6 +781,7 @@ h6{
   background: #eceff1;
   border-radius: 18px;
   padding: 25px;
+  margin-top: 5px;
 }
 .search-txt{
   position: absolute;
