@@ -1,5 +1,7 @@
 /** export dispatch action video chat */
 import Peer from 'peerjs';
+import {Alert} from 'antd'
+
 
 export const videoChat = (socket, props) => {
   socket.on('server-send-listener-is-offline', (response) => {
@@ -22,7 +24,6 @@ export const videoChat = (socket, props) => {
 
   //step 3 of listener
   socket.on('server-request-peer-id-of-listener', (response) => {
-    console.log("step3")
     let dataToEmit = {
       callerId : response.callerId,
       listenerId : response.listenerId,
@@ -37,7 +38,6 @@ export const videoChat = (socket, props) => {
 
   //step 5 of caller
   socket.on("server-send-peer-id-of-listener-to-caller", (response) => {
-    console.log("step5")
     let dataToEmit = {
       callerId : response.callerId,
       listenerId : response.listenerId,
@@ -51,7 +51,7 @@ export const videoChat = (socket, props) => {
     *  caller is calling
     */
     socket.emit("caller-request-call-to-server", dataToEmit);
-    props.openModalCaller(dataToEmit);
+    props.openStream("open-modal", dataToEmit);
     
 
     /**view : caller would like cancel call
@@ -68,8 +68,8 @@ export const videoChat = (socket, props) => {
      * socket.on("server-send-reject-call-to-caller", response => {});
      */
     socket.on("server-send-reject-call-to-caller", response => {
-      props.closeModalCaller(dataToEmit);
-      alert("Client is busy!!!")
+      props.closeStream();
+      alert("Client is busy!!!");
     })
   });
 
@@ -94,7 +94,6 @@ export const videoChat = (socket, props) => {
      * socket.on("server-send-cancel-request-call-to-listener", response => {});
     */
     socket.on("server-send-cancel-request-call-to-listener", response => {
-      console.log('hello')
       props.closeModalListener();
     })
     
@@ -120,16 +119,21 @@ export const videoChat = (socket, props) => {
   * close modal call
   * show modal video
   */
-  socket.on("server-send-accept-call-to-caller", response=>{
+  socket.on("server-send-accept-call-to-caller", function(response){
     props.closeModalCaller()
     let getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia).bind(navigator);
+    props.openStream("local-stream",'');
 
     getUserMedia({video: true, audio: true}, function(stream) {
+      props.openStream("local-stream",stream);
+
       let call = peer.call(response.listenerPeerId, stream);
 
       call.on('stream', function(remoteStream) {
-        // Show stream in some video/canvas element.
+        props.openStream("remote-stream",stream);
       });
+
+      //
     }, function(err) {
       console.log('Failed to get local stream' ,err);
     });
@@ -139,17 +143,20 @@ export const videoChat = (socket, props) => {
   * step 14
   * show modal video
   */
-  socket.on("server-send-accept-call-to-listener", response=>{
+  socket.on("server-send-accept-call-to-listener", function(response){
     props.closeModalListener()
     let getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia).bind(navigator);
-
+    props.openStream("local-stream",'');
     peer.on('call', function(call) {
       getUserMedia({video: true, audio: true}, function(stream) {
+        props.openStream("local-stream",stream);
 
         call.answer(stream);
          // Answer the call with an A/V stream.
+
         call.on('stream', function(remoteStream) {
           // Show stream in some video/canvas element.
+          props.openStream("remote-stream",stream);
         });
       }, function(err) {
         console.log('Failed to get local stream' ,err);

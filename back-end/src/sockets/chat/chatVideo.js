@@ -51,7 +51,7 @@ let chatVideo = (io) => {
       if(clients[data.callerId]){
         emitNotifyToArray(clients, data.callerId, io, "server-send-peer-id-of-listener-to-caller", response);
       }
-
+      
     });
 
     /**

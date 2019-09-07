@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Swal from 'sweetalert2';
+import * as actions from './../../../../actions/index';
 
 function mapStateToProps(state) {
     return {
@@ -22,40 +23,7 @@ class ModalCallVideo extends Component {
         const socket = nextProps.socket;
         let timerInterval;
         if(nextProps.chatVideo.status){
-            if(nextProps.chatVideo.type === 'caller'){
-                Swal.fire({
-                    title : `Calling to &nbsp <span style="color : #2ECC71">${data.listenerName}</span> &nbsp <i class="fas fa-phone-volume"></i>...`,
-                    html : `time : <strong id="timer" style="color: #d43f3a;"></strong> seconds <br/> <br/>
-                            <button id="btn-cancel-call" class="btn btn-danger">
-                            Cancel
-                            </button> `,
-                    backdrop: "rgba(85,85,85,0.4)",
-                    width: "50rem",
-                    allowOutsideClick: false,
-                    timer: 25000,
-                    onBeforeOpen: () => {
-                        document.getElementById("btn-cancel-call").addEventListener("click", function(){
-                            Swal.close();
-                            clearInterval(timerInterval);
-                            //step 7
-                            socket.emit("caller-cancel-request-call-to-server", data);
-                        })
-
-                        timerInterval = setInterval(()=>{
-                            if( Swal.getContent().querySelector != null){
-                                Swal.showLoading();
-                                Swal.getContent().querySelector("strong").textContent = Math.ceil(Swal.getTimerLeft()/1000);
-                            } 
-                        }, 1000);
-                    },
-                    onClose: ()=>{
-                        clearImmediate(timerInterval);
-                    }
-                }).then((result) => {
-                    return false;
-                })
-            }
-            else {
+            if(nextProps.chatVideo.type === 'listener'){
                 Swal.fire({
                     title : `Calling from &nbsp <span style="color : #2ECC71">${data.callerName}</span> &nbsp <i class="fas fa-phone-volume"></i>...`,
                     html : `time : <strong style="color: #d43f3a;"></strong> seconds <br/> <br/>
@@ -68,7 +36,7 @@ class ModalCallVideo extends Component {
                     backdrop: "rgba(85,85,85,0.4)",
                     width: "50rem",
                     allowOutsideClick: false,
-                    timer: 25000,
+                    timer: 3000,
                     onBeforeOpen: () => {
                         document.getElementById("btn-cancel-call").addEventListener("click", function(){
                             Swal.close();
@@ -82,9 +50,8 @@ class ModalCallVideo extends Component {
                             socket.emit("listener-accept-request-call-to-server", data);
                         });
 
-                        
                         timerInterval = setInterval(()=>{
-                            if( Swal.getContent().querySelector != null){
+                            if(Swal.getContent() !== null){
                                 Swal.showLoading();
                                 Swal.getContent().querySelector("strong").textContent = Math.ceil(Swal.getTimerLeft()/1000);
                             } 

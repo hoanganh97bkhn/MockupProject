@@ -6,7 +6,7 @@ import 'emoji-mart/css/emoji-mart.css';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './setAuthToken';
 import {connect} from 'react-redux';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Link } from 'react-router-dom';
 import * as actions from './actions/index';
 import Home from './pages/home';
 import Register from './pages/register';
@@ -14,6 +14,7 @@ import './App.css';
 import './AppResponsive.css';
 import io from 'socket.io-client';
 import {initSockets} from './sockets/index';
+
 
 
 class App extends Component {
@@ -40,8 +41,6 @@ class App extends Component {
             setAuthToken(localStorage.jwtToken);
             const payload = jwt_decode(localStorage.jwtToken);
             this.props.loginSuccess(payload);
-
-    
             const currentTime = Date.now() / 1000;
             if(payload.exp < currentTime) {
                 this.props.logoutUser({});
@@ -57,7 +56,7 @@ class App extends Component {
                 return (<Redirect to='/home' />);
             }} />
             <Route path='/home' component={Home} />
-            <Route path='/login-register' component={Register} />
+            <Route path='/login-register' component={Register}/>
             <Route path='/login/:token' component={Register}/>
             </BrowserRouter>
         </div>
@@ -104,7 +103,7 @@ const mapDispatchToProps = (dispatch, props) => {
             dispatch(actions.addListContacts(data));
         },
         addCountListContacts : () => {
-        dispatch(actions.addCountListContacts());
+            dispatch(actions.addCountListContacts());
         },
         removeListContacts : (data) => {
             dispatch(actions.removeListContacts(data))
@@ -142,8 +141,12 @@ const mapDispatchToProps = (dispatch, props) => {
         closeModalListener : () => {
             dispatch(actions.closeModalListener())
         },
-
-           
+        openStream : (text, data) => {
+            dispatch(actions.openStream(text, data))
+        },
+        closeStream : () => {
+            dispatch(actions.closeStream())
+        },
     }
 }
 

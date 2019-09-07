@@ -1,14 +1,23 @@
 import * as types from './../../constants/ActionTypes';
-let initialState = ''
+let initialState = {
+  text : '',
+  data : ''
+}
 
 let myReducer = (state = initialState,action) => {
 
     switch(action.type){
         case types.OPEN_MODAL_STREAM :
-          state = action.data
+          state = {...state,
+                    text : action.text,
+                    data : action.data  
+                  }
           return state;
         case types.CLOSE_MODAL_STREAM :
-          state = ''
+          state = {...state,
+                    text : '',
+                    data : ''
+                  }
           return state;
         default : 
           return state;

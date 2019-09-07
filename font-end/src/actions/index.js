@@ -443,10 +443,11 @@ export const closeModalListener = () => {
 }
 
 //streamming
-export const openStream = (stream) => {
+export const openStream = (text, stream) => {
     return {
         type : types.OPEN_MODAL_STREAM,
-        data : stream
+        data : stream,
+        text : text
     }
 }
 

@@ -6,6 +6,7 @@ import { Picker, Emoji } from 'emoji-mart';
 import * as actions from './../../../../actions/index';
 import config from './../../../../config/index';
 import ModalCallVideo from './ModalCallVideo';
+import VideoCall from './VideoCall';
 const {TextArea} = Input;
 
 class RightWrite extends Component {
@@ -261,7 +262,7 @@ class RightWrite extends Component {
                             <input key={this.state.keyInput} className="input-image" id="input-image" type="file" style={{position: "fixed", top: "-100em"}} onChange={this.handleInputChangeImage}></input>
                         <label htmlFor="input-file"><i className="fa fa-paperclip"></i></label>
                             <input key={this.state.keyInputFile} className="input-file" id="input-file" type="file" style={{position: "fixed", top: "-110em"}} onChange={this.handleInputChangeFile}></input>
-                        {!this.props.isGroup ? <i className="fa fa-video-camera" onClick={this.handleCallVideo}></i> : null}
+                        {!this.props.isGroup ? <i className="fa fa-video-camera" onClick={this.handleCallVideo}></i>: null}
                     </div>
                     <div className="col-9">
                         <div className="test">
@@ -302,6 +303,7 @@ class RightWrite extends Component {
                     visible={this.state.visible}
                     />
                 <ModalCallVideo/>
+                <VideoCall />
             </div>
         );
     }

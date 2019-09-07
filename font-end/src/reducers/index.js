@@ -18,6 +18,7 @@ import checkChangeList from './messages/changeList';
 import typing from './chat/typing';
 import message from './chat/message';
 import chatVideo from "./chat/chatVideo";
+import stream from './chat/stream';
 import { combineReducers } from 'redux';
 
 const myReducer = combineReducers({
@@ -40,7 +41,8 @@ const myReducer = combineReducers({
     checkChangeList,
     typing,
     message,
-    chatVideo
+    chatVideo,
+    stream
 });
 
 export default myReducer;
