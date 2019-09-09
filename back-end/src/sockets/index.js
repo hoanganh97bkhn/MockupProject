@@ -7,6 +7,7 @@ import chatTextEmoji from './chat/chatTextEmoji';
 import typingOn from './chat/typingOn';
 import typingOff from './chat/typingOff';
 import chatVideo from './chat/chatVideo';
+import userStatus from './status/userStatus';
 
 let initSockets = (io) => {
   addNewContact(io);
@@ -18,6 +19,7 @@ let initSockets = (io) => {
   typingOn(io);
   typingOff(io);
   chatVideo(io);
+  userStatus(io)
 }
 
 module.exports = initSockets;

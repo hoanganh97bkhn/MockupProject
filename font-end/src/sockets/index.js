@@ -6,6 +6,7 @@ import {removeContact} from './contact/removeContact';
 import {chatTextEmoji} from './chat/chatTextEmoji';
 import {videoChat} from './chat/videoChat';
 import {typingOn, typingOff} from './chat/typingOnOff';
+import {userStatus} from './status/userStatus';
 
 export const initSockets = (socket, props) => {
   addNewContact(socket, props);
@@ -17,5 +18,5 @@ export const initSockets = (socket, props) => {
   typingOff(socket, props);
   typingOn(socket, props);
   videoChat(socket, props);
-  
+  userStatus(socket, props);
 }

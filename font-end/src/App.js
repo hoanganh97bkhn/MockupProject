@@ -66,7 +66,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-      login: state.login
+      login: state.login,
   }
 }
 
@@ -147,6 +147,9 @@ const mapDispatchToProps = (dispatch, props) => {
         closeStream : () => {
             dispatch(actions.closeStream())
         },
+        setUserOnline : (data) => {
+            dispatch(actions.setUserOnline(data))
+        }
     }
 }
 

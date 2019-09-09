@@ -76,6 +76,7 @@ let chatVideo = (io) => {
      * emit-to-listener:  server send request cancel to listener
      */
     socket.on("caller-cancel-request-call-to-server", (data) => {
+      console.log('=====')
       let response = {
         callerId : data.callerId,
         listenerId : data.listenerId,
@@ -125,6 +126,24 @@ let chatVideo = (io) => {
       }
     });
 
+    /**
+     * end call {caller-listener}
+     */
+    socket.on("request-end-call-to-server", (data) => {
+      let response = {
+        callerId : data.callerId,
+        listenerId : data.listenerId,
+        callerName : data.callerName,
+        listenerName : data.listenerName,
+        listenerPeerId : data.listenerPeerId
+      };
+      if(clients[data.callerId]){
+        emitNotifyToArray(clients, data.callerId, io, "server-send-end-call", response);
+      }
+      if(clients[data.listenerId]){
+        emitNotifyToArray(clients, data.listenerId, io, "server-send-end-call", response);
+      }
+    })
 
     
 

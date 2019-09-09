@@ -83,3 +83,10 @@ export const CLOSE_MODAL_LISTENER = "CLOSE_MODAL_LISTENER"
 //stream
 export const OPEN_MODAL_STREAM = "OPEN_MODAL_STREAM";
 export const CLOSE_MODAL_STREAM = "CLOSE_MODAL_STREAM"
+
+//ice turn server
+export const GET_ICE_TURN_SERVER = "GET_ICE_TURN_SERVER"
+
+//online-offline
+export const SET_USER_ONLINE = "SET_USER_ONLINE";
+export const REMOVE_ONLINE = "REMOVE_ONLINE"

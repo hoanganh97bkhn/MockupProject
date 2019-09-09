@@ -57,6 +57,7 @@ class NavBar extends Component {
         })
         .then((response) => {
             this.props.getUser(response.data.user);
+            //this.props.getICETurnServer(response.data.iceServerList);
             if(response.data.user.avatar !== 'avatar-default.jpg'){
                 imageUrl = config.baseUrl + '/images/' + response.data.user.avatar
             }
@@ -271,6 +272,9 @@ const mapDispatchToProps = (dispatch, props) => {
           },
           getUser : (data) => {
               dispatch(actions.getUser(data));
+          },
+          getICETurnServer : (data) => {
+              dispatch(actions.getICETurnServer(data))
           }
     }
 }

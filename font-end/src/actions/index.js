@@ -456,3 +456,25 @@ export const closeStream = () => {
         type : types.CLOSE_MODAL_STREAM,
     }
 }
+//ice turn server
+export const getICETurnServer = (data) => {
+    return {
+        type : types.GET_ICE_TURN_SERVER,
+        data
+    }
+}
+
+//online-offline
+export const setUserOnline = (data) => {
+    return {
+        type : types.SET_USER_ONLINE,
+        data
+    }
+}
+
+export const removeUserOnline = (data) => {
+    return {
+        type : types.REMOVE_ONLINE,
+        data
+    }
+}

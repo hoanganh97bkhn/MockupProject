@@ -1,13 +1,49 @@
 /** export dispatch action video chat */
 import Peer from 'peerjs';
-import {Alert} from 'antd'
+import {notification} from 'antd';
+import request from 'request';
 
+let getICETurnServer = () => {
+  return new Promise(async(resolve, reject)=>{
+    // Node Get ICE STUN and TURN list
+    let o = {
+      format: "urls"
+    };
 
-export const videoChat = (socket, props) => {
+    let bodyString = JSON.stringify(o);
+    
+    let options = {
+      url : 'https://global.xirsys.net/_turn/MockProject',
+      method: "PUT",
+      headers: {
+        "Authorization": "Basic " + Buffer.from("HoangAnh:c53ffbc0-d1ef-11e9-8e1d-0242ac110007").toString("base64"),
+        "Content-Type": "application/json",
+        "Content-Length": bodyString.length
+      }
+    };
+
+    // call a request to get ICE list of turn server
+    request(options, function(error, response, body){
+      if(error){
+        console.log('error')
+        return reject(error)
+      }
+      let bodyJson = JSON.parse(body);
+      resolve(bodyJson.v.iceServers);
+    })
+  })
+}
+
+export const videoChat = async(socket, props) => {
+  
   socket.on('server-send-listener-is-offline', (response) => {
     //offline
+    openNotificationOffline('error');
   });
 
+  // get ICE turn server
+  let iceServerList = await getICETurnServer();
+  
   //peerId
   let getPeerId = "";
   const peer = new Peer({
@@ -15,7 +51,7 @@ export const videoChat = (socket, props) => {
     host: "peerjs-server-trungquandev.herokuapp.com",
     secure: true,
     port : 443,
-    debug : 3
+    config : iceServerList 
   });
   
   peer.on("open", function(peerId) {
@@ -61,17 +97,17 @@ export const videoChat = (socket, props) => {
      * socket.emit("caller-cancel-request-call-to-server", dataToEmit);
      *  HANDLE IN MODAL CALL VIDEO .JSX
      */
+  });
 
-     /** caller
+  /** caller
      * step 12, listener reject to caller
      * close modal call
      * socket.on("server-send-reject-call-to-caller", response => {});
      */
     socket.on("server-send-reject-call-to-caller", response => {
       props.closeStream();
-      alert("Client is busy!!!");
+      openNotificationBusy('error');
     })
-  });
 
   //step 8 of listener request call
   /**view request call 
@@ -86,16 +122,6 @@ export const videoChat = (socket, props) => {
       listenerPeerId : response.listenerPeerId
     };
     props.openModalListener(dataToEmit);
-
-    /**
-     * step 9 of listener  (cancel because caller cancel)
-     * view cancel call 
-     * close modal call
-     * socket.on("server-send-cancel-request-call-to-listener", response => {});
-    */
-    socket.on("server-send-cancel-request-call-to-listener", response => {
-      props.closeModalListener();
-    })
     
       /**
      * step 10 of listener   (cancel because listener cancel)
@@ -114,26 +140,39 @@ export const videoChat = (socket, props) => {
     
   });
 
+  /**
+     * step 9 of listener  (cancel because caller cancel)
+     * view cancel call 
+     * close modal call
+     * socket.on("server-send-cancel-request-call-to-listener", response => {});
+    */
+   socket.on("server-send-cancel-request-call-to-listener", response => {
+    props.closeModalListener();
+  })
+
   /** caller
   * step 13
   * close modal call
   * show modal video
   */
   socket.on("server-send-accept-call-to-caller", function(response){
-    props.closeModalCaller()
+    console.log('close modal caller')
+    props.closeModalCaller();
     let getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia).bind(navigator);
-    props.openStream("local-stream",'');
-
     getUserMedia({video: true, audio: true}, function(stream) {
       props.openStream("local-stream",stream);
 
       let call = peer.call(response.listenerPeerId, stream);
 
       call.on('stream', function(remoteStream) {
-        props.openStream("remote-stream",stream);
+        props.openStream("remote-stream",remoteStream);
       });
 
-      //
+      //stop stream
+      socket.on("server-send-end-call", response=>{
+        stopStream(stream);
+        props.closeStream();
+      })
     }, function(err) {
       console.log('Failed to get local stream' ,err);
     });
@@ -144,9 +183,8 @@ export const videoChat = (socket, props) => {
   * show modal video
   */
   socket.on("server-send-accept-call-to-listener", function(response){
-    props.closeModalListener()
     let getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia).bind(navigator);
-    props.openStream("local-stream",'');
+
     peer.on('call', function(call) {
       getUserMedia({video: true, audio: true}, function(stream) {
         props.openStream("local-stream",stream);
@@ -156,15 +194,45 @@ export const videoChat = (socket, props) => {
 
         call.on('stream', function(remoteStream) {
           // Show stream in some video/canvas element.
-          props.openStream("remote-stream",stream);
+          props.openStream("remote-stream",remoteStream);
         });
+
+        //stop stream
+        socket.on("server-send-end-call", response=>{
+          stopStream(stream);
+          props.closeStream();
+        })
       }, function(err) {
         console.log('Failed to get local stream' ,err);
       });
     });
   })
 
+  /**
+   * end call
+   */
 
+  const openNotificationBusy = type => {
+    notification[type]({
+      message: 'Notification',
+      description:
+        'Client is busy!!!',
+      duration: 5
+    });
+  };
+  
+  const openNotificationOffline = type => {
+    notification[type]({
+      message: 'Notification',
+      description:
+        'Client is busy!!!',
+      duration: 5
+    });
+  };
+  
+  function stopStream (stream){
+    return stream.getTracks().forEach(track => track.stop());
+  }
 
 }
 

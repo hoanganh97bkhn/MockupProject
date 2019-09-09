@@ -17,8 +17,15 @@ class GroupChat extends Component {
   constructor(props){
     super(props);
     this.state={
-        idFocus: ''
+        idFocus: '',
+        userStatus : []
     }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    this.setState({
+        userStatus : nextProps.userStatus
+    })
   }
 
   handleOpenChat = (item, idFocus) => {
@@ -36,8 +43,8 @@ class GroupChat extends Component {
                     <a key ={index}  href = {"#uid_" + item._id} className="room-chat">
                     <li className={item._id == this.state.idFocus? "person group-chat active" : "person group-chat"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item, item._id)}}>
                         <div className="left-avatar">
-                            {/* <!-- <div className="dot"></div> --> */}
-                            <img src={`${config.baseUrl}/images/${item.avatar}`} alt=""></img>
+                            <div className={`dot ${this.state.userStatus.indexOf(item._id) > -1 ? 'online' : ''}`}></div>
+                            <img src={`${config.baseUrl}/images/${item.avatar}`} alt="" className={`${this.state.userStatus.indexOf(item._id) > -1 ? 'avatar-online' : ''}`}></img>
                         </div>
                         <p className="name text-over">
                             <span className="group-chat-name">{item.name}</span>
@@ -56,7 +63,8 @@ class GroupChat extends Component {
 
 function mapStateToProps(state) {
   return {
-    groupConversations : state.groupConversations
+    groupConversations : state.groupConversations,
+    userStatus : state.userStatus
   };
 }
 

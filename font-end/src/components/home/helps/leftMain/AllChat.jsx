@@ -26,7 +26,8 @@ class AllChat extends Component {
         super(props);
         this.state={
             idFocus: '',
-            listData : ''
+            listData : '',
+            userStatus : []
         }
     }
 
@@ -61,10 +62,11 @@ class AllChat extends Component {
         // }
     }
 
-    // componentWillReceiveProps = (nextProps) => {
-    //     let uid = nextProps.checkChangeList;
-        
-    // }
+    componentWillReceiveProps = (nextProps) => {
+        this.setState({
+            userStatus : nextProps.userStatus
+        })
+    }
    
     handleOpenChat = (item, idFocus) => {
         this.props.handleOpenChat(item._id);
@@ -81,8 +83,8 @@ class AllChat extends Component {
                         <a key ={index}  href = {"#uid_" + item._id} className={"room-chat"}>
                             <li className={item._id == this.state.idFocus? "person active" : "person"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item, item._id, index)}}>
                                 <div className="left-avatar">
-                                    <div className="dot"></div>
-                                    <img src={`${config.baseUrl}/images/${item.avatar}`} alt=""></img>
+                                    <div className={`dot ${this.state.userStatus.indexOf(item._id) > -1 ? 'online' : ''}`}></div>
+                                    <img src={`${config.baseUrl}/images/${item.avatar}`} alt="" className={`${this.state.userStatus.indexOf(item._id) > -1 ? 'avatar-online' : ''}`}></img>
                                 </div>
                                 <p className="name text-over">
                                     {item.nickname}
@@ -96,8 +98,8 @@ class AllChat extends Component {
                         <a key ={index}  href = {"#uid_" + item._id} className={"room-chat"}>
                             <li className={item._id == this.state.idFocus? "person group-chat active" : "person group-chat"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item, item._id)}}>
                                 <div className="left-avatar">
-                                    {/* <!-- <div className="dot"></div> --> */}
-                                    <img src={`${config.baseUrl}/images/${item.avatar}`} alt=""></img>
+                                    <div  className={`dot ${this.state.userStatus.indexOf(item._id) > -1 ? 'online' : ''}`}></div>
+                                    <img src={`${config.baseUrl}/images/${item.avatar}`} alt="" className={`${this.state.userStatus.indexOf(item._id) > -1 ? 'avatar-online' : ''}`}></img>
                                 </div>
                                 <p className="name text-over">
                                     <span className="group-chat-name">{item.name}</span> 
@@ -116,7 +118,8 @@ class AllChat extends Component {
 function mapStateToProps(state) {
     return {
         allConversations : state.allConversations,
-        message : state.message
+        message : state.message,
+        userStatus : state.userStatus
     };
 }
 

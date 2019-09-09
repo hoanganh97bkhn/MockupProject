@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Swal from 'sweetalert2';
+import {Modal} from 'antd';
 import * as actions from './../../../../actions/index';
 
 function mapStateToProps(state) {
@@ -10,76 +10,71 @@ function mapStateToProps(state) {
     };
 }
 
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        openStream : (text, data) => {
+            dispatch(actions.openStream(text, data))
+        },
+    }
+}
+
 class ModalCallVideo extends Component {
     constructor(props){
         super(props);
         this.state = {
-            show : true
+            visible: false,
+            data : {}
         }
     }
-
+    hideModal = () => {
+        this.props.socket.emit("listener-reject-request-call-to-server", this.state.data);
+        this.setState({
+            visible: false,
+        });
+    };
+    handleAnswer = () => {
+        console.log('answer')
+        this.props.socket.emit("listener-accept-request-call-to-server", this.state.data);
+        this.props.openStream("open-modal", this.state.data);
+        this.setState({
+            visible : false
+        })
+    }
     componentWillReceiveProps = (nextProps) => {
-        const data = nextProps.chatVideo.data;
-        const socket = nextProps.socket;
-        let timerInterval;
-        if(nextProps.chatVideo.status){
-            if(nextProps.chatVideo.type === 'listener'){
-                Swal.fire({
-                    title : `Calling from &nbsp <span style="color : #2ECC71">${data.callerName}</span> &nbsp <i class="fas fa-phone-volume"></i>...`,
-                    html : `time : <strong style="color: #d43f3a;"></strong> seconds <br/> <br/>
-                            <button id="btn-cancel-call" class="btn btn-danger">
-                            Cancel
-                            </button>
-                            <button id="btn-accept-call" class="btn btn-success">
-                            Accept
-                            </button> `,
-                    backdrop: "rgba(85,85,85,0.4)",
-                    width: "50rem",
-                    allowOutsideClick: false,
-                    timer: 3000,
-                    onBeforeOpen: () => {
-                        document.getElementById("btn-cancel-call").addEventListener("click", function(){
-                            Swal.close();
-                            clearInterval(timerInterval);
-                            socket.emit("listener-reject-request-call-to-server", data)
-                        });
-
-                        document.getElementById("btn-accept-call").addEventListener("click", function(){
-                            Swal.close();
-                            clearInterval(timerInterval);
-                            socket.emit("listener-accept-request-call-to-server", data);
-                        });
-
-                        timerInterval = setInterval(()=>{
-                            if(Swal.getContent() !== null){
-                                Swal.showLoading();
-                                Swal.getContent().querySelector("strong").textContent = Math.ceil(Swal.getTimerLeft()/1000);
-                            } 
-                        }, 1000);
-                    },
-                    onClose: ()=>{
-                        clearImmediate(timerInterval);
-                    }
-                }).then((result) => {
-                    return false;
+        if(nextProps.chatVideo.type === "listener"){
+            if(nextProps.chatVideo.status === true){
+                this.setState({
+                    data: nextProps.chatVideo.data,
+                    visible : true
                 })
             }
-        }
-        else {
-            Swal.close();
-            clearInterval(timerInterval);
-        }
+            else if(nextProps.chatVideo.status === false){
+                this.setState({
+                    data: {},
+                    visible : false
+                })
+            }
+        }  
     }
 
     render() {
         return (
-            <div>
-                
-            </div>
-        );
+            <Modal
+                title="Incoming video chat"
+                centered
+                visible={this.state.visible}
+                onOk={this.handleAnswer}
+                onCancel={this.hideModal}
+                okText="Answer"
+                cancelText="Decline"
+                maskClosable={false}
+                >
+                <span><strong style={{fontWeight:"bold"}}>{this.state.data? this.state.data.callerName : ''}</strong> is calling</span>
+            </Modal>
+            );
     }
 }
 
 export default connect(
-  mapStateToProps,
+  mapStateToProps, mapDispatchToProps
 )(ModalCallVideo);

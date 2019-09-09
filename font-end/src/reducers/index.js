@@ -19,6 +19,8 @@ import typing from './chat/typing';
 import message from './chat/message';
 import chatVideo from "./chat/chatVideo";
 import stream from './chat/stream';
+import iceTurnServer from './chat/iceTurnServer';
+import userStatus from './status/userStatus';
 import { combineReducers } from 'redux';
 
 const myReducer = combineReducers({
@@ -42,7 +44,10 @@ const myReducer = combineReducers({
     typing,
     message,
     chatVideo,
-    stream
+    stream,
+    iceTurnServer,
+    userStatus,
+
 });
 
 export default myReducer;
