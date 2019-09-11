@@ -111,14 +111,14 @@ const mapDispatchToProps = (dispatch, props) => {
         removeCountListContacts : () => {
             dispatch(actions.removeCountListContacts())
         },
-        addListAllConversations : (id, data) => {
-            dispatch(actions.addListAllConversations(id, data));
+        changeListAllConversations : (id, data) => {
+            dispatch(actions.changeListAllConversations(id, data));
         },
-        addListGroupConversations : (id, data) => {
-            dispatch(actions.addListGroupConversations(id, data));
+        changeListGroupConversations : (id, data) => {
+            dispatch(actions.changeListGroupConversations(id, data));
         },   
-        addListUserConversations : (id, data) => {
-            dispatch(actions.addListUserConversations(id, data));
+        changeListUserConversations : (id, data) => {
+            dispatch(actions.changeListUserConversations(id, data));
         },
         addOnTyping : (data) => {
             dispatch(actions.addOnTyping(data))
@@ -149,6 +149,18 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         setUserOnline : (data) => {
             dispatch(actions.setUserOnline(data))
+        },
+        addListUserConversations : (data) => {
+            dispatch(actions.addListUserConversations(data));
+        },
+        addListAllConversations : (data) => {
+            dispatch(actions.addListAllConversations(data))
+        },
+        addListAllConversations : (data) => {
+            dispatch(actions.addListAllConversations(data))
+        },
+        addListGroupConversations : (data) => {
+            dispatch(actions.addListGroupConversations(data))
         }
     }
 }

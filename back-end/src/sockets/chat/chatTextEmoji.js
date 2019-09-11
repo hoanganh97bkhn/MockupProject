@@ -2,7 +2,7 @@ import ActiveAccountModel from './../../models/activeAccount';
 import {pushSocketIdToArray, emitNotifyToArray, removeSocketIdFromArray} from './../../helpers/socketHelper';
 import _ from 'lodash';
 
-let chatTextEmoji = (io) => {
+let chatTextEmoji = (io)=> {
   let clients = {};
   io.on("connection", (socket) => {
 
@@ -12,7 +12,7 @@ let chatTextEmoji = (io) => {
     clients = pushSocketIdToArray(clients, currentUserId, socket.id);
     arrayGroupId.forEach((grId)=>{
       clients = pushSocketIdToArray(clients, grId._id, socket.id);
-    })
+    });
 
     socket.on("chat-text-emoji", (data) => {
       if(data.isGroup) {
@@ -40,6 +40,14 @@ let chatTextEmoji = (io) => {
           emitNotifyToArray(clients, data.uid, io, "response-chat-text-emoji", response);
         }
       }
+    });
+
+    socket.on("add-message-after-create-group-chat", (data) => {
+      clients = pushSocketIdToArray(clients, data._id, socket.id);
+    });
+
+    socket.on("confirm-created-group-chat-by-others", (data) => {
+      clients = pushSocketIdToArray(clients, data._id, socket.id);
     });
 
     socket.on("disconnect", async()=>{

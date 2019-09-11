@@ -1,7 +1,6 @@
 import {notification, message} from './../services/index';
 import {timer} from './../services/index';
-import request from 'request';
-import { json } from 'body-parser';
+
 
 // let getICETurnServer = () => {
 //   return new Promise(async(resolve, reject)=>{

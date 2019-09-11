@@ -172,9 +172,9 @@ class RightWrite extends Component {
                 data : data
             })
             .then((res)=>{
-                this.props.addListAllConversations(this.props.dataId, res.data);
-                this.props.addListGroupConversations(this.props.dataId, res.data);
-                this.props.addListUserConversations(this.props.dataId, res.data);
+                this.props.changeListAllConversations(this.props.dataId, res.data);
+                this.props.changeListGroupConversations(this.props.dataId, res.data);
+                this.props.changeListUserConversations(this.props.dataId, res.data);
                 this.props.socket.emit("chat-text-emoji", {uid : this.props.dataId, messageVal : res.data, isGroup : this.props.isGroup});
                 this.setState({
                     newMessage : '',
@@ -196,9 +196,9 @@ class RightWrite extends Component {
                 data : formData
             })
             .then((res)=>{
-                this.props.addListAllConversations(this.props.dataId, res.data);
-                this.props.addListGroupConversations(this.props.dataId, res.data);
-                this.props.addListUserConversations(this.props.dataId, res.data);
+                this.props.changeListAllConversations(this.props.dataId, res.data);
+                this.props.changeListGroupConversations(this.props.dataId, res.data);
+                this.props.changeListUserConversations(this.props.dataId, res.data);
                 this.props.socket.emit("chat-text-emoji", {uid : this.props.dataId, messageVal : res.data, isGroup : this.props.isGroup});
                 this.setState({
                     imageData : '',
@@ -222,9 +222,9 @@ class RightWrite extends Component {
                 data : formData
             })
             .then((res)=>{
-                this.props.addListAllConversations(this.props.dataId, res.data);
-                this.props.addListGroupConversations(this.props.dataId, res.data);
-                this.props.addListUserConversations(this.props.dataId, res.data);
+                this.props.changeListAllConversations(this.props.dataId, res.data);
+                this.props.changeListGroupConversations(this.props.dataId, res.data);
+                this.props.changeListUserConversations(this.props.dataId, res.data);
                 this.props.socket.emit("chat-text-emoji", {uid : this.props.dataId, messageVal : res.data, isGroup : this.props.isGroup});
                 this.setState({
                     fileData : '',
@@ -319,18 +319,15 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        addListAllConversations : (id, data) => {
-            dispatch(actions.addListAllConversations(id, data));
+        changeListAllConversations : (id, data) => {
+            dispatch(actions.changeListAllConversations(id, data));
         },
-        addListGroupConversations : (id, data) => {
-            dispatch(actions.addListGroupConversations(id, data));
+        changeListGroupConversations : (id, data) => {
+            dispatch(actions.changeListGroupConversations(id, data));
         },   
-        addListUserConversations : (id, data) => {
-            dispatch(actions.addListUserConversations(id, data));
+        changeListUserConversations : (id, data) => {
+            dispatch(actions.changeListUserConversations(id, data));
         },    
-        checkChangeListMessage : (data) => {
-            dispatch(actions.checkChangeListMessage(data));
-        },
         openModalCaller : (data) => {
             dispatch(actions.openModalCaller(data))
         },  

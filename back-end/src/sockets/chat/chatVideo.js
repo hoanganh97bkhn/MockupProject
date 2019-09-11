@@ -2,7 +2,7 @@ import ActiveAccountModel from './../../models/activeAccount';
 import {pushSocketIdToArray, emitNotifyToArray, removeSocketIdFromArray} from './../../helpers/socketHelper';
 import _ from 'lodash';
 
-let chatVideo = (io) => {
+let chatVideo = (io)=> {
   let clients = {};
   io.on("connection", (socket) => {
 

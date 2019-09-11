@@ -11,7 +11,7 @@ let chatGroupSchema = new Schema({
   members: [
     {userId: String}
   ],
-  status: {type: Boolean, default: false},
+  avatar : {type : String, default : 'group-avatar.png'},
   createdAt: {type: Number, default: Date.now},
   updatedAt: {type: Number, default: Date.now},
   deletedAt: {type: Number, default: null}

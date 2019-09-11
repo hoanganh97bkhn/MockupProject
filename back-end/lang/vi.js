@@ -5,6 +5,9 @@ export const transValidation = {
   password_incorrect: "Mật khẩu chứ ít nhất 8 ký tự, bao gổm kí tự và số",
   password_confirmation_incorrect: "Nhập lại mật khẩu chưa chính xác",
   message_text_emoji_incorrect : "Error,message invalid",
+  keyword_find_user : 'error, keyword failed',
+  add_new_group_users_incorrect : 'The group must have at least 2 members',
+  add_new_group_name_incorrect : 'Group name error! '
 };
 
 export const transErrors = {

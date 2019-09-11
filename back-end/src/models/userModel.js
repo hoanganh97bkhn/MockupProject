@@ -85,6 +85,22 @@ UserSchema.statics = {
     else
       return this.findById(id ,{_id:1, nickname:1, address:1, avatar: 1, gender: 1}).exec()
   },
+
+  findAllToAddGroupChat(friendsIds, keyword){
+    return this.find({
+      $and: [
+        {"_id" : {$in: friendsIds}},
+        {'local.isActive': true},
+        {
+          $or: [
+            {"nickname": {"$regex": new RegExp(keyword, "i")}},
+            {"local.email": {"$regex": new RegExp(keyword, "i")}},
+          ]
+        }
+      ]
+    },{_id:1, nickname:1, address:1, avatar: 1}).exec()
+  },
+  
 }
 
 UserSchema.methods = {

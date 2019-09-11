@@ -535,6 +535,29 @@ h6{
 .left .people .person .left-avatar {
   position: relative;
 }
+/* style scroll-bar */
+#list-chat::-webkit-scrollbar {
+	width: 6px;
+	background-color: #fff;
+}
+#list-chat::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: #ffffff;
+  border: none;
+}
+#list-chat::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #aaa;
+  border: 1px solid #aaa;
+}
+
+#list-chat::-webkit-scrollbar-thumb:hover {
+  background: #fff;
+}
+
+#list-chat::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(left, #22ADD4, #1E98BA);
+}
 .dot {
   background-color: #bbbbbb;
   border: 2px solid #fff;
@@ -896,3 +919,8 @@ h6{
   width: 50px
 }
 
+/* css create group */
+.right-list-members {
+  padding-left: 10px;
+  border-left: 1px solid #e6e6e6
+}

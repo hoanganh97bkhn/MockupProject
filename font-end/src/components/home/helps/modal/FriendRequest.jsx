@@ -45,7 +45,7 @@ class FriendRequest extends Component {
     })
     .then((res)=>{
       message.success(`Delete friend request ${item.nickname} success!`);
-      this.props.socket.emit("confirm-request-contact-received", {contactId : item._id});
+      this.props.socket.emit("remove-request-contact-received", {contactId : item._id});
       this.props.removeListContactsReceived(item);
       this.props.removeCountListContactsReceived();
     })
@@ -62,12 +62,16 @@ class FriendRequest extends Component {
       data: {uid: item._id}
     })
     .then((res)=>{
+      console.log(res.data)
       message.success(`${item.nickname} became friends`);
       this.props.socket.emit("confirm-request-contact-received", {contactId : item._id});
       this.props.removeListContactsReceived(item);
       this.props.removeCountListContactsReceived();
       this.props.addListContacts(item);
       this.props.addCountListContacts();
+      this.props.addListUserConversations(res.data);
+      this.props.addListAllConversations(res.data);
+      this.props.socket.emit("add-message-after-confirm-friend", {uid : res.data._id, updatedAt : res.data.updatedAt});
     })
     .catch((error)=>{
       console.log(error)
@@ -161,6 +165,12 @@ const mapDispatchToProps = (dispatch, props) => {
       },
       addCountListContacts : () => {
         dispatch(actions.addCountListContacts());
+      },
+      addListUserConversations : (data) => {
+        dispatch(actions.addListUserConversations(data));
+      },
+      addListAllConversations : (data) => {
+        dispatch(actions.addListAllConversations(data))
       }
   }
 }

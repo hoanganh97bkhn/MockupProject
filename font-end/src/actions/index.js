@@ -261,9 +261,16 @@ export const getListUserConversations = (data) => {
     }
 }
 
-export const addListUserConversations = (_id, data) => {
+export const addListUserConversations = (data) => {
     return {
         type : types.ADD_LIST_USER_CONVERSATIONS,
+        data
+    }
+}
+
+export const changeListUserConversations = (_id, data) => {
+    return {
+        type : types.CHANGE_LIST_USER_CONVERSATIONS,
         _id,
         data
     }
@@ -292,9 +299,16 @@ export const getListGroupConversations = (data) => {
     }
 }
 
-export const addListGroupConversations = (_id, data) => {
+export const addListGroupConversations = (data) => {
     return {
         type : types.ADD_LIST_GROUP_CONVERSATIONS,
+        data
+    }
+}
+
+export const changeListGroupConversations = (_id, data) => {
+    return {
+        type : types.CHANGE_LIST_GROUP_CONVERSATIONS,
         _id,
         data
     }
@@ -314,36 +328,6 @@ export const removeListGroupConversations = (data) => {
     }
 }
 
-// all-conversation-
-
-// export const getListAllConversations= (data) => {
-//     return {
-//         type : types.GET_LIST_ALL_CONVERSATIONS,
-//         data
-//     }
-// }
-
-// export const addListAllConversations= (data) => {
-//     return {
-//         type : types.ADD_LIST_ALL_CONVERSATIONS,
-//         data
-//     }
-// }
-
-// export const scrollListAllConversations= (data) => {
-//     return {
-//         type : types.SCROLL_LIST_ALL_CONVERSATIONS,
-//         data
-//     }
-// }
-
-// export const removeListAllConversations= (data) => {
-//     return {
-//         type : types.REMOVE_LIST_ALL_CONVERSATIONS,
-//         data
-//     }
-// }
-
 // all-conversation-with-messages
 export const getListAllConversations= (data) => {
     return {
@@ -352,9 +336,16 @@ export const getListAllConversations= (data) => {
     }
 }
 
-export const addListAllConversations= (_id, data) => {
+export const addListAllConversations= (data) => {
     return {
         type : types.ADD_LIST_ALL_CONVERSATIONS,
+        data
+    }
+}
+
+export const changeListAllConversations= (_id, data) => {
+    return {
+        type : types.CHANGE_LIST_ALL_CONVERSATIONS,
         _id,
         data
     }
@@ -374,15 +365,15 @@ export const removeListAllConversations= (data) => {
     }
 }
 
-/** change list message when new message */
+// /** change list message when new message */
 
-export const checkChangeListMessage = (data) => {
-    return {
-        type: types.CHECK_CHANGE_LIST_MESSAGE,
+// export const checkChangeListMessage = (data) => {
+//     return {
+//         type: types.CHECK_CHANGE_LIST_MESSAGE,
         
-        data 
-    }
-}
+//         data 
+//     }
+// }
 
 /** chat message */
 

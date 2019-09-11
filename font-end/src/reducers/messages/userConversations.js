@@ -9,7 +9,13 @@ let myReducer = (state = initialState,action) => {
       case types.GET_LIST_USER_CONVERSATIONS :
         state = state.concat(action.data)
         return state;
+
+      //add data to list conversation
       case types.ADD_LIST_USER_CONVERSATIONS :
+        state = [action.data, ...state];
+        return state;
+
+      case types.CHANGE_LIST_USER_CONVERSATIONS :
         state.map((item,index) => {
           if(item._id === action._id){
             item.messages = [...item.messages, action.data];
@@ -22,11 +28,13 @@ let myReducer = (state = initialState,action) => {
         });
         state = _.concat(item, state);
         return state;
+
       case types.REMOVE_LIST_USER_CONVERSATIONS : 
         state = state.filter(item => {
           return item._id !== action.data._id
         })
         return state;
+
       case types.SCROLL_LIST_USER_CONVERSATIONS:
         state = state.concat(action.data);
         return state;

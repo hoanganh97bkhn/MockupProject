@@ -1,7 +1,7 @@
 import {pushSocketIdToArray, emitNotifyToArray, removeSocketIdFromArray} from '../../helpers/socketHelper';
 
 
-let removeRequestContactReceived = (io) => {
+let removeRequestContactReceived = (io)=> {
   let clients = {};
   io.on("connection", (socket) => {
 

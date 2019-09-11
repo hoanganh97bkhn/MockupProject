@@ -1,7 +1,7 @@
 import ActiveAccountModel from './../../models/activeAccount';
 import {pushSocketIdToArray, emitNotifyToArray, removeSocketIdFromArray} from './../../helpers/socketHelper';
 
-let confirmRequestContactReceived = (io) => {
+let confirmRequestContactReceived = (io)=> {
   let clients = {};
   io.on("connection", (socket) => {
 

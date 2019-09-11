@@ -1,8 +1,8 @@
 import express from 'express';
 import passPort from 'passport';
 import initPassportJWT from './../controllers/passportController/local';
-import {home, auth, userInfo, contact, message, timer, notifi} from './../controllers/index';
-import {authValid, messageValid} from './../validation/index';
+import {home, auth, userInfo, contact, message, timer, notifi, groupChat} from './../controllers/index';
+import {authValid, messageValid, findUserValid, GroupValid} from './../validation/index';
 
 
 //Init all passPort
@@ -39,6 +39,7 @@ let initRouters = (app) => {
   router.post("/contacts/readmore",authLogin, contact.readMoreContacts);
   router.post("/contacts-sent/readmore",authLogin, contact.readMoreContactsSent);
   router.post("/contacts-received/readmore",authLogin, contact.readMoreContactsReceived);
+  router.get('/contact/search-friends/:keyword', authLogin, findUserValid.findUserContact, contact.searchFriends)
 
   //home-get data
   router.get("/home/user",authLogin, home.getHome);
@@ -53,6 +54,8 @@ let initRouters = (app) => {
   router.post("/message/add-new-image", authLogin, message.addNewImage );
   router.post("/message/add-new-file", authLogin, message.addNewFile);
 
+  //add group chat
+  router.post("/group-chat/add-new", authLogin, GroupValid.addNewGroup, groupChat.addNewGroup)
   
   //timer-notification
   router.put("/timer/count/notification-general/reset", authLogin, timer.resetCountNotifGeneral)

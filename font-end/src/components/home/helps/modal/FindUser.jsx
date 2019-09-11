@@ -57,15 +57,11 @@ class FindUser extends Component {
     let data = this.state.listUser;
     let item = nextProps.findUser[0];
     if(data.length > 0) {
-      data.map((value, i)=>{
-        if(value._id === item._id) return (
-          value.titleSuccess = "Add Friend",
-          value.titleDanger  = ""
-        )
-        else return value
-      });
       this.setState({
-        listUser: data
+        listUser: data.filter((value, i)=>{
+          if(value._id === item._id) return false;
+          else return true
+        })
       })
     }
   }

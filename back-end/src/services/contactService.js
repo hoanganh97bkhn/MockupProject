@@ -20,7 +20,7 @@ let findUserContact = (currentUserId, keyword) => {
     let users = await UserModel.findAllForAddContact(deprecatedUserIds, keyword);
     return resolve(users);
   })
-}
+};
 
 let addNew = (currentUserId, contactId) => {
   return new Promise( async (resolve, reject) => {
@@ -47,7 +47,7 @@ let addNew = (currentUserId, contactId) => {
 
     resolve(newContact);
   })
-}
+};
 
 let removeRequestContactSent = (currentUserId, contactId) => {
   return new Promise( async (resolve, reject) => {
@@ -61,7 +61,7 @@ let removeRequestContactSent = (currentUserId, contactId) => {
     await ActiveAccountModel.removeNotificationContact(contactId);
     return resolve(true);
   })
-}
+};
 
 let removeRequestContactReceived = (currentUserId, contactId) => {
   return new Promise( async (resolve, reject) => {
@@ -72,7 +72,7 @@ let removeRequestContactReceived = (currentUserId, contactId) => {
 
     return resolve(true);
   })
-}
+};
 
 let removeContact = (currentUserId, contactId) => {
   return new Promise( async (resolve, reject) => {
@@ -83,7 +83,7 @@ let removeContact = (currentUserId, contactId) => {
 
     return resolve(true);
   })
-}
+};
 
 let confirmRequestContactReceived = (currentUserId, contactId) => {
   return new Promise( async (resolve, reject) => {
@@ -98,11 +98,15 @@ let confirmRequestContactReceived = (currentUserId, contactId) => {
       type: NotificationModel.types.CONFIRM_FRIEND,
     };
     await NotificationModel.model.createNew(notificationItem);
-    await ActiveAccountModel.addNotificationContact(contactId);
-
-    return resolve(true);
+    //await ActiveAccountModel.addNotificationContact(contactId);
+    let contactItem = await ContactModel.getNewContacts(currentUserId, contactId);
+    let getUserContact = await UserModel.getNormalUserDataById(contactId);
+    getUserContact = getUserContact.toObject();
+    getUserContact.updatedAt = contactItem.updatedAt;
+    getUserContact.messages = [];
+    return resolve(getUserContact);
   })
-}
+};
 
 let getContacts = (currentUserId) => {
   return new Promise(async(resolve, reject) => {
@@ -120,7 +124,7 @@ let getContacts = (currentUserId) => {
       reject(error)
     }
   })
-}
+};
 
 let getContactsSent = (currentUserId) => {
   return new Promise(async(resolve, reject) => {
@@ -135,7 +139,7 @@ let getContactsSent = (currentUserId) => {
       reject(error)
     }
   })
-}
+};
 
 let getContactsReceived = (currentUserId) => {
   return new Promise(async(resolve, reject) => {
@@ -150,7 +154,7 @@ let getContactsReceived = (currentUserId) => {
       reject(error)
     }
   })
-}
+};
 
 let countAllContacts = (currentUserId) => {
   return new Promise(async(resolve, reject) => {
@@ -161,7 +165,7 @@ let countAllContacts = (currentUserId) => {
       reject(error)
     }
   })
-}
+};
 
 let countAllContactsSent = (currentUserId) => {
   return new Promise(async(resolve, reject) => {
@@ -172,7 +176,7 @@ let countAllContactsSent = (currentUserId) => {
       reject(error)
     }
   })
-}
+};
 
 let countAllContactsReceived = (currentUserId) => {
   return new Promise(async(resolve, reject) => {
@@ -183,7 +187,7 @@ let countAllContactsReceived = (currentUserId) => {
       reject(error)
     }
   })
-}
+};
 
 let readMoreContacts = (currentUserId, skip) => {
   return new Promise (async(resolve, reject) => {
@@ -201,7 +205,7 @@ let readMoreContacts = (currentUserId, skip) => {
       reject(error)
     }
   })
-}
+};
 
 let readMoreContactsSent = (currentUserId, skip) => {
   return new Promise (async(resolve, reject) => {
@@ -215,7 +219,7 @@ let readMoreContactsSent = (currentUserId, skip) => {
       reject(error)
     }
   })
-}
+};
 
 let readMoreContactsReceived = (currentUserId, skip) => {
   return new Promise (async(resolve, reject) => {
@@ -229,7 +233,28 @@ let readMoreContactsReceived = (currentUserId, skip) => {
       reject(error)
     }
   })
-}
+};
+let searchFriends = (currentUserId, keyword) => {
+  return new Promise(async(resolve, reject) => {
+    let friendsIds = [];
+    let friends = await ContactModel.getFriends(currentUserId);
+
+    friends.forEach((item) => {
+      friendsIds.push(item.userId);
+      friendsIds.push(item.contactId);
+    });
+    
+    friendsIds = _.uniqBy(friendsIds);
+    friendsIds = _.remove(friendsIds, (item)=>{
+      return item != currentUserId
+    })
+    console.log(friendsIds)
+
+    let users = await UserModel.findAllToAddGroupChat(friendsIds, keyword)
+
+    return resolve(users);
+  })
+};
 
 
 module.exports = {
@@ -247,5 +272,6 @@ module.exports = {
   countAllContactsReceived,
   readMoreContacts,
   readMoreContactsSent,
-  readMoreContactsReceived
+  readMoreContactsReceived,
+  searchFriends
 }

@@ -77,7 +77,7 @@ class AllChat extends Component {
     }
     render() {
         return (
-            <ul className="people no-padding-start" onScroll={this.handleScrollLoad}>
+            <ul id="list-chat" className="people no-padding-start" onScroll={this.handleScrollLoad}>
                 {this.props.allConversations.length> 0 ? this.props.allConversations.map((item, index) => {
                     if(!item.members) return (
                         <a key ={index}  href = {"#uid_" + item._id} className={"room-chat"}>

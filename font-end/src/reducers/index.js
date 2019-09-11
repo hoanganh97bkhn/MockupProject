@@ -14,7 +14,6 @@ import findUser from './contacts/findUser';
 import groupConversations from './messages/groupConversations';
 import userConversations from './messages/userConversations';
 import allConversations from './messages/allConversationWithMessages';
-import checkChangeList from './messages/changeList';
 import typing from './chat/typing';
 import message from './chat/message';
 import chatVideo from "./chat/chatVideo";
@@ -40,7 +39,6 @@ const myReducer = combineReducers({
     userConversations,
     groupConversations,
     allConversations,
-    checkChangeList,
     typing,
     message,
     chatVideo,

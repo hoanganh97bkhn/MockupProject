@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import config from './../../../../config/index';
+import {covertTimestampToHumanTime} from './../../../../helpers/clientHelper';
 
 
 let helperPreview = (item) => {
@@ -11,6 +12,13 @@ let helperPreview = (item) => {
       else return ((item.messages[item.messages.length -1]).text)
   }
   else return "[null]"
+}
+
+let helperTime = (item) => {
+  if(item.messages[item.messages.length -1]){
+     let time = covertTimestampToHumanTime(item.messages[item.messages.length -1].createdAt);
+     return time
+  }
 }
 
 class GroupChat extends Component {
@@ -37,7 +45,7 @@ class GroupChat extends Component {
   render() {
       const listData = this.props.groupConversations;
     return (
-      <ul className="people no-padding-start">
+      <ul id="list-chat" className="people no-padding-start">
             {listData.map( (item, index) => {
                 return (
                     <a key ={index}  href = {"#uid_" + item._id} className="room-chat">
@@ -49,7 +57,7 @@ class GroupChat extends Component {
                         <p className="name text-over">
                             <span className="group-chat-name">{item.name}</span>
                         </p>
-                        <span className="time">Hai giờ trước</span>
+                        <span className="time">{helperTime(item)}</span>
                         <span className="preview">{helperPreview(item)}</span>
                     </li>
                 </a>

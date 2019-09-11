@@ -71,25 +71,6 @@ class Contact extends Component {
     });
   }
 
-  handleDeleteContacts (item){
-    console.log('hello')
-    // axios({
-    //   url: `${config.baseUrl}/contact/remove-contact`,
-    //   method: "delete",
-    //   data: {uid: item._id}
-    // })
-    // .then((res)=>{
-    //   message.success(`Delete friend ${item.nickname} success!`);
-    //   this.props.socket.emit("remove-contact", {contactId : item._id});
-    //   this.props.removeListContacts(item);
-    //   this.props.removeCountListContacts();
-    // })
-    // .catch((error)=>{
-    //   message.error(`Delete friend ${item.nickname} error!`);
-    //   console.log(error)
-    // })
-  }
-
   handleScrollLoad = (event) =>{
     let element = event.target;
     if(element.scrollHeight - element.scrollTop === 476){

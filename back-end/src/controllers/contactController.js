@@ -1,12 +1,12 @@
 import UserModel from '../models/userModel';
 import ContactModel from '../models/contactModel';
 import {contact} from '../services/index';
+import { validationResult } from 'express-validator/check';
 
 
 let findUser = async(req,res)=>{
   try{
     let users = await contact.findUserContact(req.user._id, req.body.key);
-    console.log(users)
     res.status(200).send(users);
   }
   catch(error){
@@ -83,8 +83,8 @@ let removeContact = async(req, res) => {
 
 let confirmRequestContactReceived = async(req, res) => {
   try{
-    let removeReq = await contact.confirmRequestContactReceived(req.user._id, req.body.uid);
-    res.status(200).send({status: !!removeReq})
+    let confirmReq = await contact.confirmRequestContactReceived(req.user._id, req.body.uid);
+    res.status(200).send(confirmReq)
   }
   catch(error){
     return res.status(500).send(error);
@@ -127,6 +127,30 @@ let readMoreContactsReceived = async(req, res) => {
   }
 }
 
+let searchFriends = async(req, res) => {
+  let errorArr = [];
+  let validationErrors = validationResult(req);
+  if(!validationErrors.isEmpty()){
+    let errors = Object.values(validationErrors.mapped());
+    erros.forEach(item => {
+      errorArr.push(item.msg);
+    });
+
+  return res.status(500).send(errorArr)
+  }
+
+  try{
+    let currentUserId = req.user._id;
+    let keyword = req.params.keyword;
+
+    let users = await contact.searchFriends(currentUserId, keyword);
+    return res.status(200).send(users)
+  }
+  catch(error){
+    res.status(500).send(error)
+  }
+}
+
 
 module.exports = {
   findUser,
@@ -138,5 +162,6 @@ module.exports = {
   confirmRequestContactReceived,
   readMoreContacts,
   readMoreContactsSent,
-  readMoreContactsReceived
+  readMoreContactsReceived,
+  searchFriends
 };
