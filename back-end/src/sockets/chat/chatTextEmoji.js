@@ -50,15 +50,12 @@ let chatTextEmoji = (io)=> {
       clients = pushSocketIdToArray(clients, data._id, socket.id);
     });
 
-    socket.on("disconnect", async()=>{
+    socket.on("disconnect", ()=>{
       //remove socketId
       clients = removeSocketIdFromArray(clients, currentUserId, socket);
       arrayGroupId.forEach((grId)=>{
         clients = removeSocketIdFromArray(clients, grId._id, socket);
       })
-       //save active to database
-      await ActiveAccountModel.updateTimeOffline(socket.request.user._id);
-
     })
     console.log(clients);
   })

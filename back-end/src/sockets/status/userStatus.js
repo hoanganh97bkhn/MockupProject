@@ -21,7 +21,7 @@ let userStatus = (io)=> {
     //step 2: emit to all another users when has new online
     socket.broadcast.emit("server-send-list-user-online", listUserOnline);
 
-    socket.on("disconnect", async()=>{
+    socket.on("disconnect", ()=>{
       //remove socketId
       clients = removeSocketIdFromArray(clients, currentUserId, socket);
       arrayGroupId.forEach((grId)=>{
@@ -31,10 +31,6 @@ let userStatus = (io)=> {
       let listUserOnlineAfterDis = Object.keys(clients);
       //step 3: emit to all another users when has new offline
       socket.broadcast.emit("server-send-list-user-online", listUserOnlineAfterDis);
-
-       //save active to database
-      await ActiveAccountModel.updateTimeOffline(socket.request.user._id);
-
     })
     console.log(clients);
   })

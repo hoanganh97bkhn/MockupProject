@@ -40,15 +40,12 @@ let typingOn = (io)=> {
       }
     });
 
-    socket.on("disconnect", async()=>{
+    socket.on("disconnect", ()=>{
       //remove socketId
       clients = removeSocketIdFromArray(clients, currentUserId, socket);
       arrayGroupId.forEach((grId)=>{
         clients = removeSocketIdFromArray(clients, grId._id, socket);
       })
-       //save active to database
-      await ActiveAccountModel.updateTimeOffline(socket.request.user._id);
-
     })
     console.log(clients);
   })
