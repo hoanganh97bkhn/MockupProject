@@ -21,6 +21,14 @@ let userStatus = (io)=> {
     //step 2: emit to all another users when has new online
     socket.broadcast.emit("server-send-list-user-online", listUserOnline);
 
+    socket.on("add-message-after-create-group-chat", (data) => {
+      clients = pushSocketIdToArray(clients, data._id, socket.id);
+    });
+
+    socket.on("confirm-created-group-chat-by-others", (data) => {
+      clients = pushSocketIdToArray(clients, data._id, socket.id);
+    });
+
     socket.on("disconnect", ()=>{
       //remove socketId
       clients = removeSocketIdFromArray(clients, currentUserId, socket);

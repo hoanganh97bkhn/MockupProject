@@ -16,18 +16,23 @@ let myReducer = (state = initialState,action) => {
         return state;
 
       case types.CHANGE_LIST_USER_CONVERSATIONS :
-        state.map((item,index) => {
+        state.forEach((item, index)=>{
           if(item._id === action._id){
-            item.messages = [...item.messages, action.data];
+            state.splice(index, 1);
+            state.unshift(item);
+            return ;
+          }
+        });
+        
+        return state.map((item,index) => {
+          if(item._id === action._id){
+            item = {...item,
+                    messages : [...item.messages, action.data]
+                  };
             return item;
           }
           else return item
         });
-        let item = _.remove(state, (info)=>{
-          return (info._id === action._id);
-        });
-        state = _.concat(item, state);
-        return state;
 
       case types.REMOVE_LIST_USER_CONVERSATIONS : 
         state = state.filter(item => {

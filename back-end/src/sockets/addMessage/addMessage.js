@@ -27,7 +27,6 @@ let addMessage = (io)=> {
     });
 
     socket.on("add-message-after-create-group-chat", (data) => {
-      clients = pushSocketIdToArray(clients, data._id, socket.id);
       //emit notification "response-create-group-chat"
       _.remove(data.members, (item) => {
         return item.userId == socket.request.user._id;
