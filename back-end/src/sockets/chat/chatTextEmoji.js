@@ -48,6 +48,12 @@ let chatTextEmoji = (io)=> {
 
     socket.on("confirm-created-group-chat-by-others", (data) => {
       clients = pushSocketIdToArray(clients, data._id, socket.id);
+      console.log('===', clients)
+    });
+
+    socket.on("confirm-remove-member-to-group", (data) => {
+      clients = removeSocketIdFromArray(clients, data, socket);
+      console.log('===', clients)
     });
 
     socket.on("disconnect", ()=>{

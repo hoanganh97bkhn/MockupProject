@@ -13,7 +13,9 @@ let myReducer = (state = initialState,action) => {
 
       //add data to list conversation
       case types.ADD_LIST_ALL_CONVERSATIONS :
+        console.log(action.data)
         state = [action.data, ...state];
+        console.log(state)
         return state;
 
       //change data to list conversation 
@@ -38,8 +40,10 @@ let myReducer = (state = initialState,action) => {
         
       //remove data to list conversation
       case types.REMOVE_LIST_ALL_CONVERSATIONS : 
+        console.log(state)
+        console.log(action.data)
         state = state.filter(item => {
-          return item._id !== action.data._id
+          return item._id !== action.data
         })
         return state;
 

@@ -25,7 +25,6 @@ let typingOff = (io)=> {
             return item !== socket.id
           });
           arrayEmitGroup.forEach((socketId)=>{
-            console.log("===", socketId)
             io.sockets.connected[socketId].emit("response-user-is-typing-off", response);
           })
         }

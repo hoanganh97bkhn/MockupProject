@@ -48,6 +48,19 @@ chatGroupSchema.statics = {
     return this.find({
       "members" : {$elemMatch : {"userId" : userId}}
     },{"_id" : 1}).exec();
+  },
+
+  getListMembers(groupId){
+    return this.findById(groupId, {"members.userId" : 1, userId : 1}).exec();
+  },
+
+  addNewMember(groupId, memberId){
+    let member = {'userId' : memberId};
+    return this.findByIdAndUpdate(groupId, {$push : {members : member}}).exec()
+  },
+
+  removeMember(groupId, memberId){
+    return this.findByIdAndUpdate(groupId, {$pull : {members : {userId : memberId}}}).exec()
   }
 }
 

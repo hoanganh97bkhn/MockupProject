@@ -39,6 +39,19 @@ let addMessage = (io)=> {
       });
     });
 
+    socket.on("add-member-to-group", (data) => {
+      //emit notification "response-add-member-to-group"
+      if(clients[data.uid]) {
+        emitNotifyToArray(clients, data.uid, io, "response-add-member-to-group", data);
+      }
+    });
+
+    socket.on("remove-member-to-group", (data) => {
+      if(clients[data.uid]) {
+        emitNotifyToArray(clients, data.uid, io, "response-remove-member-to-group", data);
+      }
+    });
+
     socket.on("disconnect", async()=>{
       //remove socketId
       clients = removeSocketIdFromArray(clients, currentUserId, socket);

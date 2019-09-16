@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Row, Col, Icon, List, Empty, Spin} from 'antd';
+import {Row, Col, Icon, List, Empty, Spin, Button, message} from 'antd';
 import axios from 'axios';
 import config from './../../../../config/index';
 import {Modal} from 'antd';
 import Gallery from 'react-grid-gallery';
 import {bufferToBase64} from './../../../../helpers/clientHelper';
+import ModalMore from './ModalMore';
+import * as actions from './../../../../actions/index';
 
 function mapStateToProps(state) {
     return {
@@ -14,6 +16,7 @@ function mapStateToProps(state) {
 }
 
 const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+const { confirm } = Modal;
 
 function coverImages(item){
     return {
@@ -31,10 +34,13 @@ class RightTop extends Component {
         this.state={
             listImage : [],
             listFile : [],
+            listInfo : [],
             visibleImage: false,
             visibleFile: false,
+            visibleMore : false,
             loading: false,
             isEmpty : false,
+            isAdmin : false
         }
     }
 
@@ -83,7 +89,7 @@ class RightTop extends Component {
         })
 
         axios({
-            url: `${config.baseUrl}/message/file/list?messageId=${this.props.data._id}`,
+            url: `${config.baseUrl}/message/file/list:messageId=${this.props.data._id}`,
             method: 'get'
         })
         .then((res)=>{
@@ -100,6 +106,66 @@ class RightTop extends Component {
         })
     }
 
+    handleModalMore = ()=>{
+        if(!this.state.visibleMore){
+            this.setState({
+                visibleMore : true,
+                loading : true
+            })
+            axios({
+                url: `${config.baseUrl}/group-chat/list-member?groupId=${this.props.data._id}`,
+                method: 'get'
+            })
+            .then((res)=>{
+                this.setState({
+                    listInfo : res.data.listInfo,
+                    isAdmin : res.data.isAdmin,
+                    loading :false
+                })
+            })
+            .catch((err) => {
+                console.log(err);
+                this.setState({
+                    loading :false
+                })
+            })
+        }
+        else {
+            this.setState({
+                visibleMore : false
+            })
+        }
+    }
+
+    handleRemove = () => {
+        if(!this.state.isAdmin){
+            confirm({
+                title : "Would you like leave to group?",
+                onOk : ()=>{
+                    axios({
+                        url : `${config.baseUrl}/group-chat/leave-group`,
+                        method: 'put',
+                        data :{ groupId : this.props.data._id}
+                    })
+                    .then((res)=>{
+                        this.props.removeListAllConversations(this.props.data._id);
+                        this.props.removeListGroupConversations(this.props.data._id);
+                        this.setState({
+                            visibleMore : false
+                        })
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        
+                    })
+                }
+            })
+        }
+        else {
+            message.error('Admin can not leave to group', 3);
+        }
+    }
+
     render() {
         const data = this.props.data;
         return (
@@ -108,7 +174,7 @@ class RightTop extends Component {
                     <Col span={8}>
                         To: <span><strong>{data.nickname? data.nickname : data.name}</strong></span>
                     </Col>
-                    <Col span={3} offset={10}>
+                    <Col span={3} offset={7}>
                     <div onClick={this.handleModalImage} style={{cursor: "pointer", width: "50%"}}>
                         Image
                         <Icon type="file-image" />
@@ -118,6 +184,12 @@ class RightTop extends Component {
                     <div onClick={this.handleModalFile} style={{cursor: "pointer",  width: "50%"}}>
                         File
                         <Icon type="paper-clip" />
+                        </div>
+                    </Col>
+                    <Col span={3}>
+                    <div onClick={this.handleModalMore} style={{cursor: "pointer",  width: "50%"}} >
+                        More
+                        <Icon type="ellipsis" />
                         </div>
                     </Col>
                 </Row>
@@ -162,11 +234,40 @@ class RightTop extends Component {
                         /> : <Empty/>
                     }
                 </Modal>
+                    
+                <Modal
+                visible = {this.state.visibleMore}
+                className="modal-more"
+                title="Info Conversation"
+                width={"65vw"}
+                closable = {false}
+                maskClosable={false}
+                footer = {[
+                    null, 
+                    <Button key="1" type="danger" onClick={this.handleRemove}>Leave Group</Button>,
+                    <Button key="2" type="primary" onClick={this.handleModalMore}>Ok</Button>,
+                    ]}
+                destroyOnClose = {true}
+                >
+                    <div style={{textAlign : 'center', marginTop: '15px'}}><Spin indicator={antIcon} spinning={this.state.loading}/></div>
+                    {this.state.listInfo.length>0 ? <ModalMore listInfo={this.state.listInfo} isAdmin = {this.state.isAdmin} groupId = {this.props.data._id}/> : null}
+                </Modal>
             </div>
         );
     }
 }
 
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        removeListAllConversations : (data) => {
+            dispatch(actions.removeListAllConversations(data))
+        },
+        removeListGroupConversations : (data) => {
+            dispatch(actions.removeListGroupConversations(data))
+        }
+      }
+  }
+
 export default connect(
-    mapStateToProps,
+    mapStateToProps, mapDispatchToProps
 )(RightTop);

@@ -7,7 +7,7 @@ import {chatTextEmoji} from './chat/chatTextEmoji';
 import {videoChat} from './chat/videoChat';
 import {typingOn, typingOff} from './chat/typingOnOff';
 import {userStatus} from './status/userStatus';
-import {addMessageAfterConfirmFriend, addMessageAfterCreateGroup} from './addMessage/addMessage';
+import {addMessageAfterConfirmFriend, addMessageAfterCreateGroup, addMemberToGroup, removeMemberToGroup} from './addMessage/addMessage';
 
 export const initSockets = (socket, props) => {
   addNewContact(socket, props);
@@ -22,4 +22,7 @@ export const initSockets = (socket, props) => {
   userStatus(socket, props);
   addMessageAfterConfirmFriend(socket, props);
   addMessageAfterCreateGroup(socket, props);
+  addMemberToGroup(socket, props);
+  removeMemberToGroup(socket, props);
+
 }

@@ -55,7 +55,11 @@ let initRouters = (app) => {
   router.post("/message/add-new-file", authLogin, message.addNewFile);
 
   //add group chat
-  router.post("/group-chat/add-new", authLogin, GroupValid.addNewGroup, groupChat.addNewGroup)
+  router.post("/group-chat/add-new", authLogin, GroupValid.addNewGroup, groupChat.addNewGroup);
+  router.get("/group-chat/list-member", authLogin, groupChat.listMembers);
+  router.put("/group-chat/add-memebers", authLogin, groupChat.addNewMember);
+  router.put("/group-chat/remove-memebers", authLogin, groupChat.removeMember);
+  router.put("/group-chat/leave-group", authLogin, groupChat.leaveGroup)
   
   //timer-notification
   router.put("/timer/count/notification-general/reset", authLogin, timer.resetCountNotifGeneral)

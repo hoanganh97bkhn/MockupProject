@@ -924,3 +924,10 @@ h6{
   padding-left: 10px;
   border-left: 1px solid #e6e6e6
 }
+
+
+/* */
+.list-data {
+  height: 40vh;
+  overflow-y: auto;
+}

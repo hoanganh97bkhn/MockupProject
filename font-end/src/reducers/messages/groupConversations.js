@@ -37,7 +37,7 @@ let myReducer = (state = initialState,action) => {
 
       case types.REMOVE_LIST_GROUP_CONVERSATIONS : 
         state = state.filter(item => {
-          return item._id !== action.data._id
+          return item._id !== action.data
         })
         return state;
         

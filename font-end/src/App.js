@@ -161,6 +161,12 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         addListGroupConversations : (data) => {
             dispatch(actions.addListGroupConversations(data))
+        },
+        removeListAllConversations : (data) => {
+            dispatch(actions.removeListAllConversations(data))
+        },
+        removeListGroupConversations : (data) => {
+            dispatch(actions.removeListGroupConversations(data))
         }
     }
 }

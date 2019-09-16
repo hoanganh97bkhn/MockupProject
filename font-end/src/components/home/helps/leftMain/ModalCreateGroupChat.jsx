@@ -165,7 +165,7 @@ class ModalCreateGroupChat extends Component {
         return (
             <div>
                 <Row>
-                    <Col span={9}>
+                    <Col span={9} className="list-data">
                         <Search
                         placeholder="Input nickname or email"
                         onChange={e => this.handleSearch(e)}
@@ -197,7 +197,7 @@ class ModalCreateGroupChat extends Component {
                             </ul>
                         </div>
                     </Col>
-                    <Col className='right-list-members' span={14} offset={1}>
+                    <Col className='right-list-members list-data' span={14} offset={1}>
                         {this.state.listMembers.length > 0 ? 
                             this.state.listMembers.map((item, index)=>{
                             return (
