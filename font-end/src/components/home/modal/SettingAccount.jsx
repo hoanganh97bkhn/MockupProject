@@ -4,7 +4,7 @@ import GeneralAccount from './../helps/settingAccount/GeneralAccount';
 import Password from './../helps/settingAccount/Password';
 const { TabPane } = Tabs;
 
-class ContactManager extends Component {
+class SettingAccount extends Component {
   constructor(props){
     super(props);
   }
@@ -52,4 +52,4 @@ class ContactManager extends Component {
   }
 }
 
-export default ContactManager;
+export default SettingAccount;

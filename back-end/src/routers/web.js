@@ -53,6 +53,9 @@ let initRouters = (app) => {
   router.post("/message/add-new-text-emoji", authLogin, messageValid.checkMessageLength, message.addNewTexEmoji );
   router.post("/message/add-new-image", authLogin, message.addNewImage );
   router.post("/message/add-new-file", authLogin, message.addNewFile);
+  router.get("/message/read-more-all-chat", authLogin, message.readMoreAllChat);
+  router.get("/message/read-more-user-chat", authLogin, message.readMoreUserChat);
+  router.get("/message/read-more-message", authLogin, message.readMoreMessage);
 
   //add group chat
   router.post("/group-chat/add-new", authLogin, GroupValid.addNewGroup, groupChat.addNewGroup);

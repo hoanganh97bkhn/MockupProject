@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 import * as actions from './../../../../actions/index';
 import config from './../../../../config/index';
 import _ from 'lodash';
+import axios from 'axios';
+import {Spin, Icon} from 'antd';
 import {covertTimestampToHumanTime} from './../../../../helpers/clientHelper';
+
+const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />
 
 let helperPreview = (item) => {
     if(item.messages[item.messages.length -1]){
@@ -13,7 +17,6 @@ let helperPreview = (item) => {
     }
     else return "[null]"
 }
-
 let helperTime = (item) => {
     if(item.messages[item.messages.length -1]){
        let time = covertTimestampToHumanTime(item.messages[item.messages.length -1].createdAt);
@@ -27,50 +30,77 @@ class AllChat extends Component {
         this.state={
             idFocus: '',
             listData : '',
-            userStatus : []
+            userStatus : [],
+            displaySpiner : 'none',
+            isLimit : false,
+            skipUser : 0,
+            skipGroup : 0
         }
+    }
+
+    componentWillMount = () => {
+        this.setState({
+          userStatus : this.props.userStatus,
+          skipUser : this.props.userConversations.length,
+          skipGroup : this.props.groupConversations.length,
+        })
     }
 
     handleScrollLoad = (event) =>{
         let element = event.target;
-        console.log(element.scrollHeight - element.scrollTop)
-        // let element = event.target;
-        // if(element.scrollHeight - element.scrollTop === 476){
-        //   this.setState({
-        //     displaySpiner : 'block'
-        //   })
-        //   setTimeout(axios({
-        //     url:`${config.baseUrl}/contacts/readmore`,
-        //     method: 'post',
-        //     data: {
-        //       skip: this.state.skip
-        //     }
-        //   })
-        //   .then((res) => {
-        //     this.props.scrollListContacts(res.data)
-        //     this.setState({
-        //       displaySpiner : 'none'
-        //     })
-        //   })
-        //   .catch((error) => {
-        //     console.log(error);
-        //     this.setState({
-        //       displaySpiner : 'none'
-        //     })
-        //   }), 1000)
-          
-        // }
+        if(element.scrollHeight - element.scrollTop === 779 && !this.state.isLimit){
+          this.setState({
+            displaySpiner : 'block'
+          })
+          axios({
+            url:`${config.baseUrl}/message/read-more-all-chat?skipUser=${this.state.skipUser}&skipGroup=${this.state.skipGroup}`,
+            method: 'get',
+          })
+          .then((res) => {
+                if(res.data.allConversationsWithMessages.length == 0){
+                    this.setState({
+                        displaySpiner : 'none',
+                        isLimit : true
+                    })
+                }
+                else {
+                    this.props.scrollListAllConversations(res.data.allConversationsWithMessages);
+                    this.props.scrollListGroupConversations(res.data.groupConversationsWithMessages);
+                    this.props.scrollListUserConversations(res.data.userConversationsWithMessages);
+                    this.setState({
+                        displaySpiner : 'none',
+                        isLimit : false
+                    })
+                }
+          })
+          .catch((error) => {
+            console.log(error);
+            this.setState({
+              displaySpiner : 'none'
+            })
+          })
+        }
     }
 
     componentWillReceiveProps = (nextProps) => {
+        if(nextProps.focusMessage != "") {
+            this.props.handleOpenChat(nextProps.focusMessage);
+            this.setState({
+                idFocus : nextProps.focusMessage
+            }, ()=>{
+                this.props.removeFocusMessageFromContact();
+            })
+        }
+
         this.setState({
-            userStatus : nextProps.userStatus
+            userStatus : nextProps.userStatus,
+            skipUser : nextProps.userConversations.length,
+            skipGroup : nextProps.groupConversations.length
         })
     }
    
-    handleOpenChat = (item, idFocus) => {
-        this.props.handleOpenChat(item._id);
-        this.props.removeOnMessage(item._id);
+    handleOpenChat = (idFocus) => {
+        this.props.handleOpenChat(idFocus);
         this.setState({
             idFocus : idFocus
         })
@@ -80,8 +110,8 @@ class AllChat extends Component {
             <ul id="list-chat" className="people no-padding-start" onScroll={this.handleScrollLoad}>
                 {this.props.allConversations.length> 0 ? this.props.allConversations.map((item, index) => {
                     if(!item.members) return (
-                        <a key ={index}  href = {"#uid_" + item._id} className={"room-chat"}>
-                            <li className={item._id == this.state.idFocus? "person active" : "person"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item, item._id, index)}}>
+                        <a key ={index}  className={"room-chat"}>
+                            <li className={item._id == this.state.idFocus? "person active" : "person"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item._id)}}>
                                 <div className="left-avatar">
                                     <div className={`dot ${this.state.userStatus.indexOf(item._id) > -1 ? 'online' : ''}`}></div>
                                     <img src={`${config.baseUrl}/images/${item.avatar}`} alt="" className={`${this.state.userStatus.indexOf(item._id) > -1 ? 'avatar-online' : ''}`}></img>
@@ -95,8 +125,8 @@ class AllChat extends Component {
                         </a>
                     )
                     else return (
-                        <a key ={index}  href = {"#uid_" + item._id} className={"room-chat"}>
-                            <li className={item._id == this.state.idFocus? "person group-chat active" : "person group-chat"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item, item._id)}}>
+                        <a key ={index}  className={"room-chat"}>
+                            <li className={item._id == this.state.idFocus? "person group-chat active" : "person group-chat"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item._id)}}>
                                 <div className="left-avatar">
                                     <div  className={`dot ${this.state.userStatus.indexOf(item._id) > -1 ? 'online' : ''}`}></div>
                                     <img src={`${config.baseUrl}/images/${item.avatar}`} alt="" className={`${this.state.userStatus.indexOf(item._id) > -1 ? 'avatar-online' : ''}`}></img>
@@ -110,7 +140,11 @@ class AllChat extends Component {
                         </a>
                     )
                 }) : null}
+                <div className="spiner-all-chat" style={{textAlign:'center', display: this.state.displaySpiner}}>
+                    <Spin indicator={antIcon}/>
+                </div>
             </ul>
+            
         );
     }
 }
@@ -118,16 +152,27 @@ class AllChat extends Component {
 function mapStateToProps(state) {
     return {
         allConversations : state.allConversations,
-        message : state.message,
-        userStatus : state.userStatus
+        groupConversations : state.groupConversations,
+        userConversations : state.userConversations,
+        userStatus : state.userStatus,
+        focusMessage : state.focusMessage
     };
 }
 
 function mapDispatchToProps(dispatch, props){
     return {
-        removeOnMessage : (data) => {
-            dispatch(actions.removeOnMessage(data))
+        removeFocusMessageFromContact : () => {
+            dispatch(actions.removeFocusMessageFromContact());
         },
+        scrollListAllConversations : (data) => {
+            dispatch(actions.scrollListAllConversations(data));
+        },
+        scrollListGroupConversations : (data) => {
+            dispatch(actions.scrollListGroupConversations(data));
+        },
+        scrollListUserConversations : (data) => {
+            dispatch(actions.scrollListUserConversations(data));
+        }
     }
 }
 

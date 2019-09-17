@@ -61,6 +61,12 @@ chatGroupSchema.statics = {
 
   removeMember(groupId, memberId){
     return this.findByIdAndUpdate(groupId, {$pull : {members : {userId : memberId}}}).exec()
+  },
+
+  readMoreChatGroups(userId, skip, limit){
+    return this.find({
+      "members" : {$elemMatch : {"userId" : userId}}
+    }).sort({"updatedAt" : -1}).skip(skip).limit(limit).exec();
   }
 }
 

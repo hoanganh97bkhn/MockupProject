@@ -931,3 +931,12 @@ h6{
   height: 40vh;
   overflow-y: auto;
 }
+
+ul.people{
+  position: relative;
+}
+
+.spiner-all-chat{
+  position: absolute;
+  right: 50%;
+}

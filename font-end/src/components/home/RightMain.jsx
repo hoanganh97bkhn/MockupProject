@@ -40,9 +40,12 @@ class RightMain extends Component {
     render() {
         return (
             <div className="right">
-                <RightTop data= {this.state.listData.length>0 ? this.state.listData[0] : this.state.listData}/>
+                <RightTop data= {this.state.listData.length>0 ? this.state.listData[0] : this.state.listData}
+                            isGroup = {this.state.isGroup}/>
                 <ContentChat data = {this.state.dataMessage.length>0 ? this.state.dataMessage : this.state.dataMessage} 
                             isTyping={this.state.isTyping}
+                            dataId = {this.state.id_chat_room}
+                            isGroup = {this.state.isGroup}
                             />
                 <RightWrite dataId = {this.state.id_chat_room} isGroup = {this.state.isGroup} 
                             handleChangeSendMess = {this.handleChangeSendMess}

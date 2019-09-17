@@ -39,6 +39,14 @@ let addMessage = (io)=> {
       });
     });
 
+    //remove contact
+    socket.on("remove-message-after-delete-friend", async(data) => {
+      //emit notification "response-remove-message-after-delete-friend"
+      if(clients[data.contactId]) {
+        emitNotifyToArray(clients, data.contactId, io, "response-remove-message-after-delete-friend", data.contactId);
+      }
+    });
+
     socket.on("add-member-to-group", (data) => {
       //emit notification "response-add-member-to-group"
       if(clients[data.uid]) {

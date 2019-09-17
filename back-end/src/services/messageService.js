@@ -61,22 +61,6 @@ let getAllConversationItems = (currentUserId) => {
         return -item.updatedAt;
       })
 
-      /**get message for allConversations */
-      // let allConversationsWithMessagesPromise = allConversations.map(async(conversation) => {
-      //   conversation = conversation.toObject();
-
-      //   if(conversation.members){
-
-      //   }
-      //   else {}
-      //   let getMessages = await MessageModel.model.getMessages(currentUserId, conversation._id, LIMIT_MESSAGES_TAKEN);
-
-        
-      //   conversation.messages = getMessages;
-      //   return conversation
-      // });
-
-      // let allConversationsWithMessages = await Promise.all(allConversationsWithMessagesPromise);
       let allConversationsWithMessages = userConversationsWithMessages.concat(groupConversationsWithMessages)
       allConversationsWithMessages = _.sortBy(allConversationsWithMessages, (item) => {
         return -item.updatedAt;
@@ -338,11 +322,156 @@ let addNewFile = (sender, receiverId, messageVal, isGroup) => {
   })
 }
 
+let readMoreAllChat = (currentUserId, skipUser, skipGroup) => {
+  return new Promise (async(resolve, reject) => {
+    try {
+      let contacts = await ContactModel.readMoreContacts(currentUserId, skipUser, LIMIT_CONVERSATION_TAKEN);
+      let userConversationsPromise = contacts.map(async(contact) => {
+        if(contact.contactId == currentUserId){
+          let getUserContact = await UserModel.getNormalUserDataById(contact.userId);
+          getUserContact.updatedAt = contact.updatedAt;
+          return getUserContact;
+        }
+        else {
+          let getUserContact = await UserModel.getNormalUserDataById(contact.contactId);
+          getUserContact.updatedAt = contact.updatedAt;
+          return getUserContact;
+        }
+      });
+      let userConversations = await Promise.all(userConversationsPromise);
+
+      let groupConversations = await ChatGroupModel.readMoreChatGroups(currentUserId, skipGroup, LIMIT_CONVERSATION_TAKEN);
+      let allConversations = userConversations.concat(groupConversations);
+      
+      allConversations = _.sortBy(allConversations, (item) => {
+        return -item.updatedAt;
+      })
+
+      /**get message for userConversations */
+      let userConversationsWithMessagesPromise = userConversations.map(async(conversation) => {
+        let getMessages = await MessageModel.model.getMessagesInPersonal(currentUserId, conversation._id, LIMIT_MESSAGES_TAKEN);
+
+        conversation = conversation.toObject();
+        conversation.messages = _.reverse(getMessages);
+        return conversation
+      });
+
+      let userConversationsWithMessages = await Promise.all(userConversationsWithMessagesPromise);
+      userConversationsWithMessages = _.sortBy(userConversationsWithMessages, (item) => {
+        return -item.updatedAt;
+      })
+
+      /**get message for groupConversations */
+      let groupConversationsWithMessagesPromise = groupConversations.map(async(conversation) => {
+        let getMessages = await MessageModel.model.getMessagesInGroup(conversation._id, LIMIT_MESSAGES_TAKEN);
+
+        conversation = conversation.toObject();
+        conversation.messages = _.reverse(getMessages);
+        return conversation
+      });
+
+      let groupConversationsWithMessages = await Promise.all(groupConversationsWithMessagesPromise);
+      groupConversationsWithMessages = _.sortBy(groupConversationsWithMessages, (item) => {
+        return -item.updatedAt;
+      })
+
+      let allConversationsWithMessages = userConversationsWithMessages.concat(groupConversationsWithMessages)
+      allConversationsWithMessages = _.sortBy(allConversationsWithMessages, (item) => {
+        return -item.updatedAt;
+      })
+
+      resolve({userConversationsWithMessages, groupConversationsWithMessages, allConversationsWithMessages});
+    }
+    catch (error) {
+      reject(error)
+    }
+  })
+}
+
+let readMoreUserChat = (currentUserId, skipUser) => {
+  return new Promise (async(resolve, reject) => {
+    try {
+      let contacts = await ContactModel.readMoreContacts(currentUserId, skipUser, LIMIT_CONVERSATION_TAKEN);
+      let userConversationsPromise = contacts.map(async(contact) => {
+        if(contact.contactId == currentUserId){
+          let getUserContact = await UserModel.getNormalUserDataById(contact.userId);
+          getUserContact.updatedAt = contact.updatedAt;
+          return getUserContact;
+        }
+        else {
+          let getUserContact = await UserModel.getNormalUserDataById(contact.contactId);
+          getUserContact.updatedAt = contact.updatedAt;
+          return getUserContact;
+        }
+      });
+      let userConversations = await Promise.all(userConversationsPromise);
+
+      /**get message for userConversations */
+      let userConversationsWithMessagesPromise = userConversations.map(async(conversation) => {
+        let getMessages = await MessageModel.model.getMessagesInPersonal(currentUserId, conversation._id, LIMIT_MESSAGES_TAKEN);
+
+        conversation = conversation.toObject();
+        conversation.messages = _.reverse(getMessages);
+        return conversation
+      });
+
+      let userConversationsWithMessages = await Promise.all(userConversationsWithMessagesPromise);
+      userConversationsWithMessages = _.sortBy(userConversationsWithMessages, (item) => {
+        return -item.updatedAt;
+      });
+
+      let allConversationsWithMessages = userConversationsWithMessages;
+
+      resolve({userConversationsWithMessages, allConversationsWithMessages});
+    }
+    catch (error) {
+      reject(error)
+    }
+  })
+}
+
+let readMoreGroupChat = (currentUserId, skipGroup) => {
+  return new Promise (async(resolve, reject) => {
+    try {
+      let groupConversations = await ChatGroupModel.readMoreChatGroups(currentUserId, skipGroup, LIMIT_CONVERSATION_TAKEN);
+
+      /**get message for groupConversations */
+      let groupConversationsWithMessagesPromise = groupConversations.map(async(conversation) => {
+        let getMessages = await MessageModel.model.getMessagesInGroup(conversation._id, LIMIT_MESSAGES_TAKEN);
+
+        conversation = conversation.toObject();
+        conversation.messages = _.reverse(getMessages);
+        return conversation
+      });
+
+      let groupConversationsWithMessages = await Promise.all(groupConversationsWithMessagesPromise);
+      groupConversationsWithMessages = _.sortBy(groupConversationsWithMessages, (item) => {
+        return -item.updatedAt;
+      })
+
+      let allConversationsWithMessages = groupConversationsWithMessages;
+
+      resolve({groupConversationsWithMessages, allConversationsWithMessages});
+    }
+    catch (error) {
+      reject(error)
+    }
+  })
+}
+
+let readMoreMessage = (currentUserId, skipMessage, targetId, chatInGroup) => {
+
+}
+
 module.exports = {
   getAllConversationItems,
   getAllImages,
   getAllFiles,
   addNewTexEmoji,
   addNewImage,
-  addNewFile
+  addNewFile,
+  readMoreAllChat,
+  readMoreUserChat,
+  readMoreGroupChat,
+  readMoreMessage
 }

@@ -116,8 +116,62 @@ let addNewFile = async(req, res) => {
     res.status(500).send(error)
   }
 }
+
+let readMoreAllChat = async(req, res) =>{
+  try {
+    let skipUser = +(req.query.skipUser);
+    let skipGroup = +(req.query.skipGroup);
+
+    let newAllConversation = await message.readMoreAllChat(req.user._id, skipUser, skipGroup);
+    res.status(200).send(newAllConversation)
+  } catch (error){
+    res.status(500).send(error)
+  }
+}
+
+let readMoreUserChat = async(req, res) =>{
+  try {
+    let skipUser = +(req.query.skipUser);
+
+    let newAllConversation = await message.readMoreUserChat(req.user._id, skipUser);
+    res.status(200).send(newAllConversation)
+  } catch (error){
+    res.status(500).send(error)
+  }
+}
+
+let readMoreGroupChat = async(req, res) =>{
+  try {
+    let skipGroup = +(req.query.skipGroup);
+
+    let newAllConversation = await message.readMoreGroupChat(req.user._id, skipGroup);
+
+    res.status(200).send(newAllConversation)
+  } catch (error){
+    res.status(500).send(error)
+  }
+}
+
+let readMoreMessage = async(req, res)=>{
+  try {
+    let skipMessage = +(req.query.skipMessage);
+    let targetId = req.query.targetId;
+    let chatInGroup = req.query.chatInGroup === "true" ? true : false;
+
+    let newAllConversation = await message.readMoreMessage(req.user._id, skipMessage, targetId, chatInGroup);
+
+    res.status(200).send(newAllConversation)
+  } catch (error){
+    res.status(500).send(error)
+  }
+}
+
 module.exports = {
   addNewTexEmoji,
   addNewImage,
-  addNewFile
+  addNewFile,
+  readMoreAllChat,
+  readMoreUserChat,
+  readMoreGroupChat,
+  readMoreMessage
 }

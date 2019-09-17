@@ -13,7 +13,8 @@ class ContentChat extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading : false
+            loading : false,
+            skipMessage : 0
         }
     }
 
@@ -23,30 +24,31 @@ class ContentChat extends Component {
       
     componentDidMount() {
         this.scrollToBottom();
-      }
+        this.setState({
+            skipMessage : this.props.data.length
+        })
+    }
       
     componentDidUpdate() {
         this.scrollToBottom();
     }
 
+    componentWillReceiveProps = (nextProps) => {
+        this.setState({
+            skipMessage : nextProps.data.length
+        })
+    }
+
     handleScrollLoad = (event) =>{
         let element = event.target;
         if(element.scrollTop === 0){
-          this.setState({
-            loading : true
-          })
           axios({
-            url:`${config.baseUrl}/message/readmore`,
-            method: 'post',
-            data: {
-              skip: this.state.skip
-            }
+            url:`${config.baseUrl}/message/read-more-message?skipMessage=${this.state.skipMessage}&targetId=${this.props.dataId}&chatInGroup=${this.props.isGroup}`,
+            method: 'get',
           })
           .then((res) => {
-            this.props.scrollListContacts(res.data)
-            this.setState({
-              loading : false
-            })
+              console.log(res.data)
+            //this.props.scrollListContacts(res.data)
           })
           .catch((error) => {
             console.log(error);

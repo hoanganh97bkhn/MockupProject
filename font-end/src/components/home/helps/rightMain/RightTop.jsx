@@ -107,33 +107,38 @@ class RightTop extends Component {
     }
 
     handleModalMore = ()=>{
-        if(!this.state.visibleMore){
-            this.setState({
-                visibleMore : true,
-                loading : true
-            })
-            axios({
-                url: `${config.baseUrl}/group-chat/list-member?groupId=${this.props.data._id}`,
-                method: 'get'
-            })
-            .then((res)=>{
-                this.setState({
-                    listInfo : res.data.listInfo,
-                    isAdmin : res.data.isAdmin,
-                    loading :false
-                })
-            })
-            .catch((err) => {
-                console.log(err);
-                this.setState({
-                    loading :false
-                })
-            })
+        if(!this.props.isGroup){
+            message.error('Conversation is not group!', 3);
         }
-        else {
-            this.setState({
-                visibleMore : false
-            })
+        else{
+            if(!this.state.visibleMore){
+                this.setState({
+                    visibleMore : true,
+                    loading : true
+                })
+                axios({
+                    url: `${config.baseUrl}/group-chat/list-member?groupId=${this.props.data._id}`,
+                    method: 'get'
+                })
+                .then((res)=>{
+                    this.setState({
+                        listInfo : res.data.listInfo,
+                        isAdmin : res.data.isAdmin,
+                        loading :false
+                    })
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.setState({
+                        loading :false
+                    })
+                })
+            }
+            else {
+                this.setState({
+                    visibleMore : false
+                })
+            }
         }
     }
 
@@ -250,7 +255,9 @@ class RightTop extends Component {
                 destroyOnClose = {true}
                 >
                     <div style={{textAlign : 'center', marginTop: '15px'}}><Spin indicator={antIcon} spinning={this.state.loading}/></div>
-                    {this.state.listInfo.length>0 ? <ModalMore listInfo={this.state.listInfo} isAdmin = {this.state.isAdmin} groupId = {this.props.data._id}/> : null}
+                    {this.state.listInfo.length>0 ? 
+                        <ModalMore listInfo={this.state.listInfo} isAdmin = {this.state.isAdmin} groupId = {this.props.data._id}/> :
+                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
                 </Modal>
             </div>
         );

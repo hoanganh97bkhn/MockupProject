@@ -62,7 +62,6 @@ class FriendRequest extends Component {
       data: {uid: item._id}
     })
     .then((res)=>{
-      console.log(res.data)
       message.success(`${item.nickname} became friends`);
       this.props.socket.emit("confirm-request-contact-received", {contactId : item._id});
       this.props.removeListContactsReceived(item);

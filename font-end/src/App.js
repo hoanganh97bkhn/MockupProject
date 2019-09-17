@@ -126,9 +126,6 @@ const mapDispatchToProps = (dispatch, props) => {
         removeOnTyping : (data) => {
             dispatch(actions.removeOnTyping(data))
         },
-        addOnMessage : (data) => {
-            dispatch(actions.addOnMessage(data))
-        },
         openModalCaller : (data) => {
             dispatch(actions.openModalCaller(data))
         },
@@ -167,6 +164,9 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         removeListGroupConversations : (data) => {
             dispatch(actions.removeListGroupConversations(data))
+        },
+        removeListUserConversations : (data) => {
+            dispatch(actions.removeListUserConversations(data))
         }
     }
 }

@@ -391,20 +391,6 @@ export const removeOnTyping = (data) => {
     }
 }
 
-export const addOnMessage = (data) => {
-    return {
-        type: types.ADD_ON_MESSAGE,
-        data 
-    }
-}
-
-export const removeOnMessage = (data) => {
-    return {
-        type: types.REMOVE_ON_MESSAGE,
-        data 
-    }
-}
-
 export const openModalCaller = (data) => {
     return {
         type : types.OPEN_MODAL_CALLER,
@@ -467,5 +453,19 @@ export const removeUserOnline = (data) => {
     return {
         type : types.REMOVE_ONLINE,
         data
+    }
+}
+
+//MESSAGE from contact
+export const focusMessageFromContact = (data) => {
+    return {
+        type : types.FOCUS_MESSAGE_FROM_CONTACT,
+        data
+    }
+}
+
+export const removeFocusMessageFromContact = () => {
+    return {
+        type : types.REMOVE_FOCUS_MESSAGE_FROM_CONTACT,
     }
 }

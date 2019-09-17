@@ -51,7 +51,7 @@ class ContactManager extends Component {
                 visible={this.props.open}
                 onCancel={this.props.close}
                 footer={null}
-                maskClosable={true}
+                maskClosable={false}
                 width={750}
             >
                 <Tabs defaultActiveKey="1">
@@ -77,7 +77,7 @@ class ContactManager extends Component {
                         }
                         key="2"
                         >
-                        <Contact ></Contact>
+                        <Contact closeModal = {this.props.close}></Contact>
                     </TabPane>
 
                     <TabPane

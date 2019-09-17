@@ -192,7 +192,7 @@ let countAllContactsReceived = (currentUserId) => {
 let readMoreContacts = (currentUserId, skip) => {
   return new Promise (async(resolve, reject) => {
     try {
-      let newContacts = await ContactModel.readMore(currentUserId, skip, LIMIT_NUMBER_TAKEN);
+      let newContacts = await ContactModel.readMoreContacts(currentUserId, skip, LIMIT_NUMBER_TAKEN);
 
       let users = newContacts.map(async(contact) => {
         if(contact.contactId == currentUserId){

@@ -15,11 +15,11 @@ import groupConversations from './messages/groupConversations';
 import userConversations from './messages/userConversations';
 import allConversations from './messages/allConversationWithMessages';
 import typing from './chat/typing';
-import message from './chat/message';
 import chatVideo from "./chat/chatVideo";
 import stream from './chat/stream';
 import iceTurnServer from './chat/iceTurnServer';
 import userStatus from './status/userStatus';
+import focusMessage from './chat/focusMessage';
 import { combineReducers } from 'redux';
 
 const myReducer = combineReducers({
@@ -40,12 +40,11 @@ const myReducer = combineReducers({
     groupConversations,
     allConversations,
     typing,
-    message,
     chatVideo,
     stream,
     iceTurnServer,
     userStatus,
-
+    focusMessage
 });
 
 export default myReducer;

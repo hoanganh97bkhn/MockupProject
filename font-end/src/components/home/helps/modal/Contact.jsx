@@ -28,6 +28,9 @@ function handleDeleteContacts (item, props){
     props.socket.emit("remove-contact", {contactId : item._id});
     props.removeListContacts(item);
     props.removeCountListContacts();
+    props.removeListAllConversations(item._id);
+    props.removeListUserConversations(item._id);
+
   })
   .catch((error)=>{
     message.error(`Delete friend ${item.nickname} error!`);
@@ -56,6 +59,12 @@ class Contact extends Component {
       skip : nextProps.contacts.length
     })
   }
+
+  handleMessage = (item) => {
+    this.props.focusMessageFromContact(item._id);
+    this.props.closeModal();
+  }
+
   showDeleteConfirm = (item, props)=>{
     confirm({
       title: `Are you sure delete ${item.nickname} from contacts list?`,
@@ -114,7 +123,7 @@ class Contact extends Component {
                         address={item.address} 
                         titleSuccess={"Messgae"} 
                         titleDanger={"Delete"}
-                        clickSuccess = {() => this.handleMessage(item, index)}
+                        clickSuccess = {() => this.handleMessage(item)}
                         clickDanger={()=>this.showDeleteConfirm(item, this.props)}>
                       </InfoContact> )
                   })  
@@ -147,6 +156,15 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     removeCountListContacts : () => {
       dispatch(actions.removeCountListContacts())
+    },
+    removeListAllConversations : (data) => {
+      dispatch(actions.removeListAllConversations(data))
+    },
+    removeListUserConversations : (data) => {
+      dispatch(actions.removeListUserConversations(data))
+    },
+    focusMessageFromContact : (data) => {
+      dispatch(actions.focusMessageFromContact(data));
     }
   }
 }
