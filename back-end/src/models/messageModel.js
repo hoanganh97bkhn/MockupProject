@@ -96,9 +96,24 @@ messageSchema.statics = {
     }).sort({"createdAt" : -1}).exec();
   },
 
-  addNewTexEmoji(){
+  readMoreMessageInPersonal(senderId, receiverId, skip, limit){
+    return this.find({
+      $or: [
+        {$and: [
+          {"senderId" : senderId},
+          {"receiverId" : receiverId},
+        ]},
+        {$and: [
+          {"senderId" : receiverId},
+          {"receiverId" : senderId},
+        ]}
+      ]
+    }).sort({"createdAt" : -1}).skip(skip).limit(limit).exec();
+  },
 
-  }
+  readMoreMessageInGroup(receiverId, skip, limit){
+    return this.find({"receiverId" : receiverId},).sort({"createdAt" : -1}).skip(skip).limit(limit).exec();
+  },
 }
 
 const MESSAGE_CONVERSATION_TYPES = {

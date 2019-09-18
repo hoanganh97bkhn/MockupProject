@@ -276,6 +276,14 @@ export const changeListUserConversations = (_id, data) => {
     }
 }
 
+export const scrollChangeListUserConversations = (_id, data) => {
+    return {
+        type : types.SCROLL_CHANGE_LIST_USER_CONVERSATIONS,
+        _id,
+        data
+    }
+}
+
 export const scrollListUserConversations = (data) => {
     return {
         type : types.SCROLL_LIST_USER_CONVERSATIONS,
@@ -314,6 +322,14 @@ export const changeListGroupConversations = (_id, data) => {
     }
 }
 
+export const scrollChangeListGroupConversations = (_id, data) => {
+    return {
+        type : types.SCROLL_CHANGE_LIST_GROUP_CONVERSATIONS,
+        _id,
+        data
+    }
+}
+
 export const scrollListGroupConversations = (data) => {
     return {
         type : types.SCROLL_LIST_GROUP_CONVERSATIONS,
@@ -329,23 +345,31 @@ export const removeListGroupConversations = (data) => {
 }
 
 // all-conversation-with-messages
-export const getListAllConversations= (data) => {
+export const getListAllConversations = (data) => {
     return {
         type : types.GET_LIST_ALL_CONVERSATIONS,
         data
     }
 }
 
-export const addListAllConversations= (data) => {
+export const addListAllConversations = (data) => {
     return {
         type : types.ADD_LIST_ALL_CONVERSATIONS,
         data
     }
 }
 
-export const changeListAllConversations= (_id, data) => {
+export const changeListAllConversations = (_id, data) => {
     return {
         type : types.CHANGE_LIST_ALL_CONVERSATIONS,
+        _id,
+        data
+    }
+}
+
+export const scrollChangeListAllConversations = (_id, data) => {
+    return {
+        type : types.SCROLL_CHANGE_LIST_ALL_CONVERSATIONS,
         _id,
         data
     }

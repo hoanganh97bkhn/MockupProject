@@ -37,6 +37,12 @@ class home extends Component {
         })
     }
 
+    componentWillReceiveProps = (nextProps)=>{
+        if(!nextProps.auth.isAuthenticated) {
+            this.props.history.push('/login-register');
+        }
+    }
+
     componentDidMount(){
         if(!this.props.auth.isAuthenticated) {
             this.props.history.push('/login-register');

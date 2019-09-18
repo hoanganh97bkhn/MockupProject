@@ -20,9 +20,11 @@ let myReducer = (state = initialState,action) => {
                 user: action.payload
             }
         case types.LOGIN_ERROR :
-            state.type = "error"
-            state.message = action.data.messageError;
-            return state; 
+            return {
+                ...state,
+                type: "error",
+                message : action.data
+            }
         case types.LOGOUT_SUCCESS:
             localStorage.removeItem('jwtToken');
             setAuthToken(false);

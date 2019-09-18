@@ -18,13 +18,10 @@ function* loginFlow(action){
     const data = response.data;
     console.log(data);
     if(response.status === 200){
-      console.log("vao day roi")
       const {token} = data;
-      console.log(token)
       localStorage.setItem('jwtToken', token);
       setAuthToken(token);
       const payload = jwt_decode(token);
-      console.log(payload)
       yield put({ type: "LOGIN_SUCCESS", payload });
     }
     else

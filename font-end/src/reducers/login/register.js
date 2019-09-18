@@ -6,13 +6,23 @@ let myReducer = (state = initialState,action) => {
 
     switch(action.type){
         case types.REGISTER_SUCCESS :
-            state.type = "success"
-            state.message = action.data.messageSuccess;
-            return state; 
+            return {
+                ...state,
+                type : "success",
+                message : action.data
+            }
         case types.REGISTER_ERROR :
-            state.type = "error"
-            state.message = action.data.messageError;
-            return state; 
+            return {
+                ...state,
+                type : "error",
+                message : action.data
+            }
+        case types.ERROR_SERVER :
+        return {
+            ...state,
+            type : "error",
+            message : action.data
+        }  
         default : 
             return state;
     }

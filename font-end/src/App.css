@@ -13,7 +13,12 @@
   background-size: cover;
 }
 
+#close{
+  display: none;
+}
+
 #close.register{
+  height: 80%;
   visibility: hidden;
   opacity: 0;
   transition: 0.25s;
@@ -22,7 +27,6 @@
   transition: 0.75s;
   visibility: visible;
   opacity: 1;
-  position: fixed;
   left: 0;
   top: 0;
   z-index: 1;
@@ -139,6 +143,10 @@
 .register button.close:hover{
   transform: rotate(-90deg);
   transition: 0.5s
+}
+
+.nav-register{
+  height: 20%;
 }
 
 .navbar-brand img{

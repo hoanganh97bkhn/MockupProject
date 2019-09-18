@@ -7,7 +7,7 @@ import fsExtra from 'fs-extra';
 
 
 const LIMIT_CONVERSATION_TAKEN = 15;
-const LIMIT_MESSAGES_TAKEN = 30;
+const LIMIT_MESSAGES_TAKEN = 15;
 
 let getAllConversationItems = (currentUserId) => {
   return new Promise (async(resolve, reject) => {
@@ -460,7 +460,23 @@ let readMoreGroupChat = (currentUserId, skipGroup) => {
 }
 
 let readMoreMessage = (currentUserId, skipMessage, targetId, chatInGroup) => {
+  return new Promise(async(resolve, reject)=>{
+    try {
+      //message in group
+      if(chatInGroup){
+        let getMessages = await MessageModel.model.readMoreMessageInGroup(targetId, skipMessage, LIMIT_MESSAGES_TAKEN);
+        getMessages = _.reverse(getMessages);
+        return resolve(getMessages);
+      }
+      // message in personal
+      let getMessages = await MessageModel.model.readMoreMessageInPersonal(currentUserId, targetId, skipMessage, LIMIT_MESSAGES_TAKEN);
+      getMessages = _.reverse(getMessages);
+      return resolve(getMessages);
 
+    } catch (error) {
+      reject(error);
+    }
+  })
 }
 
 module.exports = {

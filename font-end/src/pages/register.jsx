@@ -6,8 +6,10 @@ import FacebookLogin from 'react-facebook-login';
 import * as actions from './../actions/index';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import {message} from 'antd';
 import axios from 'axios';
 import config from './../config/index';
+import { element } from 'prop-types';
 
 class register extends Component {
     constructor(props){
@@ -33,15 +35,9 @@ class register extends Component {
     }
 
     componentDidMount = ()=>{
-        console.log(this.props.auth.isAuthenticated);
         if(this.props.auth.isAuthenticated) {
             this.props.history.push('/');
         }
-        // setTimeout(()=>{
-        //     this.setState({
-        //         modal: "open"
-        //     })
-        // },1500)
         this.setState({
             modal: "open"
         })
@@ -62,31 +58,33 @@ class register extends Component {
         }
     }
 
-    // componentWillReceiveProps(){
-    //     if(this.props.message.status === "error"){
-            
-    //         this.setState({
-    //             arrayError: this.props.message.message,
-    //             loading: false,
-    //         })
-    //     }
-    //     else {
-    //         this.setState({
-    //             arraySuccess: this.props.message.message,
-    //             loading: false
-    //         })
-    //     }
-    // }
-
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.auth.isAuthenticated) {
-            this.props.history.push('/')
+    componentWillReceiveProps = (nextProps)=>{
+        if(nextProps.auth.type === "error"){
+            this.setState({
+                loading : false
+            },()=>{
+                message.error(nextProps.auth.message,5);
+            })
+        } 
+        else if(nextProps.auth.isAuthenticated) {
+            this.props.history.push('/');
         }
-        // if(nextProps.errors) {
-        //     this.setState({
-        //         errors: nextProps.errors
-        //     });
-        // }
+        if(nextProps.message.type === "error"){
+            this.setState({
+                loading: false,
+            },()=>{
+                nextProps.message.message.forEach(element => {
+                    message.error(element,5);
+                })
+            })
+        }
+        else if(nextProps.message.type === "success") {
+            this.setState({
+                loading: false
+            },()=>{
+                message.success("Register success, please go to email and confirm ",5);
+            })
+        }
     }
 
     handleChangeLogin = (name, data) => {
@@ -187,7 +185,6 @@ class register extends Component {
 
 
     render() {
-        // console.log(this.props.message)
         return (
         <div className="register">
             <div className="container">

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Icon, Spin} from 'antd';
+import {Icon, Spin, message} from 'antd';
 import axios from 'axios';
 import config from './../../../../config/index';
 import typingImage from './../../../../image/typing.gif';
@@ -9,28 +9,37 @@ import * as actions from './../../../../actions/index';
 
 
 const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+let isScroll = false;
 class ContentChat extends Component {
     constructor(props) {
         super(props);
         this.state = {
             loading : false,
-            skipMessage : 0
+            skipMessage : 0,
+            limit : false
         }
     }
 
     scrollToBottom = () => {
         this.messagesEnd.scrollIntoView({ behavior: "auto" });
     }
+
+    scrollToTop = () => {
+        this.messageTop.scrollIntoView({behavior: 'auto'});
+    }
       
     componentDidMount() {
-        this.scrollToBottom();
         this.setState({
             skipMessage : this.props.data.length
         })
     }
       
     componentDidUpdate() {
-        this.scrollToBottom();
+        if(!isScroll){
+            this.scrollToBottom();
+        } else {
+            this.scrollToTop();
+        }
     }
 
     componentWillReceiveProps = (nextProps) => {
@@ -39,38 +48,57 @@ class ContentChat extends Component {
         })
     }
 
-    handleScrollLoad = (event) =>{
+    handleScrollLoad = (event) => {
         let element = event.target;
-        if(element.scrollTop === 0){
-          axios({
-            url:`${config.baseUrl}/message/read-more-message?skipMessage=${this.state.skipMessage}&targetId=${this.props.dataId}&chatInGroup=${this.props.isGroup}`,
-            method: 'get',
-          })
-          .then((res) => {
-              console.log(res.data)
-            //this.props.scrollListContacts(res.data)
-          })
-          .catch((error) => {
-            console.log(error);
+        if(element.scrollTop === 0 && !this.state.limit){
+            isScroll = true;
             this.setState({
-              loading : false
+                loading : true
             })
-          })
-          
+            axios({
+                url:`${config.baseUrl}/message/read-more-message?skipMessage=${this.state.skipMessage}&targetId=${this.props.dataId}&chatInGroup=${this.props.isGroup}`,
+                method: 'get',
+            })
+            .then((res) => {
+                    if(res.data.length > 0){
+                        this.props.scrollChangeListAllConversations(this.props.dataId, res.data);
+                        this.props.scrollChangeListGroupConversations(this.props.dataId, res.data);
+                        this.props.scrollChangeListUserConversations(this.props.dataId, res.data);
+                    }
+                    else {   
+                        this.setState({
+                            limit : true
+                        },()=>{
+                            message.error("No more messages to scroll",3);
+                        })
+                    }
+                    this.setState({
+                        loading : false,
+                    },()=>{
+                        isScroll = false;
+                    })
+            })
+            .catch((error) => {
+                console.log(error);
+                this.setState({
+                    loading : false,
+                    limit : true
+                })
+            })
         }
-      }
+    }
 
     render() {
         let user = this.props.user;
         let dataMessage = this.props.data;
         return (
             <div className="content-chat" onScroll={this.handleScrollLoad}>
-                <div style={{textAlign : 'center', marginTop: '15px'}}><Spin indicator={antIcon} spinning={this.state.loading}/></div>
                 <div id="style-chat" className="chat" data-chat="" tabIndex="2" >
+                    <div style={{textAlign : 'center', marginTop: '15px'}}><Spin indicator={antIcon} spinning={this.state.loading}/></div>
                     {dataMessage.length >0 ? dataMessage.map((item, index) => {
                         if(item.messageType === "text"){
                             return (
-                                <div key={index} className={"bubble " + (item.senderId == user._id ? "me" : "you")} >{item.text}
+                                <div key={index} className={"bubble " + (item.senderId == user._id ? "me" : "you")} ref={index == 1? (el) => { this.messageTop = el; } : null}>{item.text} 
                                     {item.senderId != user._id ? 
                                         <img src={`${config.baseUrl}/images/${item.sender.avatar}`} className="avatar-small" title={item.sender.name}></img>
                                         : null
@@ -81,7 +109,7 @@ class ContentChat extends Component {
                         }
                         else if(item.messageType === "image"){
                             return (
-                                <div key={index} className={(item.senderId == user._id ? "me" : "you") + " bubble image bubble-image-file"}>
+                                <div key={index} className={(item.senderId == user._id ? "me" : "you") + " bubble image bubble-image-file"} ref={index == 1? (el) => { this.messageTop = el; } : null}>
                                     {item.senderId != user._id ? 
                                         <img src={`${config.baseUrl}/images/${item.sender.avatar}`} className="avatar-small" title={item.sender.name}></img>
                                         : null
@@ -92,7 +120,7 @@ class ContentChat extends Component {
                         }
                         else if(item.messageType === "file"){
                             return (
-                                <div key={index} className={(item.senderId == user._id ? "me" : "you") + " bubble file bubble-image-file"}>
+                                <div key={index} className={(item.senderId == user._id ? "me" : "you") + " bubble file bubble-image-file"} ref={index == 1? (el) => { this.messageTop = el; } : null}>
                                     {item.senderId != user._id ? 
                                         <img src={`${config.baseUrl}/images/${item.sender.avatar}`} className="avatar-small" title={item.sender.name}></img>
                                         : null
@@ -125,6 +153,20 @@ function mapStateToProps(state) {
     };
 }
 
+function mapDispatchToProps(dispatch, props) {
+    return {
+        scrollChangeListAllConversations : (id, data) => {
+            dispatch(actions.scrollChangeListAllConversations(id, data));
+        },
+        scrollChangeListGroupConversations : (id, data) => {
+            dispatch(actions.scrollChangeListGroupConversations(id, data));
+        },   
+        scrollChangeListUserConversations : (id, data) => {
+            dispatch(actions.scrollChangeListUserConversations(id, data));
+        },
+    }
+}
+
 export default connect(
-    mapStateToProps,
+    mapStateToProps,mapDispatchToProps
 )(ContentChat);
