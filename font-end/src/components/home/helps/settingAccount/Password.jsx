@@ -17,27 +17,32 @@ class Password extends Component {
     }
     handleSubmit = (e) => {
         e.preventDefault();
-        let data = this.props.form.getFieldsValue();
-        data.id = this.props.id
-        axios({
-            url: `${config.baseUrl}/user/update/password`,
-            method : 'post',
-            data: data
-        })
-        .then((response)=>{
-            console.log(response)
-            if(response.status === 200){
-                message.success('Update password success!', 10);
-                this.setState({
-                    loading : false,
-                    updateUser: data
-                });
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            if(err) return ;
+            else {
+                let data = this.props.form.getFieldsValue();
+                data.id = this.props.id
+                axios({
+                    url: `${config.baseUrl}/user/update/password`,
+                    method : 'post',
+                    data: data
+                })
+                .then((response)=>{
+                    console.log(response)
+                    if(response.status === 200){
+                        message.success('Update password success!', 10);
+                        this.setState({
+                            loading : false,
+                            updateUser: data
+                        });
+                    }
+                })
+                .catch((error)=>{
+                    message.error(error.response.statusText, 10);
+                    this.props.form.resetFields();
+                })
             }
-        })
-        .catch((error)=>{
-            message.error(error.response.statusText, 10);
-            this.props.form.resetFields();
-        })
+        });
     };
     
     compareToFirstPassword = (rule, value, callback) => {

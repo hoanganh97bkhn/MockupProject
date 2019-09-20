@@ -268,6 +268,22 @@ export const addListUserConversations = (data) => {
     }
 }
 
+export const changeListUserConversations = (_id, data) => {
+    return {
+        type : types.CHANGE_LIST_USER_CONVERSATIONS,
+        _id,
+        data
+    }
+}
+
+export const scrollChangeListUserConversations = (_id, data) => {
+    return {
+        type : types.SCROLL_CHANGE_LIST_USER_CONVERSATIONS,
+        _id,
+        data
+    }
+}
+
 export const scrollListUserConversations = (data) => {
     return {
         type : types.SCROLL_LIST_USER_CONVERSATIONS,
@@ -298,6 +314,22 @@ export const addListGroupConversations = (data) => {
     }
 }
 
+export const changeListGroupConversations = (_id, data) => {
+    return {
+        type : types.CHANGE_LIST_GROUP_CONVERSATIONS,
+        _id,
+        data
+    }
+}
+
+export const scrollChangeListGroupConversations = (_id, data) => {
+    return {
+        type : types.SCROLL_CHANGE_LIST_GROUP_CONVERSATIONS,
+        _id,
+        data
+    }
+}
+
 export const scrollListGroupConversations = (data) => {
     return {
         type : types.SCROLL_LIST_GROUP_CONVERSATIONS,
@@ -312,18 +344,33 @@ export const removeListGroupConversations = (data) => {
     }
 }
 
-// all-conversation-
-
-export const getListAllConversations= (data) => {
+// all-conversation-with-messages
+export const getListAllConversations = (data) => {
     return {
         type : types.GET_LIST_ALL_CONVERSATIONS,
         data
     }
 }
 
-export const addListAllConversations= (data) => {
+export const addListAllConversations = (data) => {
     return {
         type : types.ADD_LIST_ALL_CONVERSATIONS,
+        data
+    }
+}
+
+export const changeListAllConversations = (_id, data) => {
+    return {
+        type : types.CHANGE_LIST_ALL_CONVERSATIONS,
+        _id,
+        data
+    }
+}
+
+export const scrollChangeListAllConversations = (_id, data) => {
+    return {
+        type : types.SCROLL_CHANGE_LIST_ALL_CONVERSATIONS,
+        _id,
         data
     }
 }
@@ -342,31 +389,107 @@ export const removeListAllConversations= (data) => {
     }
 }
 
-// all-conversation-with-messages
-export const getListAllConversationWithMessages= (data) => {
+// /** change list message when new message */
+
+// export const checkChangeListMessage = (data) => {
+//     return {
+//         type: types.CHECK_CHANGE_LIST_MESSAGE,
+        
+//         data 
+//     }
+// }
+
+/** chat message */
+
+export const addOnTyping = (data) => {
     return {
-        type : types.GET_LIST_ALL_CONVERSATION_WITH_MESSAGES,
+        type: types.ADD_ON_TYPING,
+        data 
+    }
+}
+
+export const removeOnTyping = (data) => {
+    return {
+        type: types.REMOVE_ON_TYPING,
+        data 
+    }
+}
+
+export const openModalCaller = (data) => {
+    return {
+        type : types.OPEN_MODAL_CALLER,
         data
     }
 }
 
-export const addListAllConversationWithMessages= (data) => {
+export const closeModalCaller= () => {
     return {
-        type : types.ADD_LIST_ALL_CONVERSATION_WITH_MESSAGES,
+        type : types.CLOSE_MODAL_CALLER,
         data
     }
 }
 
-export const scrollListAllConversationWithMessages= (data) => {
+export const openModalListener = (data) => {
     return {
-        type : types.SCROLL_LIST_ALL_CONVERSATION_WITH_MESSAGES,
+        type : types.OPEN_MODAL_LISTENER,
         data
     }
 }
 
-export const removeListAllConversationWithMessages= (data) => {
+export const closeModalListener = () => {
     return {
-        type : types.REMOVE_LIST_ALL_CONVERSATION_WITH_MESSAGES,
+        type : types.CLOSE_MODAL_LISTENER,
         data
+    }
+}
+
+//streamming
+export const openStream = (text, stream) => {
+    return {
+        type : types.OPEN_MODAL_STREAM,
+        data : stream,
+        text : text
+    }
+}
+
+export const closeStream = () => {
+    return {
+        type : types.CLOSE_MODAL_STREAM,
+    }
+}
+//ice turn server
+export const getICETurnServer = (data) => {
+    return {
+        type : types.GET_ICE_TURN_SERVER,
+        data
+    }
+}
+
+//online-offline
+export const setUserOnline = (data) => {
+    return {
+        type : types.SET_USER_ONLINE,
+        data
+    }
+}
+
+export const removeUserOnline = (data) => {
+    return {
+        type : types.REMOVE_ONLINE,
+        data
+    }
+}
+
+//MESSAGE from contact
+export const focusMessageFromContact = (data) => {
+    return {
+        type : types.FOCUS_MESSAGE_FROM_CONTACT,
+        data
+    }
+}
+
+export const removeFocusMessageFromContact = () => {
+    return {
+        type : types.REMOVE_FOCUS_MESSAGE_FROM_CONTACT,
     }
 }

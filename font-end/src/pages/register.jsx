@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import Input from './../components/form/Input';
+import Inputt from './../components/form/Input';
 import Checkbox from './../components/form/Checkbox';
 import NavBar from '../components/form/NavBar';
 import FacebookLogin from 'react-facebook-login';
 import * as actions from './../actions/index';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import {message, Modal, Input, Form, Button} from 'antd';
 import axios from 'axios';
 import config from './../config/index';
 
@@ -29,19 +30,15 @@ class register extends Component {
             arrayError : [],
             arraySuccess: [],
             loading: false,
+            visible : false,
+            btn_loading : false,
         }
     }
 
     componentDidMount = ()=>{
-        console.log(this.props.auth.isAuthenticated);
         if(this.props.auth.isAuthenticated) {
             this.props.history.push('/');
         }
-        // setTimeout(()=>{
-        //     this.setState({
-        //         modal: "open"
-        //     })
-        // },1500)
         this.setState({
             modal: "open"
         })
@@ -62,31 +59,30 @@ class register extends Component {
         }
     }
 
-    // componentWillReceiveProps(){
-    //     if(this.props.message.status === "error"){
-            
-    //         this.setState({
-    //             arrayError: this.props.message.message,
-    //             loading: false,
-    //         })
-    //     }
-    //     else {
-    //         this.setState({
-    //             arraySuccess: this.props.message.message,
-    //             loading: false
-    //         })
-    //     }
-    // }
-
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps = (nextProps)=>{
         if(nextProps.auth.isAuthenticated) {
-            this.props.history.push('/')
+            this.props.history.push('/');
         }
-        // if(nextProps.errors) {
-        //     this.setState({
-        //         errors: nextProps.errors
-        //     });
-        // }
+        if(nextProps.auth.type === "success") {
+            this.setState({
+                loading: false
+            },()=>{
+                message.success(nextProps.auth.message,5);
+            })
+        }
+        if(nextProps.auth.type === "error"){
+            this.setState({
+                loading: false,
+            },()=>{
+                if(typeof(nextProps.auth.message) == 'string'){
+                    message.error(nextProps.auth.message,5);
+                } else {
+                    nextProps.auth.message.forEach(element => {
+                        message.error(element,5);
+                    })
+                }
+            })
+        }
     }
 
     handleChangeLogin = (name, data) => {
@@ -185,9 +181,49 @@ class register extends Component {
         this.props.loginFB(data);
     }
 
+    showInputtForgot = () => {
+        this.setState({
+            visible : true
+        })
+    }
+
+    handleCancel = () => {
+        this.setState({
+            visible : false
+        })
+    }
+
+    handleSend = (e) =>{
+        e.preventDefault();
+        let data = this.props.form.getFieldsValue();
+        this.setState({
+            btn_loading : true
+        })
+        axios({
+            url:`${config.baseUrl}/account/forgotten`,
+            method: 'post',
+            data : data
+        })
+        .then((res)=>{
+            message.success(res.data, 5);
+            this.setState({
+                visible : false,
+                btn_loading : false
+            })
+        })
+        .catch((error)=>{
+            message.error("Account is not exist",3);
+            this.setState({
+                visible : false,
+                btn_loading : false
+            })
+        })
+    }
+
+
 
     render() {
-        // console.log(this.props.message)
+        const { getFieldDecorator } = this.props.form;
         return (
         <div className="register">
             <div className="container">
@@ -197,8 +233,8 @@ class register extends Component {
                         <form className="login-form" onSubmit={this.onSubmit}>
                             <button onClick={this.closeModal} type="button" className="close">&times;</button>
                             <h1>Login</h1>
-                            <Input onChangeData={this.handleChangeLogin} type={"email"} dataPlaceholder={"Email"} name={"email"}></Input>
-                            <Input onChangeData={this.handleChangeLogin} type={"password"} dataPlaceholder={"Password"} name={"password"}></Input>
+                            <Inputt onChangeData={this.handleChangeLogin} type={"email"} dataPlaceholder={"Email"} name={"email"}></Inputt>
+                            <Inputt onChangeData={this.handleChangeLogin} type={"password"} dataPlaceholder={"Password"} name={"password"}></Inputt>
                             <button type="submit" className="btn btn-primary logbtn" disabled={this.state.loading}>
                                 Login  
                                 {this.state.loading ? 
@@ -212,13 +248,13 @@ class register extends Component {
                                 callback={this.responseFacebook}
                                 cssClass="fb-login"
                                 icon="fa-facebook"
-                            />    
-                            {/* {this.state.arrayError.length>0 ? this.state.arrayError.map((item, index)=>(
-                                <div key={index} className="notification">{item}</div>
-                            )) : null} */}
+                            />   
                             
                             <div className="bottom-text">
                                 Don't have account? <a onClick={this.openRegister}>Register</a>
+                            </div>
+                            <div className="bottom-text" style={{marginTop : '5px'}}>
+                                <a href="#forgot-account" onClick={this.showInputtForgot}>Forgotten account?</a>
                             </div>
                         </form>
                     </div>
@@ -228,10 +264,10 @@ class register extends Component {
                         <form className="login-form" onSubmit={this.onSubmitRegister}>
                             <button onClick={this.closeModalRegister} type="button" className="close">&times;</button>
                             <h1>Register</h1>
-                            <Input onChangeData={this.handleChangeRegister} type={"text"} dataPlaceholder={"Nickname"} name={"nickname"}></Input>
-                            <Input onChangeData={this.handleChangeRegister} type={"email"} dataPlaceholder={"Email"} name={"email"} ></Input>
-                            <Input onChangeData={this.handleChangeRegister} type={"password"} dataPlaceholder={"Password"} name={"password"}></Input>
-                            <Input onChangeData={this.handleChangeRegister} type={"password"} dataPlaceholder={"Re-Password"} name={"password_confirmation"}></Input>
+                            <Inputt onChangeData={this.handleChangeRegister} type={"text"} dataPlaceholder={"Nickname"} name={"nickname"}></Inputt>
+                            <Inputt onChangeData={this.handleChangeRegister} type={"email"} dataPlaceholder={"Email"} name={"email"} ></Inputt>
+                            <Inputt onChangeData={this.handleChangeRegister} type={"password"} dataPlaceholder={"Password"} name={"password"}></Inputt>
+                            <Inputt onChangeData={this.handleChangeRegister} type={"password"} dataPlaceholder={"Re-Password"} name={"password_confirmation"}></Inputt>
                             <div className="gender">
                                 <Checkbox changeGender={this.handleChangeGender} name={"male"} title={"Male"} check={this.state.register.gender}></Checkbox>
                                 <Checkbox changeGender={this.handleChangeGender} name={"female"} title={"Female"} check={this.state.register.gender}></Checkbox>
@@ -256,6 +292,35 @@ class register extends Component {
                         </form>
                     </div>
                 </div>
+                <Modal
+                    title="Forgotten account"
+                    visible = {this.state.visible}
+                    footer = {[null, <Button key="1" type="danger" onClick={this.handleCancel}>Close</Button>]}
+                    closable = {false}
+                    destroyOnClose = {true}
+                >
+                    <Form onSubmit={this.handleSend}>
+                        <Form.Item label="E-mail">
+                        {getFieldDecorator('email', {
+                            rules: [
+                            {
+                                type: 'email',
+                                message: 'The input is not valid E-mail!',
+                            },
+                            {
+                                required: true,
+                                message: 'Please input your E-mail!',
+                            },
+                            ],
+                        })(<Input />)}
+                        </Form.Item>
+                        <Form.Item >
+                            <Button type="primary" htmlType="submit" loading={this.state.btn_loading}>
+                                Send
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </Modal>
             </div>
         </div>
         );
@@ -265,7 +330,7 @@ class register extends Component {
 const mapStateToProps = (state) => {
     return {
         auth: state.login,
-        message: state.register
+        // message: state.register
     }
 }
 
@@ -283,4 +348,4 @@ const mapDispatchToProps = (dispatch, props) => {
     }
   }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter (register));
+export default connect(mapStateToProps, mapDispatchToProps)(Form.create({ name: 'forgot'})(withRouter (register)));

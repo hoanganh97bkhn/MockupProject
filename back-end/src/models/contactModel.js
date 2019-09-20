@@ -109,6 +109,21 @@ ContactSchema.statics = {
   },
 
   /**
+   * get friends by userId
+   * @param {String} userId 
+   * @param {String} contactId 
+   */
+  getNewContacts(userId, contactId) {
+    return this.findOne({
+      $and: [
+        {"userId" : contactId},
+        {"contactId" : userId},
+        {'status' : true}
+      ]
+    }).exec();
+  },
+
+  /**
    * get contacts watting request
    * @param {*} userId 
    * @param {*} limit 
@@ -225,6 +240,42 @@ ContactSchema.statics = {
       ]
     }).sort({"createdAt": -1}).skip(skip).limit(limit).exec();
   },
+
+  updateWhenHasNewMessage (userId, contactId){
+    return this.update({
+      $or: [
+        {$and : [
+          {"userId" : contactId},
+          {"contactId" : userId},
+          {'status' : true}
+        ]},
+        {$and : [
+          {"userId" : userId},
+          {"contactId" : contactId},
+          {'status' : true}
+        ]},
+      ]
+    }, {
+      "updatedAt" : Date.now()
+    }).exec()
+  },
+
+  /**
+   * get friends by userId
+   * @param {String} userId 
+   */
+  getFriends(userId) {
+    return this.find({
+      $and: [
+        {$or:[
+          {"userId" : userId},
+          {"contactId" : userId},
+        ]},
+        {'status' : true}
+      ]
+    }).sort({"updatedAt": -1}).exec();
+  }
 };
+
 
 module.exports = mongoose.model("contact", ContactSchema);

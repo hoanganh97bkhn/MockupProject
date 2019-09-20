@@ -1,8 +1,8 @@
 import express from 'express';
 import passPort from 'passport';
 import initPassportJWT from './../controllers/passportController/local';
-import {home, auth, userInfo, contact, timer, notifi} from './../controllers/index';
-import {authValid} from './../validation/index';
+import {home, auth, userInfo, contact, message, timer, notifi, groupChat} from './../controllers/index';
+import {authValid, messageValid, findUserValid, GroupValid} from './../validation/index';
 
 
 //Init all passPort
@@ -24,6 +24,9 @@ let initRouters = (app) => {
   router.post("/login", auth.postLoginLocal);
   router.post("/facebook/login", auth.postLoginFb);
 
+  //fotgotten-account
+  router.post("/account/forgotten", auth.forgottenAccount);
+
   //update user
   router.post("/user/info/update",authLogin, userInfo.updateUser);
   router.post("/user/update/password",authLogin, userInfo.updatePassword);
@@ -39,6 +42,7 @@ let initRouters = (app) => {
   router.post("/contacts/readmore",authLogin, contact.readMoreContacts);
   router.post("/contacts-sent/readmore",authLogin, contact.readMoreContactsSent);
   router.post("/contacts-received/readmore",authLogin, contact.readMoreContactsReceived);
+  router.get('/contact/search-friends/:keyword', authLogin, findUserValid.findUserContact, contact.searchFriends)
 
   //home-get data
   router.get("/home/user",authLogin, home.getHome);
@@ -47,6 +51,23 @@ let initRouters = (app) => {
   router.get("/message/conversation/list", authLogin, home.getAllConversationItems);
   router.get("/message/image/list", authLogin, home.getAllImages);
   router.get("/message/file/list", authLogin, home.getAllFiles);
+
+  //message
+  router.post("/message/add-new-text-emoji", authLogin, messageValid.checkMessageLength, message.addNewTexEmoji );
+  router.post("/message/add-new-image", authLogin, message.addNewImage );
+  router.post("/message/add-new-file", authLogin, message.addNewFile);
+  router.get("/message/read-more-all-chat", authLogin, message.readMoreAllChat);
+  router.get("/message/read-more-user-chat", authLogin, message.readMoreUserChat);
+  router.get("/message/read-more-message", authLogin, message.readMoreMessage);
+  router.get('/message/search-messages/:keyword', authLogin, findUserValid.findUserContact, message.searchMessages);
+  router.get('/message/get-messages', authLogin, message.getMessages)
+
+  //add group chat
+  router.post("/group-chat/add-new", authLogin, GroupValid.addNewGroup, groupChat.addNewGroup);
+  router.get("/group-chat/list-member", authLogin, groupChat.listMembers);
+  router.put("/group-chat/add-memebers", authLogin, groupChat.addNewMember);
+  router.put("/group-chat/remove-memebers", authLogin, groupChat.removeMember);
+  router.put("/group-chat/leave-group", authLogin, groupChat.leaveGroup)
   
   //timer-notification
   router.put("/timer/count/notification-general/reset", authLogin, timer.resetCountNotifGeneral)

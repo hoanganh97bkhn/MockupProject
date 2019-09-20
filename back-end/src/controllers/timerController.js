@@ -1,5 +1,3 @@
-import UserModel from '../models/userModel';
-import ActiveAccountModel from '../models/activeAccount';
 import {timer} from './../services/index';
 
 let resetCountNotifGeneral = async(req, res) => {

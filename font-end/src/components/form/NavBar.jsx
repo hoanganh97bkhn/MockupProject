@@ -4,7 +4,7 @@ import brand from './../../image/brand.png'
 class NavBar extends Component {
   render() {
     return (
-      <div className="navbar">
+      <div className="navbar nav-register">
         <nav className="navbar navbar-expand-lg navbar-light">
             <a className="navbar-brand" href="#"><img src={brand}></img></a>
         </nav>

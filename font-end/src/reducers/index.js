@@ -11,15 +11,20 @@ import countContacts from './contacts/countContacts';
 import countContactsSent from './contacts/countContactsSent';
 import countContactsReceived from './contacts/countContactsReceived'
 import findUser from './contacts/findUser';
-import allConversations from './messages/allConversations';
 import groupConversations from './messages/groupConversations';
 import userConversations from './messages/userConversations';
-import allConversationWithMessages from './messages/allConversationWithMessages';
+import allConversations from './messages/allConversationWithMessages';
+import typing from './chat/typing';
+import chatVideo from "./chat/chatVideo";
+import stream from './chat/stream';
+import iceTurnServer from './chat/iceTurnServer';
+import userStatus from './status/userStatus';
+import focusMessage from './chat/focusMessage';
 import { combineReducers } from 'redux';
 
 const myReducer = combineReducers({
     user,
-    register ,
+    // register ,
     login ,
     socket ,
     addContact,
@@ -31,10 +36,15 @@ const myReducer = combineReducers({
     countContactsSent,
     countContactsReceived,
     findUser,
-    allConversations,
     userConversations,
     groupConversations,
-    allConversationWithMessages
+    allConversations,
+    typing,
+    chatVideo,
+    stream,
+    iceTurnServer,
+    userStatus,
+    focusMessage
 });
 
 export default myReducer;

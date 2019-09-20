@@ -3,7 +3,7 @@ import NotificationModel from './../models/notificationModel';
 import ActiveAccountModel from "./../models/activeAccount";
 import bcrypt from "bcrypt";
 import uuidv4 from "uuid/v4";
-import {transErrors, transSuccess, transMail} from './../../lang/vi';
+import {transErrors, transSuccess, transMail, transMailForgotten} from './../../lang/vi';
 import sendMail from './../config/mailer';
 import config from './../config/host';
 import jwt from 'jsonwebtoken';
@@ -37,8 +37,6 @@ let register =  (name, email, gender, password) => {
 
   let user = await UserModel.createNew(userItem);
 
-  //create accountTimer model
-  await ActiveAccountModel.createNew({'userId' : user._id});
 
   //notification active
   let notificationItem = {
@@ -68,6 +66,10 @@ let register =  (name, email, gender, password) => {
 
 let loginLocal = (email, password) => {
   return new Promise(async(resolve, reject) => {
+    let existUserFb = await UserModel.findByEmailFacebook(email);
+    if(existUserFb){
+      return reject('email đã được sử dụng cho tài khoản facebook');
+    }
     let user = await UserModel.findByEmail(email);
     if(!user){
       return reject(transErrors.login_failed);
@@ -85,7 +87,7 @@ let loginLocal = (email, password) => {
       email: user.local.email,
     }
     jwt.sign(payload, 'secret', {
-        expiresIn: 3600
+        expiresIn: '1d'
     }, (err, token) => {
         if(err) console.error('There is some error in token', err);
         else {
@@ -134,7 +136,7 @@ let loginFb = (data ) => {
       email: user.local.email,
     }
     jwt.sign(payload, 'secret', {
-        expiresIn: 3600
+        expiresIn: '1d'
     }, (err, token) => {
         if(err) console.error('There is some error in token', err);
         else {
@@ -160,9 +162,35 @@ let verifyAccount = (token) => {
   });
 };
 
+let forgottenAccount = (email) => {
+  return new Promise( async(resolve, reject) => {
+    let userByEmail = await UserModel.findByEmail(email);
+    if(!userByEmail){
+      return reject ("Email is not exist!")
+    }
+
+    let salt = bcrypt.genSaltSync(saltRounds);
+    let passString = Math.ceil(Math.random() * 1000000);
+    let password = bcrypt.hashSync(`admin${passString}`, salt);
+    await UserModel.findByIdAndUpdate(userByEmail._id,{'local.password':password});
+
+    //send email
+    sendMail(email, transMailForgotten.subject, transMailForgotten.template(`admin${passString}`))
+      .then(success => {
+        resolve("Password reset success! please go to email and confirm!");
+      })
+      .catch(async(error) => {
+        reject("Send email reject");
+      })
+
+    resolve(transSuccess.userCreated(user.local.email));
+    });
+}
+
 module.exports = {
   register,
   verifyAccount,
   loginLocal,
   loginFb,
+  forgottenAccount
 }

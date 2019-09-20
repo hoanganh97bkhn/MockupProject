@@ -13,17 +13,37 @@ let myReducer = (state = initialState,action) => {
 
     switch(action.type){
         case types.LOGIN_SUCCESS :
-            console.log(action)
             return {
                 ...state,
                 type: "success",
                 isAuthenticated: !isEmpty(action.payload),
-                user: action.payload
+                user: action.payload,
+                message : "Login success!"
             }
         case types.LOGIN_ERROR :
-            state.type = "error"
-            state.message = action.data.messageError;
-            return state; 
+            return {
+                ...state,
+                type: "error",
+                message : action.data
+            }
+        case types.REGISTER_SUCCESS :
+            return {
+                ...state,
+                type : "success",
+                message : "Register success, please go to email and confirm"
+            }
+        case types.REGISTER_ERROR :
+            return {
+                ...state,
+                type : "error",
+                message : action.data
+            }
+        case types.ERROR_SERVER :
+            return {
+                ...state,
+                type : "error",
+                message : action.data
+            }  
         case types.LOGOUT_SUCCESS:
             localStorage.removeItem('jwtToken');
             setAuthToken(false);

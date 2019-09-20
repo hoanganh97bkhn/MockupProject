@@ -25,12 +25,6 @@ class LeftMain extends Component {
           visible: true,
         });
     };
-    
-    handleOk = () => {
-        this.setState({
-            visible: false,
-        });
-    };
 
     handleCancel = () => {
         this.setState({
@@ -38,8 +32,8 @@ class LeftMain extends Component {
         });
     };
 
-    handleOpenChat = (item) => {
-        this.props.handleOpenChat(item)
+    handleOpenChat = (_id) => {
+        this.props.handleOpenChat(_id)
     }
 
     render() {
@@ -63,8 +57,11 @@ class LeftMain extends Component {
                 <Modal
                     title="Create Group Chat"
                     visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
+                    width = {'70vw'}
+                    maskClosable={false}
+                    footer = {[null, <Button key="1" type="danger" onClick={this.handleCancel}>Close</Button>]}
+                    destroyOnClose = {true}
+                    closable = {false}
                 >
                     <ModalCreateGroupChat/>
                 </Modal>

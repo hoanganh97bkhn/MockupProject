@@ -1,7 +1,6 @@
-import ActiveAccountModel from './../../models/activeAccount';
 import {pushSocketIdToArray, emitNotifyToArray, removeSocketIdFromArray} from './../../helpers/socketHelper';
 
-let addNewContact = (io) => {
+let addNewContact = (io)=> {
   let clients = {};
   io.on("connection", (socket) => {
 
@@ -24,13 +23,9 @@ let addNewContact = (io) => {
       }
     });
 
-    socket.on("disconnect", async()=>{
+    socket.on("disconnect", ()=>{
       //remove socketId
       clients = removeSocketIdFromArray(clients, currentUserId, socket);
-
-       //save active to database
-      await ActiveAccountModel.updateTimeOffline(socket.request.user._id);
-
     })
     console.log(clients);
   })

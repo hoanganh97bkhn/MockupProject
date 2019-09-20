@@ -7,7 +7,7 @@ class InfoContact extends Component {
     }
     render() {
         return (
-            <li className="_contactList">
+            <li className="_contactList" onClick={this.props.onClick}>
                 <div className="contactPanel">
                     <div className="user-avatar">
                         <img src={this.props.avatar}></img>

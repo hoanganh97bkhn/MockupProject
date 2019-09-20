@@ -4,6 +4,10 @@ export const transValidation = {
   gender_incorrect: "Ủa, tại sao trường giới tính lại bị sai?",
   password_incorrect: "Mật khẩu chứ ít nhất 8 ký tự, bao gổm kí tự và số",
   password_confirmation_incorrect: "Nhập lại mật khẩu chưa chính xác",
+  message_text_emoji_incorrect : "Error,message invalid",
+  keyword_find_user : 'error, keyword failed',
+  add_new_group_users_incorrect : 'The group must have at least 2 members',
+  add_new_group_name_incorrect : 'Group name error! '
 };
 
 export const transErrors = {
@@ -34,6 +38,17 @@ export const transMail = {
       <h2>Bạn nhận được email này vì đã đăng ký tài khoản trên ứng dụng Awesome Chat. </h2>
       <h3>Vui lòng click vào liên kết bên dưỡi để xác nhận kích hoạt tài khoản </h3>
       <h3><a href = ${linkVerify}>${linkVerify}</a></h3>
+    `
+  },
+  send_failed: "Có lỗi trong quá trình gửi email, vui lòng làm lại"
+}
+
+export const transMailForgotten = {
+  subject: "Awesome Chat:  Xác nhận lấy lại mật khẩu",
+  template: (password) => {
+    return `
+      <h2>Bạn nhận được email này vì đã quên mật khẩu trên ứng dụng Awesome Chat. </h2>
+      <h3>Mật khẩu mới của bạn là: <i>${password}</i> <br/> Để an toàn hãy thay đổi mật khẩu</h3>
     `
   },
   send_failed: "Có lỗi trong quá trình gửi email, vui lòng làm lại"

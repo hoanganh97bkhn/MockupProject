@@ -1,7 +1,5 @@
 import {validationResult} from "express-validator/check";
 import {auth} from "./../services/index";
-import passPort from 'passport'
-import {transSuccess, transErrors} from "./../../lang/vi";
 
 
 let postRegister = async(req, res) => {
@@ -61,16 +59,20 @@ let verifyAccount = async(req,res) => {
   }
 }
 
-// let checkLoggedOut = (req, res, next) => {
-//   if(req.isAuthenticated()){
-//     return res.redirect("/");
-//   }
-//   next();
-// }
+let forgottenAccount = async(req, res) => {
+  try {
+    let success = await auth.forgottenAccount(req.body.email);
+    return res.status(200).json(success);
+  }
+  catch(error){
+    return res.status(500).json(error);
+  }
+}
 
 module.exports = {
   postRegister,
   postLoginLocal,
   verifyAccount,
-  postLoginFb
+  postLoginFb,
+  forgottenAccount
 };

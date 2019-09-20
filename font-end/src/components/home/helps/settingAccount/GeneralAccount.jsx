@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Form, Icon, Input, Button, Select, Tooltip,Radio,message } from 'antd';
+import { Row, Col, Form, Icon, Input, Button, Select, Tooltip,Radio, message } from 'antd';
 import axios from 'axios';
 import config from './../../../../config/index';
 import avatar from './../../../../image/avatar-default.jpg'
@@ -24,7 +24,6 @@ class GeneralAccount extends Component {
         };
     }
     componentWillMount = ()=>{
-        console.log(this.props.user)
         if(this.props.user.avatar !== 'avatar-default.jpg')
             imagesUrl = `${config.baseUrl}/images/`+ this.props.user.avatar;
         else imagesUrl = avatar;
@@ -37,13 +36,21 @@ class GeneralAccount extends Component {
         let reader = new FileReader();
         let file = e.target.files[0];
         if(file){
-            reader.readAsDataURL(file);
-            reader.onloadend = () => {
+            if(file.type != "image/png" && file.type != "image/jpeg"){
+                message.error('error file type', 5);
+            }
+            else if(file.size >= 1048576){
+                message.error('error file size', 5);
+            }
+            else{
+                reader.readAsDataURL(file);
+                reader.onloadend = () => {
                 this.props.imagePreviewUrl(reader.result);
                 this.setState({
                     fileimages: file,
                     imagePreviewUrl:  reader.result,
                 });
+            }
             }
         }
     }
@@ -68,7 +75,6 @@ class GeneralAccount extends Component {
             data: formData
         })
         .then((response)=>{
-            console.log(response)
             if(response.status === 200){
                 message.success('Update success!', 10);
                 this.setState({
@@ -81,7 +87,6 @@ class GeneralAccount extends Component {
             }
         })
         .catch((error)=>{
-            console.log(error)
             message.error("Server error!", 10);
         })
 

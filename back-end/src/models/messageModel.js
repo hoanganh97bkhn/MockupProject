@@ -9,12 +9,12 @@ let messageSchema = new Schema({
   messageType : String,
   sender: {
     id: String,
-    nickname: String,
+    name: String,
     avatar: String,
   },
   receiver: {
     id: String,
-    nickname: String,
+    name: String,
     avatar: String
   },
   text: String,
@@ -36,10 +36,10 @@ messageSchema.statics = {
   /**
    * get messages
    * @param {*} senderId 
-   * @param {*} receiverId 
+   * @param {*} receiverId //id contact
    * @param {*} limit 
    */
-  getMessages(senderId, receiverId, limit){
+  getMessagesInPersonal(senderId, receiverId, limit){
     return this.find({
       $or: [
         {$and: [
@@ -51,7 +51,15 @@ messageSchema.statics = {
           {"receiverId" : senderId},
         ]}
       ]
-    }).sort({"createAt" : 1}).limit(limit).exec();
+    }).sort({"createdAt" : -1}).limit(limit).exec();
+  },
+  /**
+   * get Message in group
+   * @param {*} receiverId id groupchat
+   * @param {*} limit 
+   */
+  getMessagesInGroup(receiverId, limit){
+    return this.find({"receiverId" : receiverId},).sort({"createdAt" : -1}).limit(limit).exec();
   },
 
   getAllImages(senderId, receiverId){
@@ -68,7 +76,7 @@ messageSchema.statics = {
           {"messageType" : MESSAGE_TYPES.IMAGE}
         ]}
       ]
-    }).sort({"createAt" : 1}).exec();
+    }).sort({"createdAt" : -1}).exec();
   },
 
   getAllFiles(senderId, receiverId){
@@ -85,7 +93,26 @@ messageSchema.statics = {
           {"messageType" : MESSAGE_TYPES.FILE}
         ]}
       ]
-    }).sort({"createAt" : 1}).exec();
+    }).sort({"createdAt" : -1}).exec();
+  },
+
+  readMoreMessageInPersonal(senderId, receiverId, skip, limit){
+    return this.find({
+      $or: [
+        {$and: [
+          {"senderId" : senderId},
+          {"receiverId" : receiverId},
+        ]},
+        {$and: [
+          {"senderId" : receiverId},
+          {"receiverId" : senderId},
+        ]}
+      ]
+    }).sort({"createdAt" : -1}).skip(skip).limit(limit).exec();
+  },
+
+  readMoreMessageInGroup(receiverId, skip, limit){
+    return this.find({"receiverId" : receiverId},).sort({"createdAt" : -1}).skip(skip).limit(limit).exec();
   },
 }
 
