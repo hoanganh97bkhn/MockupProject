@@ -1,7 +1,6 @@
 import NotificationModel from './../models/notificationModel';
 import UserModel from "./../models/userModel";
 
-
 /**
  * get notification when refesh page, limit 10 items/1
  * @param {String} currentUserId 

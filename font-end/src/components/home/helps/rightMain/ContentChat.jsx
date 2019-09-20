@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Icon, Spin, message} from 'antd';
+import {Icon, Spin, message, Empty} from 'antd';
 import axios from 'axios';
 import config from './../../../../config/index';
 import typingImage from './../../../../image/typing.gif';
@@ -35,10 +35,11 @@ class ContentChat extends Component {
     }
       
     componentDidUpdate() {
-        if(!isScroll){
-            this.scrollToBottom();
-        } else {
+        if(isScroll){
             this.scrollToTop();
+        }
+        else {
+            this.scrollToBottom();
         }
     }
 
@@ -50,41 +51,44 @@ class ContentChat extends Component {
 
     handleScrollLoad = (event) => {
         let element = event.target;
-        if(element.scrollTop === 0 && !this.state.limit){
-            isScroll = true;
-            this.setState({
-                loading : true
-            })
-            axios({
-                url:`${config.baseUrl}/message/read-more-message?skipMessage=${this.state.skipMessage}&targetId=${this.props.dataId}&chatInGroup=${this.props.isGroup}`,
-                method: 'get',
-            })
-            .then((res) => {
-                    if(res.data.length > 0){
-                        this.props.scrollChangeListAllConversations(this.props.dataId, res.data);
-                        this.props.scrollChangeListGroupConversations(this.props.dataId, res.data);
-                        this.props.scrollChangeListUserConversations(this.props.dataId, res.data);
-                    }
-                    else {   
+        let dataMessage = this.props.data;
+        if(dataMessage.length > 8){
+            if(element.scrollTop === 0 && !this.state.limit){
+                isScroll = true;
+                this.setState({
+                    loading : true
+                })
+                axios({
+                    url:`${config.baseUrl}/message/read-more-message?skipMessage=${this.state.skipMessage}&targetId=${this.props.dataId}&chatInGroup=${this.props.isGroup}`,
+                    method: 'get',
+                })
+                .then((res) => {
+                        if(res.data.length > 0){
+                            this.props.scrollChangeListAllConversations(this.props.dataId, res.data);
+                            this.props.scrollChangeListGroupConversations(this.props.dataId, res.data);
+                            this.props.scrollChangeListUserConversations(this.props.dataId, res.data);
+                        }
+                        else {   
+                            this.setState({
+                                limit : true
+                            },()=>{
+                                message.error("No more messages to scroll",3);
+                            })
+                        }
                         this.setState({
-                            limit : true
+                            loading : false,
                         },()=>{
-                            message.error("No more messages to scroll",3);
+                            isScroll = false;
                         })
-                    }
+                })
+                .catch((error) => {
+                    console.log(error);
                     this.setState({
                         loading : false,
-                    },()=>{
-                        isScroll = false;
+                        limit : true
                     })
-            })
-            .catch((error) => {
-                console.log(error);
-                this.setState({
-                    loading : false,
-                    limit : true
                 })
-            })
+            }
         }
     }
 
@@ -131,7 +135,7 @@ class ContentChat extends Component {
                                 </div>
                             )
                         }
-                    }) : null}
+                    }) : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
                     {this.props.isTyping ? 
                         <div className="bubble image bubble-image-file you bubble-typing-gif">
                             <img src={typingImage} ></img>

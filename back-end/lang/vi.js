@@ -42,3 +42,14 @@ export const transMail = {
   },
   send_failed: "Có lỗi trong quá trình gửi email, vui lòng làm lại"
 }
+
+export const transMailForgotten = {
+  subject: "Awesome Chat:  Xác nhận lấy lại mật khẩu",
+  template: (password) => {
+    return `
+      <h2>Bạn nhận được email này vì đã quên mật khẩu trên ứng dụng Awesome Chat. </h2>
+      <h3>Mật khẩu mới của bạn là: <i>${password}</i> <br/> Để an toàn hãy thay đổi mật khẩu</h3>
+    `
+  },
+  send_failed: "Có lỗi trong quá trình gửi email, vui lòng làm lại"
+}

@@ -6,7 +6,7 @@ import _ from 'lodash';
 import fsExtra from 'fs-extra';
 
 
-const LIMIT_CONVERSATION_TAKEN = 15;
+const LIMIT_CONVERSATION_TAKEN = 10;
 const LIMIT_MESSAGES_TAKEN = 15;
 
 let getAllConversationItems = (currentUserId) => {
@@ -464,17 +464,83 @@ let readMoreMessage = (currentUserId, skipMessage, targetId, chatInGroup) => {
     try {
       //message in group
       if(chatInGroup){
-        let getMessages = await MessageModel.model.readMoreMessageInGroup(targetId, skipMessage, LIMIT_MESSAGES_TAKEN);
+        let getMessages = await MessageModel.model.readMoreMessageInGroup(targetId, skipMessage, 10);
         getMessages = _.reverse(getMessages);
         return resolve(getMessages);
       }
       // message in personal
-      let getMessages = await MessageModel.model.readMoreMessageInPersonal(currentUserId, targetId, skipMessage, LIMIT_MESSAGES_TAKEN);
+      let getMessages = await MessageModel.model.readMoreMessageInPersonal(currentUserId, targetId, skipMessage, 10);
       getMessages = _.reverse(getMessages);
       return resolve(getMessages);
 
     } catch (error) {
       reject(error);
+    }
+  })
+}
+
+let getMessages = (currentUserId, skipUser, skipGroup, limit) => {
+  return new Promise (async(resolve, reject) => {
+    try {
+      let contacts = await ContactModel.readMoreContacts(currentUserId, skipUser, limit);
+      let userConversationsPromise = contacts.map(async(contact) => {
+        if(contact.contactId == currentUserId){
+          let getUserContact = await UserModel.getNormalUserDataById(contact.userId);
+          getUserContact.updatedAt = contact.updatedAt;
+          return getUserContact;
+        }
+        else {
+          let getUserContact = await UserModel.getNormalUserDataById(contact.contactId);
+          getUserContact.updatedAt = contact.updatedAt;
+          return getUserContact;
+        }
+      });
+      let userConversations = await Promise.all(userConversationsPromise);
+
+      let groupConversations = await ChatGroupModel.readMoreChatGroups(currentUserId, skipGroup, limit);
+      let allConversations = userConversations.concat(groupConversations);
+      
+      allConversations = _.sortBy(allConversations, (item) => {
+        return -item.updatedAt;
+      })
+
+      /**get message for userConversations */
+      let userConversationsWithMessagesPromise = userConversations.map(async(conversation) => {
+        let getMessages = await MessageModel.model.getMessagesInPersonal(currentUserId, conversation._id, LIMIT_MESSAGES_TAKEN);
+
+        conversation = conversation.toObject();
+        conversation.messages = _.reverse(getMessages);
+        return conversation
+      });
+
+      let userConversationsWithMessages = await Promise.all(userConversationsWithMessagesPromise);
+      userConversationsWithMessages = _.sortBy(userConversationsWithMessages, (item) => {
+        return -item.updatedAt;
+      })
+
+      /**get message for groupConversations */
+      let groupConversationsWithMessagesPromise = groupConversations.map(async(conversation) => {
+        let getMessages = await MessageModel.model.getMessagesInGroup(conversation._id, LIMIT_MESSAGES_TAKEN);
+
+        conversation = conversation.toObject();
+        conversation.messages = _.reverse(getMessages);
+        return conversation
+      });
+
+      let groupConversationsWithMessages = await Promise.all(groupConversationsWithMessagesPromise);
+      groupConversationsWithMessages = _.sortBy(groupConversationsWithMessages, (item) => {
+        return -item.updatedAt;
+      })
+
+      let allConversationsWithMessages = userConversationsWithMessages.concat(groupConversationsWithMessages)
+      allConversationsWithMessages = _.sortBy(allConversationsWithMessages, (item) => {
+        return -item.updatedAt;
+      })
+
+      resolve({userConversationsWithMessages, groupConversationsWithMessages, allConversationsWithMessages});
+    }
+    catch (error) {
+      reject(error)
     }
   })
 }
@@ -489,5 +555,6 @@ module.exports = {
   readMoreAllChat,
   readMoreUserChat,
   readMoreGroupChat,
-  readMoreMessage
+  readMoreMessage,
+  getMessages
 }

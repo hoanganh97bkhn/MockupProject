@@ -1,6 +1,5 @@
 import UserModel from '../models/userModel';
 import bcrypt from "bcrypt";
-import fs from 'fs-extra';
 
 let updateUser =  (req, form) => {
   return new Promise(async(resolve, reject)=>{

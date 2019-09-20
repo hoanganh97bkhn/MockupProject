@@ -1,4 +1,4 @@
-import {message} from './../services/index';
+import {message, contact, groupChat} from './../services/index';
 import {validationResult} from "express-validator/check";
 import formidable from 'formidable';
 import fsExtra from 'fs-extra';
@@ -166,6 +166,61 @@ let readMoreMessage = async(req, res)=>{
   }
 }
 
+let searchMessages = async(req, res)=>{
+  let errorArr = [];
+  let validationErrors = validationResult(req);
+  if(!validationErrors.isEmpty()){
+    let errors = Object.values(validationErrors.mapped());
+    erros.forEach(item => {
+      errorArr.push(item.msg);
+    });
+
+  return res.status(500).send(errorArr)
+  }
+
+  try{
+    let currentUserId = req.user._id;
+    let keyword = req.params.keyword;
+
+    let users = await contact.searchFriends(currentUserId, keyword);
+    let groups = await groupChat.searchGroups(currentUserId, keyword);
+    
+    let searchMessages = users.concat(groups);
+    return res.status(200).send(searchMessages);
+  }
+  catch(error){
+    res.status(500).send(error)
+  }
+}
+
+let getMessages = async(req, res)=>{
+  try {
+    let limit = 5;
+    let skipUser = +(req.query.skipUser);
+    let skipGroup = +(req.query.skipGroup);
+    let id= req.query.id;
+    let newAllConversation;
+
+    while(true){
+      newAllConversation = await message.getMessages(req.user._id, skipUser, skipGroup, limit);
+      if(!newAllConversation.allConversationsWithMessages.length > 0){
+        break;
+      }
+      let pos = newAllConversation.allConversationsWithMessages.map((i=>{
+        return i._id.toString();
+      })).indexOf(id);
+      if(pos >=0) break;
+      else {
+        limit +=5
+      }
+    }
+      
+    res.status(200).send(newAllConversation)
+  } catch (error){
+    res.status(500).send(error)
+  }
+}
+
 module.exports = {
   addNewTexEmoji,
   addNewImage,
@@ -173,5 +228,7 @@ module.exports = {
   readMoreAllChat,
   readMoreUserChat,
   readMoreGroupChat,
-  readMoreMessage
+  readMoreMessage,
+  searchMessages,
+  getMessages
 }

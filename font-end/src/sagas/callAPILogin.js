@@ -16,7 +16,6 @@ function* loginFlow(action){
   try {
     const response = yield call(loginApi,action.data); 
     const data = response.data;
-    console.log(data);
     if(response.status === 200){
       const {token} = data;
       localStorage.setItem('jwtToken', token);

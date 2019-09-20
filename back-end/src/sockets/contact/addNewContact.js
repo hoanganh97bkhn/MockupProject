@@ -1,4 +1,3 @@
-import ActiveAccountModel from './../../models/activeAccount';
 import {pushSocketIdToArray, emitNotifyToArray, removeSocketIdFromArray} from './../../helpers/socketHelper';
 
 let addNewContact = (io)=> {

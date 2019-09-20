@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { user } from '../services';
 
 let Schema = mongoose.Schema;
 
@@ -67,6 +66,15 @@ chatGroupSchema.statics = {
     return this.find({
       "members" : {$elemMatch : {"userId" : userId}}
     }).sort({"updatedAt" : -1}).skip(skip).limit(limit).exec();
+  },
+
+  searchGroups(userId, keyword){
+    return this.find({
+      $and : [
+        {"members" : {$elemMatch : {"userId" : userId}}},
+        {"name": {"$regex": new RegExp(keyword, "i")}}
+      ]
+    },{_id : 1, name : 1, avatar : 1, usersAmount : 1}).sort({'updatedAt' : -1}).exec();
   }
 }
 

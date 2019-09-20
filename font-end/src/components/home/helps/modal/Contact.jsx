@@ -44,8 +44,17 @@ class Contact extends Component {
     this.state={
       skip : 0,
       displaySpiner : 'none',
-      visible: false 
+      visible: false ,
+      skipUser : 0,
+      skipGroup : 0
     }
+  }
+
+  componentWillMount = () => {
+    this.setState({
+      skipUser : this.props.userConversations.length,
+      skipGroup : this.props.groupConversations.length,
+    })
   }
 
   componentDidMount = () => {
@@ -56,13 +65,51 @@ class Contact extends Component {
 
   componentWillReceiveProps = (nextProps) => {
     this.setState({
-      skip : nextProps.contacts.length
+      skip : nextProps.contacts.length,
+      skipUser : this.props.userConversations.length,
+      skipGroup : this.props.groupConversations.length,
     })
   }
 
   handleMessage = (item) => {
-    this.props.focusMessageFromContact(item._id);
-    this.props.closeModal();
+    let pos = this.props.allConversations.map((i=>{
+      return i._id
+    })).indexOf(item._id)
+    
+    if(pos >=0 ){
+      this.props.focusMessageFromContact(item._id);
+      this.props.closeModal();
+    }
+    else{
+      axios({
+        url:`${config.baseUrl}/message/get-messages?skipUser=${this.state.skipUser}&skipGroup=${this.state.skipGroup}&id=${item._id}`,
+        method: 'get',
+      })
+      .then((res) => {
+          if(res.data.allConversationsWithMessages.length === 0){
+              message.error('Find message not found!',3.5);
+          }
+          else {
+              this.props.scrollListAllConversations(res.data.allConversationsWithMessages);
+              this.props.scrollListGroupConversations(res.data.groupConversationsWithMessages);
+              this.props.scrollListUserConversations(res.data.userConversationsWithMessages);
+              let pos = this.props.allConversations.map((i=>{
+                return i._id
+              })).indexOf(item._id)
+              
+              if(pos >=0 ){
+                this.props.focusMessageFromContact(item._id);
+                this.props.closeModal();
+              }
+              else {
+                message.error('Find message not found!',3.5);
+              }
+          }
+      })
+      .catch((error) => {
+          message.error('Find message not found!',3.5);
+      })
+    }
   }
 
   showDeleteConfirm = (item, props)=>{
@@ -82,7 +129,7 @@ class Contact extends Component {
 
   handleScrollLoad = (event) =>{
     let element = event.target;
-    if(element.scrollHeight - element.scrollTop === 476){
+    if(element.scrollHeight - element.scrollTop === 300){
       this.setState({
         displaySpiner : 'block'
       })
@@ -94,7 +141,7 @@ class Contact extends Component {
         }
       })
       .then((res) => {
-        this.props.scrollListContacts(res.data)
+        this.props.scrollListContacts(res.data);
         this.setState({
           displaySpiner : 'none'
         })
@@ -141,6 +188,9 @@ const mapStateToProps = (state) => {
   return {
     socket: state.socket,
     contacts : state.contacts,
+    allConversations : state.allConversations,
+    groupConversations : state.groupConversations,
+    userConversations : state.userConversations,
   }
 }
 const mapDispatchToProps = (dispatch, props) => {
@@ -165,6 +215,15 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     focusMessageFromContact : (data) => {
       dispatch(actions.focusMessageFromContact(data));
+    },
+    scrollListAllConversations : (data) => {
+      dispatch(actions.scrollListAllConversations(data));
+    },
+    scrollListGroupConversations : (data) => {
+        dispatch(actions.scrollListGroupConversations(data));
+    },
+    scrollListUserConversations : (data) => {
+        dispatch(actions.scrollListUserConversations(data));
     }
   }
 }

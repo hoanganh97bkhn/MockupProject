@@ -157,7 +157,19 @@ class ModalCreateGroupChat extends Component {
                 });
             }
         });
-        
+    }
+
+    handleRemove = (item, index) => {
+        this.setState({
+            listMembers : this.state.listMembers.filter((ite, i) => {
+                if( i === index) return false;
+                return true
+            }),
+            arrayIds : this.state.arrayIds.filter((ite, i) => {
+                if( i === index) return false;
+                return true
+            })
+        })
     }
 
     render() {
@@ -198,21 +210,23 @@ class ModalCreateGroupChat extends Component {
                         </div>
                     </Col>
                     <Col className='right-list-members list-data' span={14} offset={1}>
-                        {this.state.listMembers.length > 0 ? 
-                            this.state.listMembers.map((item, index)=>{
-                            return (
-                                <InfoContact 
-                                clickSuccess={()=>this.handleAddToGroupChat(item, index)} 
-                                key={index} avatar={`${config.baseUrl}/images/${item.avatar}`} 
-                                titleSuccess={"Add to group"} 
-                                titleDanger = {""} 
-                                nickname={item.nickname} 
-                                address={item.address}>
+                        <div className="create-group">
+                            {this.state.listMembers.length > 0 ? 
+                                this.state.listMembers.map((item, index)=>{
+                                return (
+                                    <InfoContact 
+                                    clickDanger={()=>this.handleRemove(item, index)} 
+                                    key={index} avatar={`${config.baseUrl}/images/${item.avatar}`} 
+                                    titleSuccess={""} 
+                                    titleDanger = {"Delete"} 
+                                    nickname={item.nickname} 
+                                    address={item.address}>
 
-                                </InfoContact>
-                            )
-                            })  
-                        : null }
+                                    </InfoContact>
+                                )
+                                })  
+                            : null }
+                        </div>
                         {this.state.listMembers.length >1 ? 
                             <Form onSubmit={this.handleCreateGroup}>
                                 <div style={{marginTop : '25px'}}>

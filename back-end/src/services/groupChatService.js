@@ -99,10 +99,30 @@ let leaveGroup = (groupId, memeberId) => {
   })
 }
 
+let searchGroups = (currentUserId, keyword) => {
+  return new Promise(async(resolve, reject)=>{
+    try {
+      let groups = await chatGroupModel.searchGroups(currentUserId, keyword);
+      let newGroups = groups.map(item=>{
+        return {
+          _id : item._id,
+          nickname : item.name,
+          address : `${item.usersAmount} members`,
+          avatar : item.avatar,
+        }
+      });
+      resolve(await Promise.all(newGroups));
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
 module.exports = {
   addNewGroup,
   listMembers,
   addNewMember,
   removeMember,
-  leaveGroup
+  leaveGroup,
+  searchGroups
 }

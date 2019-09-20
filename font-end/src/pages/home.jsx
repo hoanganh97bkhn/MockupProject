@@ -28,9 +28,9 @@ class home extends Component {
             this.props.getListUserConversations(res.data.userConversationsWithMessages);
             this.props.getListGroupConversations(res.data.groupConversationsWithMessages);
             this.props.getListAllConversations(res.data.allConversationsWithMessages);
-            this.setState({
-                id_chat_room : res.data.allConversationsWithMessages.length>0 ? res.data.allConversationsWithMessages[0]._id : '' 
-            })
+            // this.setState({
+            //     id_chat_room : res.data.allConversationsWithMessages.length>0 ? res.data.allConversationsWithMessages[0]._id : '' 
+            // })
         })
         .catch((error) => {
             console.log(error)

@@ -4,6 +4,7 @@ import avatar from './../../image/avatar-default.jpg';
 import ContactManager from './modal/ContactManager';
 import Notification from './modal/Notification';
 import SettingAccount from './modal/SettingAccount';
+import SearchMessage from './../home/helps/searchMessage/SearchMessage';
 import * as actions from './../../actions/index';
 import {connect} from 'react-redux';
 import axios from 'axios';
@@ -27,29 +28,27 @@ const { Search } = Input;
 let imageUrl = avatar;
 
 class NavBar extends Component {
-  constructor(props) {
-    super(props);
-
-    this.toggle = this.toggle.bind(this);
-    this.state = {
-        isOpen: false,
-        openModalContact : false,
-        openModalSetting : false,
-        user : {
-            avatar:'avatar-default.jpg',
-            nickname : 'nickname'
-        },
-        imagePreview : '',
-        openModalNotifi: false,
-        badge: 0,
-        listNotifiFromServer: [],
-        countGeneralNotif : 0,
-        countContactNotif : 0,
-    };
-  }
-    componentDidMount = () => {
-        
+    constructor(props) {
+        super(props);
+        this.toggle = this.toggle.bind(this);
+        this.state = {
+            isOpen: false,
+            openModalContact : false,
+            openModalSetting : false,
+            user : {
+                avatar:'avatar-default.jpg',
+                nickname : 'nickname'
+            },
+            imagePreview : '',
+            openModalNotifi: false,
+            badge: 0,
+            listNotifiFromServer: [],
+            countGeneralNotif : 0,
+            countContactNotif : 0,
+            keyMessage : ""
+        };
     }
+    
     componentWillMount = () => {
         axios({
             url:`${config.baseUrl}/home/user`,
@@ -73,6 +72,18 @@ class NavBar extends Component {
             console.log(error)
         }) 
     }
+    handleSearchConversation = (value)=>{
+        this.setState({
+            keyMessage : value
+        })
+    }
+
+    resetKeyWord = ()=>{
+        this.setState({
+            keyMessage : ""
+        })
+    }
+
     handleReadMore = (data) => {
         this.setState({
             listNotifiFromServer : this.state.listNotifiFromServer.concat(data)
@@ -182,6 +193,7 @@ class NavBar extends Component {
         this.props.logoutUser({});
         window.location.href = '/login-register'
     }
+
     render() {
         const listDataNotification = this.props.addContactSocket.concat(this.state.listNotifiFromServer);
         const countGeneralNotif = this.props.notifiSocket + this.state.countGeneralNotif;
@@ -195,26 +207,27 @@ class NavBar extends Component {
                     <div className="input-search-navbar">
                         <Search
                             placeholder="input search text"
-                            onSearch={value => console.log(value)}
+                            onSearch={value => this.handleSearchConversation(value)}
                             style={{ width: 300 }}
                         />
+                        <SearchMessage keyword={this.state.keyMessage} resetKeyWord={this.resetKeyWord}/>
                     </div>
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                         <NavItem onClick={this.handleReloadHome}>
                             <NavLink ><i className="fa fa-home "></i></NavLink>
                         </NavItem>
-                        <Badge count={countContactNotif}>
+                        <Badge count={this.props.countContactsReceived}>
                             <NavItem onClick={this.openModalContact}>
                                 <NavLink ><i className="fa fa-user-plus"></i></NavLink>
                             </NavItem>
                         </Badge>
-                        <Badge count={countGeneralNotif}>
+                        {/* <Badge count={countGeneralNotif}>
                             <NavItem className="icon-notification" onClick={this.openNotification}>
                                 <NavLink ><i className="fa fa-bell "></i></NavLink>
                                 <Notification readMore = {this.handleReadMore} listSocket={listDataNotification} open={this.state.openModalNotifi} markAllAsRead = {this.markAllAsRead}></Notification>
                             </NavItem>
-                        </Badge>
+                        </Badge> */}
                         <UncontrolledDropdown nav inNavbar>
                             <DropdownToggle nav caret>
                                 {this.state.imagePreview != '' ? 
@@ -258,7 +271,8 @@ const mapStateToProps = (state) => {
         auth: state.login,
         notifiSocket: state.countNotifi,
         addContactSocket: state.addContact,
-        socket: state.socket
+        socket: state.socket,
+        countContactsReceived: state.countContactsReceived,
   }
 }
 

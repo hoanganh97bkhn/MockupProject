@@ -24,7 +24,7 @@ import { combineReducers } from 'redux';
 
 const myReducer = combineReducers({
     user,
-    register ,
+    // register ,
     login ,
     socket ,
     addContact,

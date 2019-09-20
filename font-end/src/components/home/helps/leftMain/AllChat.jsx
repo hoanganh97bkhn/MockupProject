@@ -111,7 +111,7 @@ class AllChat extends Component {
                 {this.props.allConversations.length> 0 ? this.props.allConversations.map((item, index) => {
                     if(!item.members) return (
                         <a key ={index}  className={"room-chat"}>
-                            <li className={item._id == this.state.idFocus? "person active" : "person"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item._id)}}>
+                            <li className={item._id == this.state.idFocus? "person active" : "person"} onClick={(e) => {this.handleOpenChat(item._id)}}>
                                 <div className="left-avatar">
                                     <div className={`dot ${this.state.userStatus.indexOf(item._id) > -1 ? 'online' : ''}`}></div>
                                     <img src={`${config.baseUrl}/images/${item.avatar}`} alt="" className={`${this.state.userStatus.indexOf(item._id) > -1 ? 'avatar-online' : ''}`}></img>
@@ -126,7 +126,7 @@ class AllChat extends Component {
                     )
                     else return (
                         <a key ={index}  className={"room-chat"}>
-                            <li className={item._id == this.state.idFocus? "person group-chat active" : "person group-chat"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item._id)}}>
+                            <li className={item._id == this.state.idFocus? "person group-chat active" : "person group-chat"} onClick={(e) => {this.handleOpenChat(item._id)}}>
                                 <div className="left-avatar">
                                     <div  className={`dot ${this.state.userStatus.indexOf(item._id) > -1 ? 'online' : ''}`}></div>
                                     <img src={`${config.baseUrl}/images/${item.avatar}`} alt="" className={`${this.state.userStatus.indexOf(item._id) > -1 ? 'avatar-online' : ''}`}></img>

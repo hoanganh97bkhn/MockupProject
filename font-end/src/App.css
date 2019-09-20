@@ -937,7 +937,6 @@ h6{
 /* */
 .list-data {
   height: 40vh;
-  overflow-y: auto;
 }
 
 ul.people{
@@ -947,4 +946,50 @@ ul.people{
 .spiner-all-chat{
   position: absolute;
   right: 50%;
+}
+
+ul.contactList{
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+.input-search-navbar{
+  position: relative;
+}
+.list-message-after-search{
+  position: absolute;
+  top: 35px;
+  z-index: 99999;
+  width: 100%;
+  background: white;
+  box-shadow: 0px 0px 11px 1px rgba(0,0,0,0.75);
+  border-radius: 5px;
+}
+.list-message-after-search ._contactList{
+  cursor: pointer;
+}
+.list-message-after-search ._contactList:hover{
+  background-color: #eceff1
+}
+.list-message-after-search .contactPanel .user-avatar img{
+  width: 30px;
+  height: 30px;
+}
+.list-message-after-search .user-name{
+  height: 20px;
+}
+.list-message-after-search .contactPanel .user-address{
+  margin-top: 0px;
+  margin-left: 40px;
+}
+.list-message-after-search .contactPanel .user-avatar{
+  margin-top: 3px;
+}
+.right-list-members.list-data .create-group{
+  max-height: 270px;
+  overflow-y: auto;
+}
+.right-list-members.list-data .group-more {
+  max-height: 300px;
+  overflow-y: auto;
 }

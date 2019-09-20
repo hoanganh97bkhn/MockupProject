@@ -160,7 +160,6 @@ class ModalMore extends Component {
     }
 
     render() {
-        console.log(this.state.listMembers)
         return (
             <div>
                 <Row>
@@ -199,21 +198,23 @@ class ModalMore extends Component {
                     </Col>
                     <Col className='right-list-members list-data' span={14} offset={1}>
                         <div style={{marginBottom :'20px', fontWeight : 'bold'}}>{this.state.listMembers.length} members</div>
-                        {this.state.listMembers.length > 0 ? 
-                            this.state.listMembers.map((item, index)=>{
-                            return (
-                                <InfoContact 
-                                    clickDanger={()=> this.handleRemove(item, index)}
-                                    key={index} avatar={`${config.baseUrl}/images/${item.avatar}`} 
-                                    titleSuccess={""} 
-                                    titleDanger = {this.props.isAdmin && index !=0 ? "Delete" : ""}
-                                    nickname={item.nickname} 
-                                    address={item.address}>
+                        <div className="group-more">
+                            {this.state.listMembers.length > 0 ? 
+                                this.state.listMembers.map((item, index)=>{
+                                return (
+                                    <InfoContact 
+                                        clickDanger={()=> this.handleRemove(item, index)}
+                                        key={index} avatar={`${config.baseUrl}/images/${item.avatar}`} 
+                                        titleSuccess={""} 
+                                        titleDanger = {this.props.isAdmin && index !=0 ? "Delete" : ""}
+                                        nickname={item.nickname} 
+                                        address={item.address}>
 
-                                </InfoContact>
-                            )
-                            })  
-                        : null }
+                                    </InfoContact>
+                                )
+                                })  
+                            : null }
+                        </div>
                     </Col>
                 </Row>
             </div>

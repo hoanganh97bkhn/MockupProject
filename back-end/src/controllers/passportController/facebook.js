@@ -1,7 +1,6 @@
 import passPort from 'passport';
 import passPortFacebook from 'passport-facebook';
 import UserModel from "./../../models/userModel";
-import ActiveAccountModel from "./../../models/activeAccount";
 import {transErrors, transSuccess} from "./../../../lang/vi";
 
 let facebookStrategy = passPortFacebook.Strategy;
@@ -39,7 +38,6 @@ let initPassportFacebook = () => {
         }
       };
       let newUser = await UserModel.createNew(newUserItem);
-      await ActiveAccountModel.createNew({'userId' : newUser._id});
       return done(null, newUser, req.flash("success", transSuccess.loginSuccess(newUser.nickname)));
 
     } catch(error){

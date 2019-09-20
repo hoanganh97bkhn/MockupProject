@@ -3,7 +3,6 @@ import UserModel from './../models/userModel';
 import NotificationModel from './../models/notificationModel';
 import ActiveAccountModel from './../models/activeAccount';
 import _ from "lodash";
-import { rejects } from 'assert';
 
 const LIMIT_NUMBER_TAKEN = 5;
 

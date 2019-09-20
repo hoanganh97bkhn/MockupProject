@@ -24,6 +24,9 @@ let initRouters = (app) => {
   router.post("/login", auth.postLoginLocal);
   router.post("/facebook/login", auth.postLoginFb);
 
+  //fotgotten-account
+  router.post("/account/forgotten", auth.forgottenAccount);
+
   //update user
   router.post("/user/info/update",authLogin, userInfo.updateUser);
   router.post("/user/update/password",authLogin, userInfo.updatePassword);
@@ -56,6 +59,8 @@ let initRouters = (app) => {
   router.get("/message/read-more-all-chat", authLogin, message.readMoreAllChat);
   router.get("/message/read-more-user-chat", authLogin, message.readMoreUserChat);
   router.get("/message/read-more-message", authLogin, message.readMoreMessage);
+  router.get('/message/search-messages/:keyword', authLogin, findUserValid.findUserContact, message.searchMessages);
+  router.get('/message/get-messages', authLogin, message.getMessages)
 
   //add group chat
   router.post("/group-chat/add-new", authLogin, GroupValid.addNewGroup, groupChat.addNewGroup);
