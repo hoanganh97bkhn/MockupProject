@@ -207,7 +207,7 @@ class RightWrite extends Component {
                 });
             })
             .catch((error)=>{
-                message.error("Server error",5)
+                message.error("Server error, please focus to conversation!",5)
             })
         }
 
@@ -232,7 +232,7 @@ class RightWrite extends Component {
                 });
             })
             .catch((error)=>{
-                message.error("Server error",5)
+                message.error("Server error, please focus to conversation!",5)
             })
         }
     }

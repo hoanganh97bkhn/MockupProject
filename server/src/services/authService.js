@@ -37,6 +37,8 @@ let register =  (name, email, gender, password) => {
 
   let user = await UserModel.createNew(userItem);
 
+  //create accountTimer model
+  await ActiveAccountModel.createNew({'userId' : user._id});
 
   //notification active
   let notificationItem = {
