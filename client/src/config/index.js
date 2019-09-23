@@ -1,5 +1,5 @@
 const config = {
-    baseUrl: 'http://localhost:3001',
-  };
+    baseUrl: 'https://awesome-chat-mock-project.herokuapp.com/',
+};
   
-  export default config;
+export default config;
