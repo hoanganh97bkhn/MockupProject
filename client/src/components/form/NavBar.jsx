@@ -6,7 +6,7 @@ class NavBar extends Component {
     return (
       <div className="navbar nav-register">
         <nav className="navbar navbar-expand-lg navbar-light">
-            <a className="navbar-brand" href="#"><img src={brand}></img></a>
+            <a className="navbar-brand" href="#home"><img src={brand} alt="logo-brand"></img></a>
         </nav>
         <div className="row">
             <div className="col">

@@ -1,5 +1,4 @@
 import user from './user/user';
-import register from './login/register';
 import login from './login/login';
 import socket from './socket';
 import addContact from './otherContacts/addContact';
@@ -24,7 +23,6 @@ import { combineReducers } from 'redux';
 
 const myReducer = combineReducers({
     user,
-    // register ,
     login ,
     socket ,
     addContact,

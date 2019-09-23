@@ -3,7 +3,6 @@ import RightWrite from './helps/rightMain/RightWrite';
 import ContentChat from './helps/rightMain/ContentChat';
 import RightTop from './helps/rightMain/RightTop';
 import { connect } from 'react-redux';
-import config from './../../config/index';
 
 class RightMain extends Component {
     constructor(props){

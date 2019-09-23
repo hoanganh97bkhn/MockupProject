@@ -54,7 +54,7 @@ class GroupChat extends Component {
         method: 'get',
       })
       .then((res) => {
-            if(res.data.groupConversationsWithMessages.length == 0){
+            if(res.data.groupConversationsWithMessages.length === 0){
                 this.setState({
                     displaySpiner : 'none',
                     isLimit : true
@@ -97,7 +97,7 @@ class GroupChat extends Component {
             {listData.map( (item, index) => {
                 return (
                     <a key ={index}  href = {"#uid_" + item._id} className="room-chat">
-                    <li className={item._id == this.state.idFocus? "person group-chat active" : "person group-chat"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item._id)}}>
+                    <li className={item._id === this.state.idFocus? "person group-chat active" : "person group-chat"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item._id)}}>
                         <div className="left-avatar">
                             <div className={`dot ${this.state.userStatus.indexOf(item._id) > -1 ? 'online' : ''}`}></div>
                             <img src={`${config.baseUrl}/images/${item.avatar}`} alt="" className={`${this.state.userStatus.indexOf(item._id) > -1 ? 'avatar-online' : ''}`}></img>

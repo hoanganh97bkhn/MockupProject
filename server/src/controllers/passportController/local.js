@@ -2,7 +2,6 @@ import passPort from 'passport';
 import passPortJWT from 'passport-jwt';
 import UserModel from "./../../models/userModel";
 
-
 let opts = {};
 let JWTStrategy = passPortJWT.Strategy;
 let ExtractJWT = passPortJWT.ExtractJwt;

@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 
 class Checkbox extends Component {
-    constructor(props){
-        super(props)
-    }
-
+    
     handleChangeRadio =(e) => {
         this.props.changeGender(e.target.value)
     }

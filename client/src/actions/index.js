@@ -1,5 +1,4 @@
 import * as types from './../constants/ActionTypes';
-import setAuthToken from './../setAuthToken';
 let data = [];
 
 //user

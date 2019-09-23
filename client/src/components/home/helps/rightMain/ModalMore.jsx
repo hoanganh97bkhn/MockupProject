@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Input, Spin, Icon, Col, Row , Empty, Button, Modal, notification, message} from 'antd';
+import { Input, Spin, Icon, Col, Row , Empty, notification, message} from 'antd';
 import { max } from 'moment';
 import config from './../../../../config/index';
 import InfoContact from './../../helps/modal/InfoContact';
 import axios from 'axios';
-import * as actions from './../../../../actions/index';
 
 const {Search} = Input;
 const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -206,7 +205,7 @@ class ModalMore extends Component {
                                         clickDanger={()=> this.handleRemove(item, index)}
                                         key={index} avatar={`${config.baseUrl}/images/${item.avatar}`} 
                                         titleSuccess={""} 
-                                        titleDanger = {this.props.isAdmin && index !=0 ? "Delete" : ""}
+                                        titleDanger = {this.props.isAdmin && index !== 0 ? "Delete" : ""}
                                         nickname={item.nickname} 
                                         address={item.address}>
 

@@ -94,8 +94,6 @@ class WaitConfirmation extends Component {
                       <InfoContact 
                         key={index} 
                         avatar={urlImage(item.avatar)} 
-                        titleSuccess={item.titleSuccess} 
-                        titleDanger={item.titleDanger} 
                         nickname={item.nickname} 
                         address={item.address} 
                         titleSuccess={""} 

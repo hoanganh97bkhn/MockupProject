@@ -251,7 +251,7 @@ class register extends Component {
                             />   
                             
                             <div className="bottom-text">
-                                Don't have account? <a onClick={this.openRegister}>Register</a>
+                                Don't have account? <a onClick={this.openRegister} href={"#register"}>Register</a>
                             </div>
                             <div className="bottom-text" style={{marginTop : '5px'}}>
                                 <a href="#forgot-account" onClick={this.showInputtForgot}>Forgotten account?</a>
@@ -287,7 +287,7 @@ class register extends Component {
                             ))}
                             
                             <div className="bottom-text">
-                                Do have account? <a onClick={this.openLogin}>Sing up</a>
+                                Do have account? <a onClick={this.openLogin} href={"#login"}>Sing up</a>
                             </div>
                         </form>
                     </div>

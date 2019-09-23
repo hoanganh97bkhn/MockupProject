@@ -32,7 +32,7 @@ class SearchMessage extends Component {
 
     componentWillReceiveProps = (nextProps) => {
         let keyword = nextProps.keyword;
-        if(keyword != ''){
+        if(keyword !== ''){
             axios({
                 url: `${config.baseUrl}/message/search-messages/${keyword}`,
                 method: 'get',

@@ -36,7 +36,7 @@ class GeneralAccount extends Component {
         let reader = new FileReader();
         let file = e.target.files[0];
         if(file){
-            if(file.type != "image/png" && file.type != "image/jpeg"){
+            if(file.type !== "image/png" && file.type !== "image/jpeg"){
                 message.error('error file type', 5);
             }
             else if(file.size >= 1048576){
@@ -143,7 +143,7 @@ class GeneralAccount extends Component {
                 <Col id="seting-profile" md={6}>
                     <div className="text-center" id="div-update-avatar">
                         <div id="image-edit-profile">
-                            <img src={this.state.imagePreviewUrl != '' ? this.state.imagePreviewUrl : imagesUrl} className="avatar img-circle" alt="avatar"></img>
+                            <img src={this.state.imagePreviewUrl !== '' ? this.state.imagePreviewUrl : imagesUrl} className="avatar img-circle" alt="avatar"></img>
                         </div>
                         <h6> Upload new image...</h6>
                         <input onChange={this.handleImageChange} type="file" key={this.state.keyInput} className="form-control" id="input-change-avatar" name="avatar"></input><br></br>

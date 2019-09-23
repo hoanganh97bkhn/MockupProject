@@ -6,7 +6,7 @@ import 'emoji-mart/css/emoji-mart.css';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './setAuthToken';
 import {connect} from 'react-redux';
-import { BrowserRouter, Route, Redirect, Link } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect} from 'react-router-dom';
 import * as actions from './actions/index';
 import Home from './pages/home';
 import Register from './pages/register';
@@ -149,9 +149,6 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         addListUserConversations : (data) => {
             dispatch(actions.addListUserConversations(data));
-        },
-        addListAllConversations : (data) => {
-            dispatch(actions.addListAllConversations(data))
         },
         addListAllConversations : (data) => {
             dispatch(actions.addListAllConversations(data))

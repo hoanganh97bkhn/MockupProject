@@ -1,6 +1,5 @@
 import * as types from './../../constants/ActionTypes'
 
-
 let initialState = [];
 
 let myReducer = (state = initialState, action) => {
@@ -13,14 +12,15 @@ let myReducer = (state = initialState, action) => {
           state = state.filter(item => {
             return item._id !== action.data._id
           })
-          return state
+          return state;
         case types.MARK_ALL_READ:
           state = state.map(item => {
             return {
               ...item,
               isRead : true,
             }
-          })
+          });
+          return state;
         default : 
           return state;
     }

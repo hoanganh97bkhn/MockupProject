@@ -1,7 +1,6 @@
 import {validationResult} from "express-validator/check";
 import {auth} from "./../services/index";
 
-
 let postRegister = async(req, res) => {
   let errorArr = [];
   let successArr = [];
@@ -35,7 +34,6 @@ let postLoginLocal = async(req,res)=>{
 }
 
 let postLoginFb = async(req, res)=>{
-  console.log(req.body)
   try {
     let loginSuccess = await auth.loginFb(req.body);
     return res.status(200).json(loginSuccess);

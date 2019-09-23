@@ -102,9 +102,9 @@ class ContentChat extends Component {
                     {dataMessage.length >0 ? dataMessage.map((item, index) => {
                         if(item.messageType === "text"){
                             return (
-                                <div key={index} className={"bubble " + (item.senderId == user._id ? "me" : "you")} ref={index == 1? (el) => { this.messageTop = el; } : null}>{item.text} 
-                                    {item.senderId != user._id ? 
-                                        <img src={`${config.baseUrl}/images/${item.sender.avatar}`} className="avatar-small" title={item.sender.name}></img>
+                                <div key={index} className={"bubble " + (item.senderId === user._id ? "me" : "you")} ref={index === 1? (el) => { this.messageTop = el; } : null}>{item.text} 
+                                    {item.senderId !== user._id ? 
+                                        <img src={`${config.baseUrl}/images/${item.sender.avatar}`} className="avatar-small" title={item.sender.name} alt={"file-avatar"}></img>
                                         : null
                                     }
                                     
@@ -113,20 +113,20 @@ class ContentChat extends Component {
                         }
                         else if(item.messageType === "image"){
                             return (
-                                <div key={index} className={(item.senderId == user._id ? "me" : "you") + " bubble image bubble-image-file"} ref={index == 1? (el) => { this.messageTop = el; } : null}>
-                                    {item.senderId != user._id ? 
-                                        <img src={`${config.baseUrl}/images/${item.sender.avatar}`} className="avatar-small" title={item.sender.name}></img>
+                                <div key={index} className={(item.senderId === user._id ? "me" : "you") + " bubble image bubble-image-file"} ref={index === 1? (el) => { this.messageTop = el; } : null}>
+                                    {item.senderId !== user._id ? 
+                                        <img src={`${config.baseUrl}/images/${item.sender.avatar}`} className="avatar-small" title={item.sender.name} alt={"file-images"}></img>
                                         : null
                                     }
-                                    <img src={`data:${item.file.contentType}; base64, ${bufferToBase64(item.file.data)}`} className="show-image-chat" ></img>
+                                    <img src={`data:${item.file.contentType}; base64, ${bufferToBase64(item.file.data)}`} className="show-image-chat" alt={"file-avatar"}></img>
                                 </div>
                             )
                         }
                         else if(item.messageType === "file"){
                             return (
-                                <div key={index} className={(item.senderId == user._id ? "me" : "you") + " bubble file bubble-image-file"} ref={index == 1? (el) => { this.messageTop = el; } : null}>
-                                    {item.senderId != user._id ? 
-                                        <img src={`${config.baseUrl}/images/${item.sender.avatar}`} className="avatar-small" title={item.sender.name}></img>
+                                <div key={index} className={(item.senderId === user._id ? "me" : "you") + " bubble file bubble-image-file"} ref={index === 1? (el) => { this.messageTop = el; } : null}>
+                                    {item.senderId !== user._id ? 
+                                        <img src={`${config.baseUrl}/images/${item.sender.avatar}`} className="avatar-small" title={item.sender.name} alt={"file-avatar"}></img>
                                         : null
                                     }
                                     <a href={`data:${item.file.contentType}; base64, ${bufferToBase64(item.file.data)}`} download={ item.file.fileName}>
@@ -138,7 +138,7 @@ class ContentChat extends Component {
                     }) : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
                     {this.props.isTyping ? 
                         <div className="bubble image bubble-image-file you bubble-typing-gif">
-                            <img src={typingImage} ></img>
+                            <img src={typingImage} alt={"file-images"}></img>
                         </div>
                     : null}
                     

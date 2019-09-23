@@ -80,6 +80,6 @@ let initRouters = (app) => {
 
   return app.use('/',router);
 
- }
+}
 
  module.exports = initRouters;

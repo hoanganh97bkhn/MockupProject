@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-import { Modal, Button, Tabs, Icon, Input } from 'antd';
+import { Modal, Tabs, Icon } from 'antd';
 import GeneralAccount from './../helps/settingAccount/GeneralAccount';
 import Password from './../helps/settingAccount/Password';
 const { TabPane } = Tabs;
 
 class SettingAccount extends Component {
-  constructor(props){
-    super(props);
-  }
 
   render() {
     return (

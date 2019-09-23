@@ -8,7 +8,6 @@ import {connect} from 'react-redux';
 import axios from 'axios';
 import config from './../../../config/index';
 import * as actions from './../../../actions/index';
-import { tsImportEqualsDeclaration } from '@babel/types';
 
 
 const { TabPane } = Tabs;

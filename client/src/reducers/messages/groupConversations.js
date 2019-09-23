@@ -1,6 +1,4 @@
 import * as types from './../../constants/ActionTypes';
-import _ from 'lodash';
-
 
 let initialState = []
 

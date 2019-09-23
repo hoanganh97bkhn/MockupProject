@@ -129,10 +129,11 @@ class VideoCall extends Component {
                     </div>
                     }
                     <div style={{textAlign : 'center', marginTop : '15px'}}>
-                        <a className="lgscreenphone phonelink" 
+                        <a  href = {"#uid_"}
+                            className="lgscreenphone phonelink" 
                             onClick={this.handleCancel} 
                             title="Cancel">
-                            <img className="phoneicon" src="https://freeiconshop.com/wp-content/uploads/edd/cross-flat.png"></img>
+                            <img className="phoneicon" src="https://freeiconshop.com/wp-content/uploads/edd/cross-flat.png" alt={""}></img>
                         </a>
                     </div>
             </Modal>

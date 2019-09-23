@@ -54,7 +54,7 @@ class UserChat extends Component {
         method: 'get',
       })
       .then((res) => {
-            if(res.data.userConversationsWithMessages.length == 0){
+            if(res.data.userConversationsWithMessages.length === 0){
                 this.setState({
                     displaySpiner : 'none',
                     isLimit : true
@@ -79,7 +79,7 @@ class UserChat extends Component {
 }
 
   componentWillReceiveProps = (nextProps) => {
-    if(nextProps.focusMessage != "") {
+    if(nextProps.focusMessage !== "") {
       this.props.handleOpenChat(nextProps.focusMessage);
       this.setState({
           idFocus : nextProps.focusMessage
@@ -107,7 +107,7 @@ class UserChat extends Component {
                 { listData.map( (item, index) => {
                     return (
                         <a key ={index}  href = {"#uid_" + item._id} className="room-chat">
-                            <li className={item._id == this.state.idFocus? "person active" : "person"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item._id)}}>
+                            <li className={item._id === this.state.idFocus? "person active" : "person"} data-chat={item._id} onClick={(e) => {this.handleOpenChat(item._id)}}>
                                 <div className="left-avatar">
                                     <div className={`dot ${this.state.userStatus.indexOf(item._id) > -1 ? 'online' : ''}`}></div>
                                     <img src={`${config.baseUrl}/images/${item.avatar}`} alt="" className={`${this.state.userStatus.indexOf(item._id) > -1 ? 'avatar-online' : ''}`}></img>

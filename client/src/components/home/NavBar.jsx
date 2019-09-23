@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import brand from './../../image/brand.png';
 import avatar from './../../image/avatar-default.jpg';
 import ContactManager from './modal/ContactManager';
-import Notification from './modal/Notification';
 import SettingAccount from './modal/SettingAccount';
 import SearchMessage from './../home/helps/searchMessage/SearchMessage';
 import * as actions from './../../actions/index';
@@ -22,7 +21,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem } from 'reactstrap';
-import {Icon, Input, Dropdown, Badge} from 'antd';
+import {Icon, Input, Badge} from 'antd';
 
 const { Search } = Input;
 let imageUrl = avatar;
@@ -195,14 +194,14 @@ class NavBar extends Component {
     }
 
     render() {
-        const listDataNotification = this.props.addContactSocket.concat(this.state.listNotifiFromServer);
-        const countGeneralNotif = this.props.notifiSocket + this.state.countGeneralNotif;
+        // const listDataNotification = this.props.addContactSocket.concat(this.state.listNotifiFromServer);
+        // const countGeneralNotif = this.props.notifiSocket + this.state.countGeneralNotif;
         const countContactNotif = this.props.notifiSocket + this.state.countContactNotif;
         return (
             <div className="navbar-main">
                 <Navbar className="container-fluid" light expand="md">
                     <NavbarBrand href="/">
-                        <img src={brand}></img></NavbarBrand>
+                        <img src={brand} alt={"brand-logo"}></img></NavbarBrand>
                     <NavbarToggler onClick={this.toggle} />
                     <div className="input-search-navbar">
                         <Search
@@ -230,7 +229,7 @@ class NavBar extends Component {
                         </Badge> */}
                         <UncontrolledDropdown nav inNavbar>
                             <DropdownToggle nav caret>
-                                {this.state.imagePreview != '' ? 
+                                {this.state.imagePreview !== '' ? 
                                     <img className="avatar-small" src = {this.state.imagePreview} alt="avatarPreview"></img> 
                                     :
                                     <img className="avatar-small" src = {imageUrl} alt="avatar-default"></img>

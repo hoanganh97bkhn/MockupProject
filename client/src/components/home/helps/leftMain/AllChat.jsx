@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from './../../../../actions/index';
 import config from './../../../../config/index';
-import _ from 'lodash';
 import axios from 'axios';
 import {Spin, Icon} from 'antd';
 import {covertTimestampToHumanTime} from './../../../../helpers/clientHelper';
@@ -57,7 +56,7 @@ class AllChat extends Component {
             method: 'get',
           })
           .then((res) => {
-                if(res.data.allConversationsWithMessages.length == 0){
+                if(res.data.allConversationsWithMessages.length === 0){
                     this.setState({
                         displaySpiner : 'none',
                         isLimit : true
@@ -83,7 +82,7 @@ class AllChat extends Component {
     }
 
     componentWillReceiveProps = (nextProps) => {
-        if(nextProps.focusMessage != "") {
+        if(nextProps.focusMessage !== "") {
             this.props.handleOpenChat(nextProps.focusMessage);
             this.setState({
                 idFocus : nextProps.focusMessage
@@ -110,8 +109,8 @@ class AllChat extends Component {
             <ul id="list-chat" className="people no-padding-start" onScroll={this.handleScrollLoad}>
                 {this.props.allConversations.length> 0 ? this.props.allConversations.map((item, index) => {
                     if(!item.members) return (
-                        <a key ={index}  className={"room-chat"}>
-                            <li className={item._id == this.state.idFocus? "person active" : "person"} onClick={(e) => {this.handleOpenChat(item._id)}}>
+                        <a key ={index}  className={"room-chat"} href={`#uid_${item._id}`}>
+                            <li className={item._id === this.state.idFocus? "person active" : "person"} onClick={(e) => {this.handleOpenChat(item._id)}}>
                                 <div className="left-avatar">
                                     <div className={`dot ${this.state.userStatus.indexOf(item._id) > -1 ? 'online' : ''}`}></div>
                                     <img src={`${config.baseUrl}/images/${item.avatar}`} alt="" className={`${this.state.userStatus.indexOf(item._id) > -1 ? 'avatar-online' : ''}`}></img>
@@ -125,8 +124,8 @@ class AllChat extends Component {
                         </a>
                     )
                     else return (
-                        <a key ={index}  className={"room-chat"}>
-                            <li className={item._id == this.state.idFocus? "person group-chat active" : "person group-chat"} onClick={(e) => {this.handleOpenChat(item._id)}}>
+                        <a key ={index}  className={"room-chat"} href={`#uid_${item._id}`}>
+                            <li className={item._id === this.state.idFocus? "person group-chat active" : "person group-chat"} onClick={(e) => {this.handleOpenChat(item._id)}}>
                                 <div className="left-avatar">
                                     <div  className={`dot ${this.state.userStatus.indexOf(item._id) > -1 ? 'online' : ''}`}></div>
                                     <img src={`${config.baseUrl}/images/${item.avatar}`} alt="" className={`${this.state.userStatus.indexOf(item._id) > -1 ? 'avatar-online' : ''}`}></img>

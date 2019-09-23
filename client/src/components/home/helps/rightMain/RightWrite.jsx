@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import {Input, message, Modal} from 'antd'
-import { Picker, Emoji } from 'emoji-mart';
+import { Picker } from 'emoji-mart';
 import * as actions from './../../../../actions/index';
 import config from './../../../../config/index';
 import ModalCallVideo from './ModalCallVideo';
@@ -87,7 +87,7 @@ class RightWrite extends Component {
         let reader = new FileReader();
         let file = e.target.files[0];
         if(file){
-            if(file.type != "image/png" && file.type != "image/jpeg" && file.type != "image/jpg"){
+            if(file.type !== "image/png" && file.type !== "image/jpeg" && file.type !== "image/jpg"){
                 message.error('error file type', 5);
             }
             else if(file.size >= 1048576){
@@ -255,6 +255,7 @@ class RightWrite extends Component {
     
     render() {
         return (
+            this.props.dataId === "" ? <div></div> : 
             <div className="write">
                 <div className="row">
                     <div className="col-2 action-chat">
@@ -269,7 +270,7 @@ class RightWrite extends Component {
                             <div className="row">
                                 {this.state.imageDataPrview === '' ? null : 
                                 <div className="img-prev col-auto">
-                                    <img className="avatar-prev" src={this.state.imageDataPrview}></img>
+                                    <img className="avatar-prev" src={this.state.imageDataPrview} alt="avatar"></img>
                                     <button type="button" onClick={this.resetImgData} className="remove-img close">×</button>
                                 </div>
                                 }
