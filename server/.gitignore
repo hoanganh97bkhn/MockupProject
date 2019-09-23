@@ -60,5 +60,3 @@ typings/
 
 # env example
 .env.sh
-
-yarn.lock*
