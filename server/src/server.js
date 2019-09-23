@@ -42,6 +42,11 @@ configSocketIo(io);
 //Init sockets
 initSockets(io);
 
-server.listen(process.env.APP_PORT, () => {
-  console.log(`The server listening on port ${process.env.APP_PORT}!`);
+// server.listen(process.env.APP_PORT, () => {
+//   console.log(`The server listening on port ${process.env.APP_PORT}!`);
+// });
+
+server.listen(process.env.PORT, () => {
+  console.log(`The server listening on port ${process.env.PORT}!`);
 });
+
