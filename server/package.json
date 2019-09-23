@@ -1,5 +1,8 @@
 {
   "name": "mockup_project",
+  "engines": {
+    "node" : "10.x"
+  },
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/hoanganh97bkhn/MockupProject.git",
