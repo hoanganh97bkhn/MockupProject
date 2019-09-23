@@ -48,7 +48,6 @@ export const videoChat = async(socket, props) => {
   let getPeerId = "";
   const peer = new Peer({
     key : "peerjs",
-    host: "peerjs-server-trungquandev.herokuapp.com",
     secure: true,
     port : 443,
     config : iceServerList 
