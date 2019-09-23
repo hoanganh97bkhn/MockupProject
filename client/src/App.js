@@ -27,7 +27,7 @@ class App extends Component {
     componentWillReceiveProps(nextProps) {
         if(nextProps.login.type === "success") {
             if(localStorage.jwtToken){
-                this.socket = io('http://localhost:3001',{
+                this.socket = io('https://awesome-chat-mock-project.herokuapp.com/',{
                     query: "token=" + localStorage.jwtToken
                 });
                 this.props.setupSocket(this.socket);
