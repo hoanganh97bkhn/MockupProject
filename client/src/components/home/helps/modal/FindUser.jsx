@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import InfoContact from'./InfoContact';
-import avatar_default from './../../../../image/avatar-default.jpg'; 
-import { Input } from 'antd';
+import { Input, Spin, Icon, Empty } from 'antd';
 import { max } from 'moment';
 import axios from 'axios';
 import {connect} from 'react-redux';
@@ -9,11 +8,7 @@ import config from './../../../../config/index';
 import * as actions from './../../../../actions/index'
 
 const {Search} = Input;
-let urlImage = (avatar) => {
-  if(avatar !== "avatar-default.jpg")
-    return `${config.baseUrl}/images/${avatar}`
-  else return avatar_default
-}
+const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 
 class FindUser extends Component {
   constructor(props){
@@ -22,11 +17,17 @@ class FindUser extends Component {
       listUser : [],
       listAddContact : [],
       titleSuccess : "Add Friend",
-      titleDanger : ""
+      titleDanger : "",
+      loading : false,
+      isEmpty : false,
     }
   }
 
   handleSearch = (value) => {
+    this.setState({
+      loading : true,
+      isEmpty : false
+    })
     let data = {
       key : value
     }
@@ -44,11 +45,16 @@ class FindUser extends Component {
         )
       })
       this.setState({
-        listUser: data
+        listUser: data,
+        loading : false,
+        isEmpty : data.length > 0 ? false : true
       })
     })
     .catch((error)=>{
-      console.log(error.response)
+      this.setState({
+        loading : false,
+        isEmpty : true
+      })
     })
   }
 
@@ -136,11 +142,13 @@ class FindUser extends Component {
                 size="large"
             />
             <div id="style-contatcs" className="find-user-bottom">
+                {this.state.loading ? <div style={{textAlign : 'center', marginTop : '10px'}} ><Spin indicator={antIcon} /></div> : null}
+                {this.state.isEmpty ? <div style={{textAlign : 'center', marginTop : '10px'}} ><Empty/></div> : null}
                 <ul className="contactList">
                   {this.state.listUser.length > 0 ? 
                     this.state.listUser.map((item, index)=>{
                       return (
-                        <InfoContact clickSuccess={()=>this.handleAddFriend(item, index)} clickDanger={()=>this.handleCancelRequest(item, index)} key={index} avatar={urlImage(item.avatar)} titleSuccess={item.titleSuccess} titleDanger={item.titleDanger} nickname={item.nickname} address={item.address}></InfoContact>
+                        <InfoContact clickSuccess={()=>this.handleAddFriend(item, index)} clickDanger={()=>this.handleCancelRequest(item, index)} key={index} avatar={`${config.baseUrl}/images/${item.avatar}`} titleSuccess={item.titleSuccess} titleDanger={item.titleDanger} nickname={item.nickname} address={item.address}></InfoContact>
                       )
                     })  
                 : null }

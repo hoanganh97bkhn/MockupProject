@@ -492,3 +492,19 @@ export const removeFocusMessageFromContact = () => {
         type : types.REMOVE_FOCUS_MESSAGE_FROM_CONTACT,
     }
 }
+
+//message 
+export const newMessageAfterChat = (_id, data) =>{
+    return {
+        type : types.NEW_MESSAGE_AFTER_CHAT,
+        _id, 
+        data
+    }
+}
+
+export const delMessageAfterChat = (_id) =>{
+    return {
+        type : types.DEL_MESSAGE_AFTER_CHAT,
+        _id,
+    }
+}

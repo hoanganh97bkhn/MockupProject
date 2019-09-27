@@ -80,9 +80,7 @@ let addNewImage = async(req, res) => {
     let isGroup = req.body.isGroup;
 
     let newMessage = await message.addNewImage(sender, receiverId, messageVal, isGroup);
-    console.log('========',newMessage)
     //remove imgae
-    console.log(`${dir}/${messageVal.originalName}`)
     await fsExtra.remove(`${dir}/${messageVal.originalName}`);
     res.status(200).send(newMessage)
   } catch (error) {

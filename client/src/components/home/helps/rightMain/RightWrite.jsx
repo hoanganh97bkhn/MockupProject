@@ -151,7 +151,6 @@ class RightWrite extends Component {
     handleSendMessage = (e) =>{
         e.preventDefault();
         let index = this.props.dataId;
-        
         //off typing
         let _data = {
             uid: index,
@@ -166,30 +165,33 @@ class RightWrite extends Component {
             isGroup : this.props.isGroup
         }
         if(this.state.newMessage !== ''){
-            axios({
-                url : `${config.baseUrl}/message/add-new-text-emoji`, 
-                method :'POST',
-                data : data
-            })
-            .then((res)=>{
-                this.props.changeListAllConversations(this.props.dataId, res.data);
-                this.props.changeListGroupConversations(this.props.dataId, res.data);
-                this.props.changeListUserConversations(this.props.dataId, res.data);
-                this.props.socket.emit("chat-text-emoji", {uid : this.props.dataId, messageVal : res.data, isGroup : this.props.isGroup});
-                this.setState({
-                    newMessage : '',
-                    ObjectMessage : {...this.state.ObjectMessage, [index] : ''},
-                });
-            })
-            .catch((error)=>{
-                message.error(error.response.statusText,5)
-            })
+            this.setState({
+                newMessage : '',
+                ObjectMessage : {...this.state.ObjectMessage, [index] : ''},
+            },()=>{
+                this.props.newMessageAfterChat(this.props.dataId,{messageType:'text', senderId : this.props.user._id, text : data.messageVal});
+                axios({
+                    url : `${config.baseUrl}/message/add-new-text-emoji`, 
+                    method :'POST',
+                    data : data
+                })
+                .then((res)=>{
+                    this.props.delMessageAfterChat(this.props.dataId);
+                    this.props.changeListAllConversations(this.props.dataId, res.data);
+                    this.props.changeListGroupConversations(this.props.dataId, res.data);
+                    this.props.changeListUserConversations(this.props.dataId, res.data);
+                    this.props.socket.emit("chat-text-emoji", {uid : this.props.dataId, messageVal : res.data, isGroup : this.props.isGroup});
+                })
+                .catch((error)=>{
+                    message.error(error.response.statusText,5)
+                })
+            });
         }
         if(this.state.imageData !== ''){
             let formData = new FormData();
             formData.append('file', this.state.imageData);
             formData.append('uid', index);
-            formData.append('isGroup', this.props.isGroup)
+            formData.append('isGroup', this.props.isGroup);
             axios({
                 url : `${config.baseUrl}/message/add-new-image`,
                 method :'POST',
@@ -331,7 +333,13 @@ const mapDispatchToProps = (dispatch, props) => {
         },    
         openModalCaller : (data) => {
             dispatch(actions.openModalCaller(data))
-        },  
+        },
+        newMessageAfterChat : (id, data) => {
+            dispatch(actions.newMessageAfterChat(id, data));
+        },
+        delMessageAfterChat : (id) => {
+            dispatch(actions.delMessageAfterChat(id));
+        },
     }
 }
 

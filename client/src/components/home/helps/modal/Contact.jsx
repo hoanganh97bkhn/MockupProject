@@ -4,7 +4,7 @@ import avatar_default from './../../../../image/avatar-default.jpg';
 import config from './../../../../config/index';
 import * as actions from './../../../../actions/index';
 import axios from 'axios';
-import {Spin, Icon, message, Modal} from 'antd';
+import {Spin, Icon, message, Modal, Empty} from 'antd';
 import {connect} from 'react-redux';
 
 
@@ -46,7 +46,8 @@ class Contact extends Component {
       displaySpiner : 'none',
       visible: false ,
       skipUser : 0,
-      skipGroup : 0
+      skipGroup : 0,
+      isEmpty : false
     }
   }
 
@@ -59,7 +60,8 @@ class Contact extends Component {
 
   componentDidMount = () => {
     this.setState({
-      skip: this.props.contacts.length
+      skip: this.props.contacts.length,
+      isEmpty : this.props.contacts.length ? false : true
     })
   }
 
@@ -68,6 +70,7 @@ class Contact extends Component {
       skip : nextProps.contacts.length,
       skipUser : this.props.userConversations.length,
       skipGroup : this.props.groupConversations.length,
+      isEmpty : this.props.contacts.length ? false : true
     })
   }
 
@@ -122,7 +125,6 @@ class Contact extends Component {
         handleDeleteContacts(item, props)
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   }
@@ -159,6 +161,7 @@ class Contact extends Component {
     return (
       <div>
         <div id="style-contatcs" className="find-user-bottom" onScroll={this.handleScrollLoad}>
+            {this.state.isEmpty ? <div style={{textAlign : 'center', marginTop : '10px'}} ><Empty/></div> : null}
             <ul className="contactList">
               {this.props.contacts.length > 0 ? 
                   this.props.contacts.map((item, index)=>{

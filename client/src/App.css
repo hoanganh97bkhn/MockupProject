@@ -8,8 +8,8 @@
 
 .register{
   height: 100vh;
-  background-image: url('./image/bgrlogin.jpg');
-  /* background-image: linear-gradient(120deg, #3498db, #8e44ad); */;
+  /* background-image: url('./image/bgrlogin.jpg'); */
+  background-image: linear-gradient(120deg, #3498db, #8e44ad);
   background-size: cover;
 }
 

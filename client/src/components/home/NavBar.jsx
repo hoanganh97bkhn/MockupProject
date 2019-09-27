@@ -112,6 +112,11 @@ class NavBar extends Component {
         window.location.reload();
     }
     openModalContact = () => {
+
+        this.setState({
+            openModalContact: !this.state.openModalContact,
+        });
+        
         if(!this.state.openModalContact){
             axios({
                 url:`${config.baseUrl}/timer/count/notification-contact/reset`,
@@ -119,7 +124,6 @@ class NavBar extends Component {
             })
             .then((res)=>{
                 this.setState({
-                    openModalContact: !this.state.openModalContact,
                     countContactNotif: 0,
                 });
                 this.props.resetNotifi();
@@ -127,11 +131,6 @@ class NavBar extends Component {
             .catch((error) => {
                 console.log(error)
             })
-        }
-        else {
-            this.setState({
-                openModalContact: !this.state.openModalContact,
-            });
         }
     }
     openModalSetting = () => {
@@ -141,7 +140,6 @@ class NavBar extends Component {
     }
     openNotification = (event) => {
         event.preventDefault();
-        console.log('show')
         this.setState({
             openModalNotifi: true,
         }, () => {
@@ -179,18 +177,18 @@ class NavBar extends Component {
         }
         this.props.resetNotifi();
     }
+
     closeModalNotifi = (event) => {
         event.preventDefault();
-        console.log('close')
         this.setState({
             openModalNotifi : false
         }, () => {
             document.removeEventListener('click', this.closeModalNotifi);
         })
     }
+    
     logoutUser = () => {
         this.props.logoutUser({});
-        window.location.href = '/login-register'
     }
 
     render() {

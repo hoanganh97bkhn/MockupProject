@@ -77,7 +77,6 @@ let initRouters = (app) => {
   router.post("/load/notification" ,authLogin, notifi.getMoreListDataNotif);
 
 
-
   return app.use('/',router);
 
 }

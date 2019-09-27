@@ -5,7 +5,7 @@ import * as actions from './../../../../actions/index';
 import {connect} from 'react-redux';
 import axios from 'axios'
 import config from './../../../../config/index';
-import {Spin, Icon} from 'antd'
+import {Spin, Icon, Empty} from 'antd'
 
 let urlImage = (avatar) => {
   if(avatar !== "avatar-default.jpg")
@@ -19,18 +19,21 @@ class WaitConfirmation extends Component {
     this.state={
       skip : 0,
       displaySpiner : 'none',
+      isEmpty : false
     }
   }
 
   componentDidMount = () => {
     this.setState({
-      skip: this.props.contactsSent.length
+      skip: this.props.contactsSent.length,
+      isEmpty : this.props.contactsSent.length ? false : true
     })
   }
 
   componentWillReceiveProps = (nextProps) => {
     this.setState({
-      skip : nextProps.contactsSent.length
+      skip : nextProps.contactsSent.length,
+      isEmpty : this.props.contactsSent.length ? false : true
     })
   }
 
@@ -87,6 +90,7 @@ class WaitConfirmation extends Component {
     return (
       <div>
         <div id="style-contatcs" className="find-user-bottom" onScroll={this.handleScrollLoad}>
+          {this.state.isEmpty ? <div style={{textAlign : 'center', marginTop : '10px'}} ><Empty/></div> : null}
             <ul className="contactList">
               {listData.length > 0 ? 
                   listData.map((item, index)=>{

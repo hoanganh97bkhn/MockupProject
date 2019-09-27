@@ -136,7 +136,6 @@ class GeneralAccount extends Component {
         const prefixGender = getFieldDecorator('gender', {
             initialValue: this.state.updateUser.gender,
         });
-        console.log(this.state.updateUser.nickname)
     return (
       <div>
             <Row>
@@ -163,13 +162,15 @@ class GeneralAccount extends Component {
                             }
                             >
                             {getFieldDecorator('nickname', {
+                                prefixNickname,
                                 rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
-                            })(<Input defaultValue={prefixNickname}/>)}
+                            })(<Input/>)}
                         </Form.Item>
                         <Form.Item label="Email" >
                             {getFieldDecorator('email', {
+                                prefixEmail,
                                 rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
-                            })(<Input defaultValue={prefixEmail} disabled={true}/>)}
+                            })(<Input disabled={true}/>)}
                         </Form.Item>
                         <Form.Item label="Gender">
                             {getFieldDecorator('gender')(
@@ -181,11 +182,14 @@ class GeneralAccount extends Component {
                         </Form.Item>
                         <Form.Item label="Phone Number">
                             {getFieldDecorator('phone', {
+                                prefixPhone,
                                 rules: [{ required: false, message: 'Please input your phone number!' }],
-                            })(<Input defaultValue={prefixPhone} addonBefore={prefixSelector} style={{ width: '100%' }} />)}
+                            })(<Input addonBefore={prefixSelector} style={{ width: '100%' }} />)}
                         </Form.Item>
                         <Form.Item label="Address">
-                            {getFieldDecorator('address') (<Input defaultValue={prefixAddress}/>)}
+                            {getFieldDecorator('address', {
+                                prefixAddress
+                            }) (<Input/>)}
                         </Form.Item>
                         <Form.Item wrapperCol={{ div: 14, offset: 8 }}>
                             <Button type="primary" htmlType="submit" onClick={this.handleBtnSubmit}  loading={this.state.loading}>

@@ -74,7 +74,7 @@ class register extends Component {
             this.setState({
                 loading: false,
             },()=>{
-                if(typeof(nextProps.auth.message) == 'string'){
+                if(typeof(nextProps.auth.message) === 'string'){
                     message.error(nextProps.auth.message,5);
                 } else {
                     nextProps.auth.message.forEach(element => {
@@ -178,7 +178,8 @@ class register extends Component {
         })
     }
     responseFacebook = (data) => {
-        this.props.loginFB(data);
+        if(data.status !== 'unknown')
+            this.props.loginFB(data);
     }
 
     showInputtForgot = () => {
@@ -219,8 +220,6 @@ class register extends Component {
             })
         })
     }
-
-
 
     render() {
         const { getFieldDecorator } = this.props.form;

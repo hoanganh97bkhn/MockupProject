@@ -1,5 +1,5 @@
 const config = {
-    baseUrl: 'https://awesome-chat-mock-project.herokuapp.com/',
+    baseUrl: 'https://appchatheroku.herokuapp.com',
 };
   
 export default config;

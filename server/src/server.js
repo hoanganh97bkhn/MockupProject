@@ -49,4 +49,3 @@ initSockets(io);
 server.listen(process.env.PORT, () => {
   console.log(`The server listening on port ${process.env.PORT}!`);
 });
-

@@ -47,7 +47,6 @@ let updateUser =  (req, form) => {
           }
         }
         let updateInfo = await UserModel.findByIdAndUpdate(req.user._id, postUser);
-        console.log(updateInfo)
         if(!updateInfo){
           return reject ('Sever error!')
         }

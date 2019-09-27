@@ -27,7 +27,7 @@ class App extends Component {
     componentWillReceiveProps(nextProps) {
         if(nextProps.login.type === "success") {
             if(localStorage.jwtToken){
-                this.socket = io('https://awesome-chat-mock-project.herokuapp.com/',{
+                this.socket = io('https://appchatheroku.herokuapp.com',{
                     query: "token=" + localStorage.jwtToken
                 });
                 this.props.setupSocket(this.socket);
@@ -44,7 +44,7 @@ class App extends Component {
             const currentTime = Date.now() / 1000;
             if(payload.exp < currentTime) {
                 this.props.logoutUser({});
-                window.location.href = '/login-register'
+                window.location.href = '/login-register';
             }
         }
     }

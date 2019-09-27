@@ -24,7 +24,7 @@ function coverImages(item){
         thumbnail: `data:${item.file.contentType}; base64, ${bufferToBase64(item.file.data)}`,
         thumbnailWidth: 280,
         thumbnailHeight: 174,
-        caption: `${item.file.fileName}`
+        caption: `${item.file.fileName}`,
     }
 }
 
@@ -89,7 +89,7 @@ class RightTop extends Component {
         })
 
         axios({
-            url: `${config.baseUrl}/message/file/list:messageId=${this.props.data._id}`,
+            url: `${config.baseUrl}/message/file/list?messageId=${this.props.data._id}`,
             method: 'get'
         })
         .then((res)=>{
@@ -198,6 +198,7 @@ class RightTop extends Component {
                         </div>
                     </Col>
                 </Row>
+
                 <Modal
                     className="modal-image"
                     title="All Image"
