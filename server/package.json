@@ -29,7 +29,7 @@
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.15",
-    "mongoose": "4.13.9",
+    "mongoose": "5.7.5",
     "nodemailer": "^6.3.0",
     "nodemon": "^1.19.1",
     "passport": "^0.4.0",
