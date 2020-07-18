@@ -28,7 +28,7 @@
     "fs-extra": "^8.1.0",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mongoose": "4.13.9",
     "nodemailer": "^6.3.0",
     "nodemon": "^1.19.1",
